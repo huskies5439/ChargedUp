@@ -36,9 +36,45 @@ public class BasePilotable extends SubsystemBase {
     encodeurG.setDistancePerPulse(conversionEncodeur);
     encodeurD.setDistancePerPulse(conversionEncodeur);
   }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  private void conduire(double vx,double vz) {
+    drive.arcadeDrive(-0.85*vx, 0.7*vz);
+  }
+
+  public void autoConduire(double voltGauche, double voltDroit){
+    moteursG.setVoltage(voltGauche);
+    moteursD.setVoltage(voltDroit);
+    drive.feed();
+   }
+  private void stop() {
+    drive.arcadeDrive(0, 0);
+  }
+
+  public double getPositionG(){
+    return encodeurG.getDistance();
+  }
+
+  public double getPositionD(){
+    return encodeurD.getDistance();
+  }
+
+  public double getPosition(){
+    return (getPositionG()+getPositionD())/2.0;
+  }
+
+  public double getVitesseG(){
+    return encodeurG.getRate();
+  }
+
+  public double getVitesseD(){
+    return encodeurD.getRate();
+  }
+
+  public double getVitesse(){
+    return (getVitesseG()+getVitesseD())/2.0;
   }
 }
