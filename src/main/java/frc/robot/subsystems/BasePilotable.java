@@ -20,55 +20,51 @@ public class BasePilotable extends SubsystemBase {
   private WPI_TalonFX moteurArriereG = new WPI_TalonFX(2);
   private WPI_TalonFX moteurAvantD = new WPI_TalonFX(3);
   private WPI_TalonFX moteurArriereD = new WPI_TalonFX(4);
-  
+
   private MotorControllerGroup moteursG = new MotorControllerGroup(moteurAvantG, moteurArriereG);
   private MotorControllerGroup moteursD = new MotorControllerGroup(moteurAvantD, moteurArriereD);
 
   private DifferentialDrive drive = new DifferentialDrive(moteursG, moteursD);
 
   private Encoder encodeurG = new Encoder(0, 1, true);
-  private Encoder encodeurD = new Encoder(2, 3, false); 
-  private double conversionEncodeur;                                                           //trouver le bon port
-  private DoubleSolenoid pistonTransmission = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0); 
+  private Encoder encodeurD = new Encoder(2, 3, false);
+  private double conversionEncodeur; // trouver le bon port
+  private DoubleSolenoid pistonTransmission = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0);
   private boolean isHighGear = false;
   private PigeonIMU gyro = new PigeonIMU(5);
   private double[] ypr = new double[3];
-  public void conduire(double vx, double vz){
-    drive.arcadeDrive(-0.85*vx, 0.7*vz);
+
+  /** Creates a new BasePilotable. */
+  public BasePilotable() {
+    conversionEncodeur = Math.PI * Units.inchesToMeters(6) / (256 * 3 * 54 / 30);
+    encodeurG.setDistancePerPulse(conversionEncodeur);
+    encodeurD.setDistancePerPulse(conversionEncodeur);
   }
 
+  public void conduire(double vx, double vz) {
+    drive.arcadeDrive(-0.85 * vx, 0.7 * vz);
+  }
 
-  public void autoConduire(double voltGauche, double voltDroit){
+  public void autoConduire(double voltGauche, double voltDroit) {
     moteursG.setVoltage(voltGauche);
     moteursD.setVoltage(voltDroit);
     drive.feed();
   }
 
-public void stop(){
-  drive.arcadeDrive(0, 0);
-}
-
-  
-
-  /** Creates a new BasePilotable. */
-  public BasePilotable() {
-    conversionEncodeur=Math.PI*Units.inchesToMeters(6)/(256*3*54/30);
-    encodeurG.setDistancePerPulse(conversionEncodeur);
-    encodeurD.setDistancePerPulse(conversionEncodeur);
+  public void stop() {
+    drive.arcadeDrive(0, 0);
   }
-<<<<<<< Updated upstream
-=======
 
   public double getPositionG() {
     return encodeurG.getDistance();
   }
 
-  public double getPositionD(){
+  public double getPositionD() {
     return encodeurD.getDistance();
-  } 
+  }
 
-  public double getPosition(){
-    return (getPositionG()+getPositionD())/2.0;
+  public double getPosition() {
+    return (getPositionG() + getPositionD()) / 2.0;
   }
 
   public double getVitesseD() {
@@ -84,73 +80,37 @@ public void stop(){
   }
 
   public void resetEncodeur() {
-   encodeurD.reset();
-   encodeurG.reset();
+    encodeurD.reset();
+    encodeurG.reset();
   }
- public void resetGyro() {
-   gyro.setYaw(0);
- }
 
- public boolean getIsHighGear(){
-  return isHighGear;
- }
+  public void resetGyro() {
+    gyro.setYaw(0);
+  }
 
- public void highGear(){
-  pistonTransmission.set(DoubleSolenoid.Value.kForward); 
+  public boolean getIsHighGear() {
+    return isHighGear;
+  }
 
-  isHighGear = true;
- }
+  public void highGear() {
+    pistonTransmission.set(DoubleSolenoid.Value.kForward);
 
- public void lowGear(){
-pistonTransmission.set(DoubleSolenoid.Value.kReverse);
+    isHighGear = true;
+  }
 
-isHighGear = false;
- }
+  public void lowGear() {
+    pistonTransmission.set(DoubleSolenoid.Value.kReverse);
 
- public double getAngle() {
-gyro.getYawPitchRoll(ypr);
-return ypr[0];
- }
->>>>>>> Stashed changes
+    isHighGear = false;
+  }
+
+  public double getAngle() {
+    gyro.getYawPitchRoll(ypr);
+    return ypr[0];
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-  }
-
-  private void conduire(double vx,double vz) {
-    drive.arcadeDrive(-0.85*vx, 0.7*vz);
-  }
-
-  public void autoConduire(double voltGauche, double voltDroit){
-    moteursG.setVoltage(voltGauche);
-    moteursD.setVoltage(voltDroit);
-    drive.feed();
-   }
-  private void stop() {
-    drive.arcadeDrive(0, 0);
-  }
-
-  public double getPositionG(){
-    return encodeurG.getDistance();
-  }
-
-  public double getPositionD(){
-    return encodeurD.getDistance();
-  }
-
-  public double getPosition(){
-    return (getPositionG()+getPositionD())/2.0;
-  }
-
-  public double getVitesseG(){
-    return encodeurG.getRate();
-  }
-
-  public double getVitesseD(){
-    return encodeurD.getRate();
-  }
-
-  public double getVitesse(){
-    return (getVitesseG()+getVitesseD())/2.0;
   }
 }
