@@ -16,10 +16,10 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class BasePilotable extends SubsystemBase {
-  private WPI_TalonFX moteurAvantG = new WPI_TalonFX(1);
-  private WPI_TalonFX moteurArriereG = new WPI_TalonFX(2);
-  private WPI_TalonFX moteurAvantD = new WPI_TalonFX(3);
-  private WPI_TalonFX moteurArriereD = new WPI_TalonFX(4);
+  private WPI_TalonFX moteurAvantG = new WPI_TalonFX(4);
+  private WPI_TalonFX moteurArriereG = new WPI_TalonFX(3);
+  private WPI_TalonFX moteurAvantD = new WPI_TalonFX(1);
+  private WPI_TalonFX moteurArriereD = new WPI_TalonFX(2);
 
   private MotorControllerGroup moteursG = new MotorControllerGroup(moteurAvantG, moteurArriereG);
   private MotorControllerGroup moteursD = new MotorControllerGroup(moteurAvantD, moteurArriereD);
@@ -39,10 +39,12 @@ public class BasePilotable extends SubsystemBase {
     conversionEncodeur = Math.PI * Units.inchesToMeters(6) / (256 * 3 * 54 / 30);
     encodeurG.setDistancePerPulse(conversionEncodeur);
     encodeurD.setDistancePerPulse(conversionEncodeur);
+    moteursD.setInverted(false);
+    moteursG.setInverted(true);
   }
 
   public void conduire(double vx, double vz) {
-    drive.arcadeDrive(-0.85 * vx, 0.7 * vz);
+    drive.arcadeDrive(-0.85 * vx, -0.7 * vz);
   }
 
   public void autoConduire(double voltGauche, double voltDroit) {
