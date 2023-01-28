@@ -41,10 +41,11 @@ public class BasePilotable extends SubsystemBase {
     encodeurD.setDistancePerPulse(conversionEncodeur);
     moteursD.setInverted(false);
     moteursG.setInverted(true);
+    setRamp(0);
   }
 
   public void conduire(double vx, double vz) {
-    drive.arcadeDrive(-0.85 * vx, -0.7 * vz);
+    drive.arcadeDrive(-0.65 * vx, -0.5 * vz);
   }
 
   public void autoConduire(double voltGauche, double voltDroit) {
@@ -79,6 +80,11 @@ public class BasePilotable extends SubsystemBase {
 
   public double getVitesse() {
     return (getVitesseD() + getVitesseG()) / 2.0;
+  }
+
+  public void setRamp(double ramp){
+    
+
   }
 
   public void resetEncodeur() {
