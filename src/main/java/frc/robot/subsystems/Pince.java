@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -23,7 +24,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Pince extends SubsystemBase {
   private DoubleSolenoid pince = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0);
   private DigitalInput lightBreak = new DigitalInput(0);
-  ColorSensorV3 capteurCouleur = new ColorSensorV3(I2C.port.kOnBoard);
+  ColorSensorV3 capteurCouleur = new ColorSensorV3(I2C.Port.kOnboard);
   private final ColorMatch colorMatcher = new ColorMatch();
   private final Color kCouleurCone = new Color(0.359, 0.485, 0.158);
   private final Color kCouleurCube = new Color(0.26, 0.429, 0.311);
@@ -61,7 +62,7 @@ public Color getCouleur(){
 
   public Color comparerCouleur()  {
   comparaisonCouleur = colorMatcher.matchClosestColor(getCouleur());
-
+  return comparaisonCouleur.color;
   }
 
   public boolean isDetected(){

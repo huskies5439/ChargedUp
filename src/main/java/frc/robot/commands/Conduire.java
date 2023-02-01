@@ -29,7 +29,18 @@ DoubleSupplier tourner;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
     basePilotable.conduire(avancer.getAsDouble(), tourner.getAsDouble());
+
+    /* 
+    if(! basePilotable.getIsHighGear() && basePilotable.getVitesse()>1.65){
+      basePilotable.highGear();
+
+    }
+    else if(basePilotable.getIsHighGear() && basePilotable.getVitesse()<1.25){
+
+      basePilotable.lowGear();
+    }*/
   }
 
   // Called once the command ends or is interrupted.
@@ -41,4 +52,6 @@ DoubleSupplier tourner;
   public boolean isFinished() {
     return false;
   }
+
+
 }
