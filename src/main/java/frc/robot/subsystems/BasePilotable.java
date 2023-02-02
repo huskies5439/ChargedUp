@@ -30,7 +30,7 @@ public class BasePilotable extends SubsystemBase {
   private Encoder encodeurG = new Encoder(0, 1, true);
   private Encoder encodeurD = new Encoder(2, 3, false);
   private double conversionEncodeur; // trouver le bon port
-  private DoubleSolenoid pistonTransmission = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0);
+  private DoubleSolenoid pistonTransmission = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1, 2);
   private boolean isHighGear = false;
   private PigeonIMU gyro = new PigeonIMU(5);
   private double[] ypr = new double[3];

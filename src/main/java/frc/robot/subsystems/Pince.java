@@ -21,8 +21,8 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Pince extends SubsystemBase {
-  private DoubleSolenoid pince = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0);
+public class Pince extends SubsystemBase {         //
+  private DoubleSolenoid pince = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1, 2);
   private DigitalInput lightBreak = new DigitalInput(0);
   ColorSensorV3 capteurCouleur = new ColorSensorV3(I2C.Port.kOnboard);
   private final ColorMatch colorMatcher = new ColorMatch();
