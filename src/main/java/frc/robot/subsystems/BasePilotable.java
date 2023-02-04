@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
@@ -84,9 +85,28 @@ public class BasePilotable extends SubsystemBase {
   }
 
   public void setRamp(double ramp){
-    
-
+    moteurAvantG.configOpenloopRamp(ramp);
+    moteurArriereG.configOpenloopRamp(ramp);
+    moteurAvantD.configOpenloopRamp(ramp);
+    moteurArriereD.configOpenloopRamp(ramp);
   }
+
+  public void setBrake(boolean isBrake) {
+    if (isBrake) {
+      moteurAvantD.setNeutralMode(NeutralMode.Brake);
+      moteurArriereD.setNeutralMode(NeutralMode.Brake);
+      moteurAvantG.setNeutralMode(NeutralMode.Brake);
+      moteurArriereG.setNeutralMode(NeutralMode.Brake);
+    }
+
+    else {
+      moteurAvantD.setNeutralMode(NeutralMode.Coast);
+      moteurArriereD.setNeutralMode(NeutralMode.Coast);
+      moteurAvantG.setNeutralMode(NeutralMode.Coast);
+      moteurArriereG.setNeutralMode(NeutralMode.Coast);
+    }
+  }
+
 
   public void resetEncodeur() {
     encodeurD.reset();

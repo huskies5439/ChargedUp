@@ -4,14 +4,44 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class BrasRetractable extends SubsystemBase {
+  private WPI_TalonFX moteurBrasRetractable = new WPI_TalonFX(5);
+
   /** Creates a new BrasRetractable. */
-  public BrasRetractable() {}
+  
+  public BrasRetractable() {
+    moteurBrasRetractable.setInverted(false);
+    moteurBrasRetractable.setNeutralMode(NeutralMode.Brake);
+    moteurBrasRetractable.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
+  resetEncodeur();
+  }
+
+  public void setVitesse(double vitesse) {
+  moteurBrasRetractable.set(vitesse);
+  }
+
+  public double getPosition() {
+  return moteurBrasRetractable.getSelectedSensorPosition();
+  }
+  
+  public void resetEncodeur() {
+    moteurBrasRetractable.setSelectedSensorPosition(0);
+  }
+  public void stop() {
+    moteurBrasRetractable.set(0.0);
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  SmartDashboard.putNumber("Position BrasRetractable", getPosition());
   }
 }
