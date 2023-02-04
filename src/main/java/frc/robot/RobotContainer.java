@@ -4,15 +4,13 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Conduire;
-import frc.robot.subsystems.BasePilotable;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.Conduire;
+import frc.robot.subsystems.BasePilotable;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a

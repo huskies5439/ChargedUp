@@ -16,4 +16,13 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+
+  public static final double rampTeleop = 0.2;
+  
+  public static final double kS = 0.0;
+  public static final double kG = 0.0;
+  public static final double kV = 0.0;
+  public static final double kA = 0.0;
+
+  public static final int kToleranceBalancer = 5;
 }

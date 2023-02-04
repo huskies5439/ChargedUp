@@ -8,12 +8,16 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class BrasRetractable extends SubsystemBase {
   private WPI_TalonFX moteurBrasRetractable = new WPI_TalonFX(5);
+
+  //Je sais pas trop comment faire pour la suite [P-A]
+  ElevatorFeedforward feedforward = new ElevatorFeedforward(Constants.kS, Constants.kG, Constants.kV, Constants.kA);
 
   /** Creates a new BrasRetractable. */
   
