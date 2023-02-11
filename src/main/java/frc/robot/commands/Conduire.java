@@ -7,6 +7,7 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.BasePilotable;
 
 public class Conduire extends CommandBase {
@@ -24,7 +25,10 @@ DoubleSupplier tourner;
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    basePilotable.setBrake(false);
+    basePilotable.setRamp(Constants.rampTeleop);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -32,15 +36,15 @@ DoubleSupplier tourner;
     
     basePilotable.conduire(avancer.getAsDouble(), tourner.getAsDouble());
 
-    /* 
-    if(! basePilotable.getIsHighGear() && basePilotable.getVitesse()>1.65){
+    
+    if(! basePilotable.getIsHighGear() && Math.abs(basePilotable.getVitesse())>1.65){
       basePilotable.highGear();
 
     }
-    else if(basePilotable.getIsHighGear() && basePilotable.getVitesse()<1.25){
+    else if(basePilotable.getIsHighGear() && Math.abs(basePilotable.getVitesse()) <1.25){
 
       basePilotable.lowGear();
-    }*/
+    }
   }
 
   // Called once the command ends or is interrupted.

@@ -35,16 +35,16 @@ public class BasePilotable extends SubsystemBase {
   private DifferentialDrive drive = new DifferentialDrive(moteursG, moteursD);
   
   //Encodeurs
-  private Encoder encodeurG = new Encoder(0, 1, true);
-  private Encoder encodeurD = new Encoder(2, 3, false);
-  private double conversionEncodeur; // trouver le bon port
+  private Encoder encodeurG = new Encoder(0, 1, false);
+  private Encoder encodeurD = new Encoder(2, 3, true);
+  private double conversionEncodeur; 
 
   //Pneumatique
   private DoubleSolenoid pistonTransmission = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1, 2);
   private boolean isHighGear = false;
 
   //Gyro
-  private PigeonIMU gyro = new PigeonIMU(5);
+  private PigeonIMU gyro = new PigeonIMU(0);
   private double pitchOffset;
 
   //Odometrie
@@ -57,7 +57,9 @@ public class BasePilotable extends SubsystemBase {
     resetGyro();
 
     //Configuration des encodeurs externes
-    conversionEncodeur = Math.PI * Units.inchesToMeters(6) / (256 * 3 * 54 / 30);
+
+    //Roue de 8 pouces, 256 clics d'encodeur par tour, ratio encodeur-shaft 3:1, ratio shaft-roue 54:30
+    conversionEncodeur = Math.PI * Units.inchesToMeters(8) / (256 * 3 * 54 / 30); 
     encodeurG.setDistancePerPulse(conversionEncodeur);
     encodeurD.setDistancePerPulse(conversionEncodeur);
     moteursD.setInverted(false);
@@ -65,7 +67,7 @@ public class BasePilotable extends SubsystemBase {
 
     //Remp et Break
     setRamp(0);
-    setBrake(true);
+    setBrake(false);
 
     //Odometrie
     odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getAngle()), getPositionG(), getPositionD());
@@ -77,6 +79,10 @@ public class BasePilotable extends SubsystemBase {
     odometry.update(Rotation2d.fromDegrees(getAngle()), getPositionG(), getPositionD());
 
     SmartDashboard.putNumber("Angle", getAngle());
+    SmartDashboard.putNumber("Pitch", getPitch());
+    SmartDashboard.putNumber("position", getPosition());
+    SmartDashboard.putNumber("vitesse", getVitesse());
+    
   }
 
   //////////////////////////////////////////// MÉTHODES ////////////////////////////////////////////
@@ -176,13 +182,9 @@ public class BasePilotable extends SubsystemBase {
     pitchOffset = gyro.getRoll();
   }
 
-  public double getYaw() {
-    return gyro.getYaw();
-  }
 
   public double getPitch() {
-    return gyro.getPitch();
-    //Si besoin return -(gyro.getPitch() - pitchOffset);
+  return -(gyro.getPitch() - pitchOffset);
   }
 
   public double getRoll() {

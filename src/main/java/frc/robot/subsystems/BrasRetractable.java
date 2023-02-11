@@ -9,15 +9,18 @@ import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class BrasRetractable extends SubsystemBase {
   private WPI_TalonFX moteurBrasRetractable = new WPI_TalonFX(5);
-
+  private double conversionEncodeurBras;
+  private DigitalInput detecteurMagnetic = new DigitalInput(9);
   //Je sais pas trop comment faire pour la suite [P-A]
-  ElevatorFeedforward feedforward = new ElevatorFeedforward(Constants.kS, Constants.kG, Constants.kV, Constants.kA);
+  ElevatorFeedforward feedforward = new ElevatorFeedforward(Constants.kSElevator, Constants.kGElevator, Constants.kVElevator, Constants.kAElevator);
 
   /** Creates a new BrasRetractable. */
   
@@ -25,27 +28,45 @@ public class BrasRetractable extends SubsystemBase {
     moteurBrasRetractable.setInverted(false);
     moteurBrasRetractable.setNeutralMode(NeutralMode.Brake);
     moteurBrasRetractable.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
-  resetEncodeur();
+    resetEncodeur();
+    conversionEncodeurBras = (1.0/2048)*(14.0/40)*(14.0/60)*(16.0)*Units.inchesToMeters(0.25);
   }
 
-  public void setVitesse(double vitesse) {
-  moteurBrasRetractable.set(vitesse);
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+  SmartDashboard.putNumber("Position BrasRetractable", getPosition());
+  SmartDashboard.putNumber("vitesse bras rétractable", getVitesse());
+  if (getDetecteurMagnetic()) {
+    resetEncodeur();
+  }
+  }
+
+  public void setVoltage(double voltage) {
+  moteurBrasRetractable.setVoltage(voltage);
   }
 
   public double getPosition() {
-  return moteurBrasRetractable.getSelectedSensorPosition();
+  return moteurBrasRetractable.getSelectedSensorPosition()*conversionEncodeurBras;
   }
   
   public void resetEncodeur() {
     moteurBrasRetractable.setSelectedSensorPosition(0);
   }
   public void stop() {
-    moteurBrasRetractable.set(0.0);
+    setVoltage(0);
   }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  SmartDashboard.putNumber("Position BrasRetractable", getPosition());
+  public double getVitesse() {
+    return moteurBrasRetractable.getSelectedSensorVelocity()*conversionEncodeurBras*10; //x10 car les encodeur des falcon donne des click par 100 ms.
+  }
+  public boolean getDetecteurMagnetic() {
+    return detecteurMagnetic.get();
+  }
+  public void allonger() {
+    setVoltage(6);
+  }
+  public void retracter() {
+    setVoltage(-6);
   }
 }

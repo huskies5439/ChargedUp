@@ -19,10 +19,10 @@ public final class Constants {
 
   public static final double rampTeleop = 0.2;
   
-  public static final double kS = 0.0;
-  public static final double kG = 0.0;
-  public static final double kV = 0.0;
-  public static final double kA = 0.0;
+  public static final double kSElevator = 0.0;
+  public static final double kGElevator = 0.0;
+  public static final double kVElevator = 0.0;
+  public static final double kAElevator = 0.0;
 
   public static final int kToleranceBalancer = 5;
 }

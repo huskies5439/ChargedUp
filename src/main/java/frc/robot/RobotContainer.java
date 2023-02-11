@@ -7,10 +7,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Conduire;
 import frc.robot.subsystems.BasePilotable;
+import frc.robot.subsystems.BrasRetractable;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -21,7 +23,8 @@ import frc.robot.subsystems.BasePilotable;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final BasePilotable basePilotable = new BasePilotable();
-  XboxController pilote = new XboxController(0);
+  private final BrasRetractable Bras = new BrasRetractable();
+  CommandXboxController pilote = new CommandXboxController(0);
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -31,18 +34,10 @@ public class RobotContainer {
     basePilotable.setDefaultCommand(new Conduire(pilote::getLeftY,pilote::getRightX, basePilotable));
   }
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-   
+   pilote.a().onTrue(new StartEndCommand(Bras::allonger,Bras::stop , Bras));
+   pilote.b().onTrue(new StartEndCommand(Bras::retracter,Bras::stop , Bras));
   }
 
   /**
