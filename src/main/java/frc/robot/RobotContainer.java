@@ -36,8 +36,8 @@ public class RobotContainer {
 
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-   pilote.a().onTrue(new StartEndCommand(Bras::allonger,Bras::stop , Bras));
-   pilote.b().onTrue(new StartEndCommand(Bras::retracter,Bras::stop , Bras));
+   pilote.a().whileTrue(new StartEndCommand(Bras::allonger,Bras::stop , Bras));
+   pilote.b().whileTrue(new StartEndCommand(Bras::retracter,Bras::stop , Bras));
   }
 
   /**

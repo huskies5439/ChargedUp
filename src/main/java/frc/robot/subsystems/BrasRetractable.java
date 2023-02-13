@@ -64,9 +64,9 @@ public class BrasRetractable extends SubsystemBase {
     return detecteurMagnetic.get();
   }
   public void allonger() {
-    setVoltage(6);
+    setVoltage(3);
   }
   public void retracter() {
-    setVoltage(-6);
+    setVoltage(-3);
   }
 }
