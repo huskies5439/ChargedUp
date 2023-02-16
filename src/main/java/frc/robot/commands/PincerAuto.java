@@ -32,17 +32,15 @@ public class PincerAuto extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    //Il faut associer la valeur du faisceau avec etat actuel
 
-    if (pince.getArmer() && !pince.getFaisceau()) { //si la pince est armé et le faisceau est bloqué, on ferme la pince
-      pince.fermer();
-      pince.setArmer(false);
-    }
+    //si la pince est armé et le faisceau est bloqué, on ferme la pince et désarme la pince
+     
+    
 
-    if (etatActuel != etatPasse && etatActuel){ //si le capteur passe de bloqué à débloqué, on arme la pince
-      pince.setArmer(true);
-      pince.ouvrir();
-
-  }
+    //si le capteur passe de bloqué à débloqué, on arme la pince et ouvre la pince (au cas où elle ne soit pas fermée)
+    
+    //Etat passé = état actuel
 }
 
   // Called once the command ends or is interrupted.
