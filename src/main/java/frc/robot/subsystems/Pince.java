@@ -19,7 +19,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Pince extends SubsystemBase {         //
   private DoubleSolenoid pince = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1, 2);
+  
+  
   private DigitalInput lightBreak = new DigitalInput(0);
+  private boolean capteurArmé = true;
+  
   ColorSensorV3 capteurCouleur = new ColorSensorV3(I2C.Port.kOnboard);
   private final ColorMatch colorMatcher = new ColorMatch();
   private final Color kCouleurCone = new Color(0.359, 0.485, 0.158);
@@ -39,17 +43,26 @@ public class Pince extends SubsystemBase {         //
   public void periodic() {
     // This method will be called once per scheduler run
   }
-public void ouvrirPince(){
+public void ouvrir(){
   pince.set(Value.kForward);
 }
 
-public void fermerPince(){
+public void fermer(){
   pince.set(Value.kReverse);
 }
-
-public boolean isBroken(){
+//capteur bloqué true capteur pas bloqué false
+public boolean getFaisceau(){
   return lightBreak.get();
 }
+
+public boolean getArmer(){
+  return capteurArmé;
+}
+
+public void setArmer(boolean estActif){
+  capteurArmé = estActif;
+}
+
 
 public Color getCouleur(){
   return capteurCouleur.getColor();
@@ -72,11 +85,10 @@ public Color getCouleur(){
 
   }
 
-  public boolean isCube(){
+  public boolean isCube() {
     return comparerCouleur() == kCouleurCube && isDetected();
 
   }
-
-
-
+  
+ 
 }
