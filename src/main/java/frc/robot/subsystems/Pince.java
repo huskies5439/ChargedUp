@@ -17,70 +17,85 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Pince extends SubsystemBase {         //
+public class Pince extends SubsystemBase { //
   private DoubleSolenoid pince = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1, 2);
-  
-  
+
   private DigitalInput lightBreak = new DigitalInput(0);
-  private boolean capteurArmé = true;
-  
+  private boolean capteurArmer = true;
+  private boolean ouverture;
+
   ColorSensorV3 capteurCouleur = new ColorSensorV3(I2C.Port.kOnboard);
   private final ColorMatch colorMatcher = new ColorMatch();
   private final Color kCouleurCone = new Color(0.359, 0.485, 0.158);
   private final Color kCouleurCube = new Color(0.26, 0.429, 0.311);
-  
+
   ColorMatchResult comparaisonCouleur;
 
   /** Creates a new Pince. */
   public Pince() {
+    ouvrir();
+
     colorMatcher.addColorMatch(kCouleurCone);
     colorMatcher.addColorMatch(kCouleurCube);
   }
-
-
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
-public void ouvrir(){
-  pince.set(Value.kForward);
-}
 
-public void fermer(){
-  pince.set(Value.kReverse);
-}
-//capteur bloqué true capteur pas bloqué false
-public boolean getFaisceau(){
-  return lightBreak.get();
-}
-
-public boolean getArmer(){
-  return capteurArmé;
-}
-
-public void setArmer(boolean estActif){
-  capteurArmé = estActif;
-}
-
-
-public Color getCouleur(){
-  return capteurCouleur.getColor();
-
-}
-
-  public Color comparerCouleur()  {
-  comparaisonCouleur = colorMatcher.matchClosestColor(getCouleur());
-  return comparaisonCouleur.color;
+  public void ouvrir() {
+    pince.set(Value.kForward);
+    ouverture = true;
   }
 
-  public boolean isDetected(){
-  return capteurCouleur.getProximity() > 150;
-    
+  public void fermer() {
+    pince.set(Value.kReverse);
+    ouverture = false;
+  }
+
+  public boolean getOuverture() {
+    return ouverture;
+  }
+
+  public void togglePince() {
+    if (ouverture) {
+      fermer();
+    } else {
+      ouvrir();
+    }
+  }
+
+  // capteur pas bloqué true capteur bloqué false
+  public boolean getFaisceau() {
+    return lightBreak.get();
+  }
+
+  public boolean getArmer() {
+    return capteurArmer;
+  }
+
+  public void setArmer(boolean estActif) {
+    capteurArmer = estActif;
+  }
+
+  public Color getCouleur() {
+    return capteurCouleur.getColor();
+
+  }
+
+  public Color comparerCouleur() {
+    comparaisonCouleur = colorMatcher.matchClosestColor(getCouleur());
+    return comparaisonCouleur.color;
+  }
+
+  public boolean isDetected() {
+    return capteurCouleur.getProximity() > 150;
+
   }
 
   public boolean isCone() {
-  
+
     return comparerCouleur() == kCouleurCone && isDetected();
 
   }
@@ -89,6 +104,5 @@ public Color getCouleur(){
     return comparerCouleur() == kCouleurCube && isDetected();
 
   }
-  
- 
+
 }
