@@ -36,7 +36,7 @@ public class RobotContainer {
     configureBindings();
 
     basePilotable.setDefaultCommand(new Conduire(pilote::getLeftY,pilote::getRightX, basePilotable));
-    //Placer la commande PinceAuto ici
+    pince.setDefaultCommand(new PincerAuto(pince));
   }
 
   private void configureBindings() {

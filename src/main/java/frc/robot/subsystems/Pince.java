@@ -17,10 +17,10 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Pince extends SubsystemBase { //
-  private DoubleSolenoid pince = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1, 2);
+public class Pince extends SubsystemBase { 
+  private DoubleSolenoid pince = new DoubleSolenoid(PneumaticsModuleType.REVPH, 3, 4);
 
-  private DigitalInput lightBreak = new DigitalInput(0);
+  private DigitalInput lightBreak = new DigitalInput(7);
   private boolean capteurArmer = true;
   private boolean ouverture;
 

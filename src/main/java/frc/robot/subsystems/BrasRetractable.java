@@ -29,6 +29,9 @@ public class BrasRetractable extends SubsystemBase {
     moteurBrasRetractable.setNeutralMode(NeutralMode.Brake);
     moteurBrasRetractable.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
     resetEncodeur();
+    /*1 tour de falcon = 2048 clic. Pignon 14 dents sur le falcon fait tourner gear 40 dents. La gear 40 dents est solidaire d'une
+    gear 14 dents (même vitesse). La gear 14 dents fait tourner une gear 60 dents. La gear 60 dents est solidaire d'une roue dentée
+    de 16 dents qui fait tourner la chaine 25. Chaque maille de la chaine fait 0.25 pouces*/
     conversionEncodeurBras = (1.0/2048)*(14.0/40)*(14.0/60)*(16.0)*Units.inchesToMeters(0.25);
   }
 
@@ -39,7 +42,7 @@ public class BrasRetractable extends SubsystemBase {
   SmartDashboard.putNumber("Position BrasRetractable", getPosition());
   SmartDashboard.putNumber("vitesse bras rétractable", getVitesse());
   if (getDetecteurMagnetic()) {
-    resetEncodeur();
+   // resetEncodeur();
   }
   }
 
