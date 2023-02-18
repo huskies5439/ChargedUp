@@ -18,7 +18,8 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Pince extends SubsystemBase { 
-  private DoubleSolenoid pince = new DoubleSolenoid(PneumaticsModuleType.REVPH, 3, 4);
+  private DoubleSolenoid pinceGris = new DoubleSolenoid(PneumaticsModuleType.REVPH, 3, 6);
+  private DoubleSolenoid pinceBleu = new DoubleSolenoid(PneumaticsModuleType.REVPH, 4, 5);
 
   private DigitalInput lightBreak = new DigitalInput(7);
   private boolean capteurArmer = true;
@@ -31,7 +32,6 @@ public class Pince extends SubsystemBase {
 
   ColorMatchResult comparaisonCouleur;
 
-  /** Creates a new Pince. */
   public Pince() {
     ouvrir();
 
@@ -41,16 +41,16 @@ public class Pince extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    //This method will be called once per scheduler run
   }
 
   public void ouvrir() {
-    pince.set(Value.kForward);
+    pinceGris.set(Value.kForward);
     ouverture = true;
   }
 
   public void fermer() {
-    pince.set(Value.kReverse);
+    pinceGris.set(Value.kReverse);
     ouverture = false;
   }
 

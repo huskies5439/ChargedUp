@@ -30,11 +30,11 @@ public class RobotContainer {
   private final Pince pince = new Pince();
   CommandXboxController pilote = new CommandXboxController(0);
   
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  
   public RobotContainer() {
-    // Configure the trigger bindings
+    
     configureBindings();
-
+    
     basePilotable.setDefaultCommand(new Conduire(pilote::getLeftY,pilote::getRightX, basePilotable));
     pince.setDefaultCommand(new PincerAuto(pince));
   }
@@ -44,18 +44,10 @@ public class RobotContainer {
     pilote.a().whileTrue(new StartEndCommand(bras::allonger,bras::stop , bras));
     pilote.b().whileTrue(new StartEndCommand(bras::retracter,bras::stop , bras));
 
-    
-
-   pilote.rightBumper().onTrue(new InstantCommand(pince::togglePince, pince)); //Pas un toggle car cela désactiverais le PincerAuto qui doit fonctionner en permanence
+    pilote.rightBumper().onTrue(new InstantCommand(pince::togglePince, pince)); //Pas un toggle car cela désactiverais le PincerAuto qui doit fonctionner en permanence
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
     return new RunCommand(() -> basePilotable.autoConduire(5, 5), basePilotable);
   }
 }
