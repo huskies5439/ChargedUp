@@ -18,8 +18,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Pince extends SubsystemBase { 
-  private DoubleSolenoid pinceGris = new DoubleSolenoid(PneumaticsModuleType.REVPH, 3, 6);
-  private DoubleSolenoid pinceBleu = new DoubleSolenoid(PneumaticsModuleType.REVPH, 4, 5);
+  private DoubleSolenoid pinceGris = new DoubleSolenoid(PneumaticsModuleType.REVPH, 6, 5);
 
   private DigitalInput lightBreak = new DigitalInput(7);
   private boolean capteurArmer = true;

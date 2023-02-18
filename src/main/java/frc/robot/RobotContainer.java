@@ -36,7 +36,7 @@ public class RobotContainer {
     configureBindings();
     
     basePilotable.setDefaultCommand(new Conduire(pilote::getLeftY,pilote::getRightX, basePilotable));
-    pince.setDefaultCommand(new PincerAuto(pince));
+    //pince.setDefaultCommand(new PincerAuto(pince)); Remettre dans le code quand les capteurs seront posés
   }
 
   private void configureBindings() {
