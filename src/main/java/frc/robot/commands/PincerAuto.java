@@ -5,20 +5,47 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Pince;
 
 public class PincerAuto extends CommandBase {
-  /** Creates a new PincerAuto. */
-  public PincerAuto() {
-    // Use addRequirements() here to declare subsystem dependencies.
+    Pince pince;
+
+    boolean capteurPasse;
+    boolean capteurActuel;
+
+    boolean etatPasse=true;
+    boolean etatActuel=true;
+
+  public PincerAuto(Pince pince) {
+   this.pince = pince;
+   addRequirements(pince);
   }
+  
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    etatPasse=true;
+    etatActuel=true;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+
+  etatActuel = pince.getFaisceau();
+  
+  if (pince.getArmer() && !etatActuel){
+    pince.setArmer(false);
+    pince.fermer();
+  }
+  if (!etatPasse && etatActuel){
+    pince.setArmer(true);
+    pince.ouvrir();
+  }
+  etatPasse = etatActuel;
+  
+}
 
   // Called once the command ends or is interrupted.
   @Override
@@ -29,4 +56,6 @@ public class PincerAuto extends CommandBase {
   public boolean isFinished() {
     return false;
   }
+
 }
+
