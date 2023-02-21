@@ -13,63 +13,88 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.BrasConstants;
 
-public class BrasRetractable extends SubsystemBase {
+public class Bras extends SubsystemBase {
   private WPI_TalonFX moteurBrasRetractable = new WPI_TalonFX(5);
-  private double conversionEncodeurBras;
+  private double conversionEncodeurMat;
   private DigitalInput detecteurMagnetic = new DigitalInput(9);
   //Je sais pas trop comment faire pour la suite [P-A]
-  ElevatorFeedforward feedforward = new ElevatorFeedforward(Constants.kSElevator, Constants.kGElevator, Constants.kVElevator, Constants.kAElevator);
+  ElevatorFeedforward feedforward = new ElevatorFeedforward(BrasConstants.kSElevator, BrasConstants.kGElevator, BrasConstants.kVElevator, BrasConstants.kAElevator);
 
-  /** Creates a new BrasRetractable. */
-  
-  public BrasRetractable() {
+  //Encoder encodeurCoude = ....... // utiliser les ports 4,5. C'est un encodeur externe, donc voir les encodeurs de la basePilotable
+  double conversionEncodeurCoude;
+  public Bras() {
     moteurBrasRetractable.setInverted(false);
     moteurBrasRetractable.setNeutralMode(NeutralMode.Brake);
     moteurBrasRetractable.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
-    resetEncodeur();
+    resetEncodeurMat();
     /*1 tour de falcon = 2048 clic. Pignon 14 dents sur le falcon fait tourner gear 40 dents. La gear 40 dents est solidaire d'une
     gear 14 dents (même vitesse). La gear 14 dents fait tourner une gear 60 dents. La gear 60 dents est solidaire d'une roue dentée
     de 16 dents qui fait tourner la chaine 25. Chaque maille de la chaine fait 0.25 pouces*/
-    conversionEncodeurBras = (1.0/2048)*(14.0/40)*(14.0/60)*(16.0)*Units.inchesToMeters(0.25);
+    conversionEncodeurMat = (1.0/2048)*(14.0/40)*(14.0/60)*(16.0)*Units.inchesToMeters(0.25);
+
+    conversionEncodeurCoude = 1; //Trouver la vraie valeur lorsque le CAD sera fait.
+
   }
 
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-  SmartDashboard.putNumber("Position BrasRetractable", getPosition());
-  SmartDashboard.putNumber("vitesse bras rétractable", getVitesse());
-  if (getDetecteurMagnetic()) {
-   // resetEncodeur();
-  }
+  SmartDashboard.putNumber("Position Mat", getPositionMat());
+  SmartDashboard.putNumber("Vitesse Mat", getVitesseMat());
+
   }
 
   public void setVoltage(double voltage) {
   moteurBrasRetractable.setVoltage(voltage);
   }
 
-  public double getPosition() {
-  return moteurBrasRetractable.getSelectedSensorPosition()*conversionEncodeurBras;
-  }
-  
-  public void resetEncodeur() {
-    moteurBrasRetractable.setSelectedSensorPosition(0);
-  }
   public void stop() {
     setVoltage(0);
   }
-  public double getVitesse() {
-    return moteurBrasRetractable.getSelectedSensorVelocity()*conversionEncodeurBras*10; //x10 car les encodeur des falcon donne des click par 100 ms.
+
+  public void allonger() {
+    if (getPositionMat()< BrasConstants.kMaxMat){
+        setVoltage(3);
+    }
+    else {
+      stop();
+    }
+  
   }
+  public void retracter() {
+    if (getPositionMat() > 0){
+      setVoltage(-3);
+    }
+    else{
+      stop();
+    }
+    
+  }
+
+  //////Encodeur Mât
+  public double getPositionMat() {
+  return moteurBrasRetractable.getSelectedSensorPosition()*conversionEncodeurMat;
+  }
+
+  public double getVitesseMat() {
+    return moteurBrasRetractable.getSelectedSensorVelocity()*conversionEncodeurMat*10; //x10 car les encodeur des falcon donne des click par 100 ms.
+  }
+  
+  public void resetEncodeurMat() {
+    moteurBrasRetractable.setSelectedSensorPosition(0);
+  }
+
+ 
   public boolean getDetecteurMagnetic() {
     return detecteurMagnetic.get();
   }
-  public void allonger() {
-    setVoltage(3);
-  }
-  public void retracter() {
-    setVoltage(-3);
-  }
+
+
+  /////Encodeur Coude - mettre les méthodes ici.
+
+  
+
 }

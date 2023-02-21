@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.BasePilotableConstants;
 
 public class BasePilotable extends SubsystemBase {
   //Moteurs
@@ -192,7 +192,7 @@ public class BasePilotable extends SubsystemBase {
   }
 
   public boolean isNotBalance() {
-    return Math.abs(getPitch()) >= Constants.kToleranceBalancer; //Depend de comment le gyro est placé dans le robot pour le sens Pitch ou Roll
+    return Math.abs(getPitch()) >= BasePilotableConstants.kToleranceBalancer; //Depend de comment le gyro est placé dans le robot pour le sens Pitch ou Roll
   }
 //Odométrie
  public double[] getOdometry(){
