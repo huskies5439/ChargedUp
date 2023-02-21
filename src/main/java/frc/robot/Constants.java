@@ -22,7 +22,7 @@ public final class Constants {
   
   
   
-    public static final double kMaxMat = 0.5; //en mètre
+    public static final double kMaxMat = 0.58; //en mètre
   }
 
 }

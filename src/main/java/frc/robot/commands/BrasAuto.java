@@ -4,10 +4,13 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.BrasConstants;
 import frc.robot.subsystems.Bras;
+
 
 public class BrasAuto extends CommandBase {
   Bras bras;
@@ -25,10 +28,12 @@ public class BrasAuto extends CommandBase {
 
   @Override
   public void initialize() {
-
+    
+    longueur = MathUtil.clamp(longueur, 0, BrasConstants.kMaxMat);
     //Mettre une tolérance de 5 mm.
-
+    pid.setTolerance(5);
     //On vérifie si la longueur cible est entre le Max du mat et 0. 
+    
     //Utiliser la fonction "clamp" pour ramener la longueur dans cet interval si nécessaire
 
 

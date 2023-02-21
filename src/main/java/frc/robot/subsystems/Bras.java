@@ -11,15 +11,17 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.BrasConstants;
+import pabeles.concurrency.ConcurrencyOps.Reset;
 
 public class Bras extends SubsystemBase {
   private WPI_TalonFX moteurBrasRetractable = new WPI_TalonFX(5);
   private double conversionEncodeurMat;
+  private Encoder encodeurCoude = new Encoder(4, 5);
   private DigitalInput detecteurMagnetic = new DigitalInput(9);
-  //Je sais pas trop comment faire pour la suite [P-A]
   ElevatorFeedforward feedforward = new ElevatorFeedforward(BrasConstants.kSElevator, BrasConstants.kGElevator, BrasConstants.kVElevator, BrasConstants.kAElevator);
 
   //Encoder encodeurCoude = ....... // utiliser les ports 4,5. C'est un encodeur externe, donc voir les encodeurs de la basePilotable
@@ -44,7 +46,8 @@ public class Bras extends SubsystemBase {
     // This method will be called once per scheduler run
   SmartDashboard.putNumber("Position Mat", getPositionMat());
   SmartDashboard.putNumber("Vitesse Mat", getVitesseMat());
-
+  SmartDashboard.putNumber("Vitesse Coude", getVitesseCoude());
+  SmartDashboard.putNumber("Distance Coude", getDistanceCoude());
   }
 
   public void setVoltage(double voltage) {
@@ -95,6 +98,17 @@ public class Bras extends SubsystemBase {
 
   /////Encodeur Coude - mettre les méthodes ici.
 
-  
+  public double getDistanceCoude() {
+    return encodeurCoude.getDistance();
+  }
+
+  public double getVitesseCoude() {
+    return encodeurCoude.getRate();
+  }
+
+  public void resetEncodeurCoude() {
+    encodeurCoude.reset();
+  }
+
 
 }

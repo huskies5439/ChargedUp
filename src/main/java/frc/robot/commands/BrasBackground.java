@@ -27,14 +27,21 @@ public class BrasBackground extends CommandBase {
   @Override
   public void execute() {
     
-//Reset si détecteur magnétique
+  //Reset si détecteur magnétique
 
-
-
-//Applique un voltage constant si l'encodeur >0
-// Le voltage est à trouver, mais surement vraiment faible, genre 1 V
-
+  if (bras.getDetecteurMagnetic()){
+    bras.resetEncodeurMat();
   }
+
+
+
+  //Applique un voltage constant si l'encodeur >0
+  // Le voltage est à trouver, mais surement vraiment faible, genre 1 V
+
+  if (bras.getPositionMat() > 0) {
+    bras.setVoltage(1);
+  }
+}
 
   @Override
   public void end(boolean interrupted) {}
