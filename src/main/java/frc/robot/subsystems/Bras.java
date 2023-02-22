@@ -18,25 +18,24 @@ import frc.robot.Constants.BrasConstants;
 import pabeles.concurrency.ConcurrencyOps.Reset;
 
 public class Bras extends SubsystemBase {
-  private WPI_TalonFX moteurBrasRetractable = new WPI_TalonFX(5);
-  private double conversionEncodeurMat;
-  private Encoder encodeurCoude = new Encoder(4, 5);
+  private WPI_TalonFX moteurBras = new WPI_TalonFX(5);
+  private double conversionEncodeur;
   private DigitalInput detecteurMagnetic = new DigitalInput(9);
-  ElevatorFeedforward feedforward = new ElevatorFeedforward(BrasConstants.kSElevator, BrasConstants.kGElevator, BrasConstants.kVElevator, BrasConstants.kAElevator);
 
-  //Encoder encodeurCoude = ....... // utiliser les ports 4,5. C'est un encodeur externe, donc voir les encodeurs de la basePilotable
-  double conversionEncodeurCoude;
+
+
+
   public Bras() {
-    moteurBrasRetractable.setInverted(false);
-    moteurBrasRetractable.setNeutralMode(NeutralMode.Brake);
-    moteurBrasRetractable.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
-    resetEncodeurMat();
+    moteurBras.setInverted(false);
+    moteurBras.setNeutralMode(NeutralMode.Brake);
+    moteurBras.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
+    resetEncodeur();
     /*1 tour de falcon = 2048 clic. Pignon 14 dents sur le falcon fait tourner gear 40 dents. La gear 40 dents est solidaire d'une
     gear 14 dents (même vitesse). La gear 14 dents fait tourner une gear 60 dents. La gear 60 dents est solidaire d'une roue dentée
     de 16 dents qui fait tourner la chaine 25. Chaque maille de la chaine fait 0.25 pouces*/
-    conversionEncodeurMat = (1.0/2048)*(14.0/40)*(14.0/60)*(16.0)*Units.inchesToMeters(0.25);
+    conversionEncodeur = (1.0/2048)*(14.0/40)*(14.0/60)*(16.0)*Units.inchesToMeters(0.25);
 
-    conversionEncodeurCoude = 1; //Trouver la vraie valeur lorsque le CAD sera fait.
+  
 
   }
 
@@ -44,14 +43,13 @@ public class Bras extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-  SmartDashboard.putNumber("Position Mat", getPositionMat());
-  SmartDashboard.putNumber("Vitesse Mat", getVitesseMat());
-  SmartDashboard.putNumber("Vitesse Coude", getVitesseCoude());
-  SmartDashboard.putNumber("Distance Coude", getDistanceCoude());
+  SmartDashboard.putNumber("Position Mat", getPosition());
+  SmartDashboard.putNumber("Vitesse Mat", getVitesse());
+
   }
 
   public void setVoltage(double voltage) {
-  moteurBrasRetractable.setVoltage(voltage);
+  moteurBras.setVoltage(voltage);
   }
 
   public void stop() {
@@ -59,7 +57,7 @@ public class Bras extends SubsystemBase {
   }
 
   public void allonger() {
-    if (getPositionMat()< BrasConstants.kMaxMat){
+    if (getPosition()< BrasConstants.kMaxMat){
         setVoltage(3);
     }
     else {
@@ -68,7 +66,7 @@ public class Bras extends SubsystemBase {
   
   }
   public void retracter() {
-    if (getPositionMat() > 0){
+    if (getPosition() > 0){
       setVoltage(-3);
     }
     else{
@@ -78,16 +76,16 @@ public class Bras extends SubsystemBase {
   }
 
   //////Encodeur Mât
-  public double getPositionMat() {
-  return moteurBrasRetractable.getSelectedSensorPosition()*conversionEncodeurMat;
+  public double getPosition() {
+  return moteurBras.getSelectedSensorPosition()*conversionEncodeur;
   }
 
-  public double getVitesseMat() {
-    return moteurBrasRetractable.getSelectedSensorVelocity()*conversionEncodeurMat*10; //x10 car les encodeur des falcon donne des click par 100 ms.
+  public double getVitesse() {
+    return moteurBras.getSelectedSensorVelocity()*conversionEncodeur*10; //x10 car les encodeur des falcon donne des click par 100 ms.
   }
   
-  public void resetEncodeurMat() {
-    moteurBrasRetractable.setSelectedSensorPosition(0);
+  public void resetEncodeur() {
+    moteurBras.setSelectedSensorPosition(0);
   }
 
  
@@ -96,19 +94,7 @@ public class Bras extends SubsystemBase {
   }
 
 
-  /////Encodeur Coude - mettre les méthodes ici.
 
-  public double getDistanceCoude() {
-    return encodeurCoude.getDistance();
-  }
-
-  public double getVitesseCoude() {
-    return encodeurCoude.getRate();
-  }
-
-  public void resetEncodeurCoude() {
-    encodeurCoude.reset();
-  }
 
 
 }

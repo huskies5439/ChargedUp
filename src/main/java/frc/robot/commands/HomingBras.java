@@ -24,14 +24,14 @@ public class HomingBras extends SequentialCommandGroup {
       //on recule jusqu'à l'interrupteur magnétique et on reset l'encodeur
       new RunCommand(()-> bras.setVoltage(-1), bras).until(bras::getDetecteurMagnetic), 
       new InstantCommand(bras::stop),
-      new InstantCommand(bras::resetEncodeurMat),
+      new InstantCommand(bras::resetEncodeur),
       new WaitCommand(0.5),
 
       //On réavance, puis on recule à nouveau vers l'interrupteur pour valider.
       new RunCommand(()-> bras.setVoltage(1), bras).withTimeout(1),
       new RunCommand(()-> bras.setVoltage(-1), bras).until(bras::getDetecteurMagnetic),
       new InstantCommand(bras::stop),
-      new InstantCommand(bras::resetEncodeurMat)
+      new InstantCommand(bras::resetEncodeur)
 
     );
   }

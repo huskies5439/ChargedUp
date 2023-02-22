@@ -8,6 +8,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.robot.Constants.BrasConstants;
 import frc.robot.subsystems.Bras;
 
@@ -15,6 +16,7 @@ import frc.robot.subsystems.Bras;
 public class BrasAuto extends CommandBase {
   Bras bras;
   double longueur;
+  double voltage;
   //Trouver la valeur de kP
   ProfiledPIDController pid = new ProfiledPIDController(0, 0, 0,
             //Vitesse et accélération max vraiment faibles pour tester     
@@ -24,27 +26,30 @@ public class BrasAuto extends CommandBase {
     this.bras = bras;
     this.longueur = longueurCible;
     addRequirements(bras);
-  }
+   
+      
+    }
+  
 
   @Override
   public void initialize() {
     
-    longueur = MathUtil.clamp(longueur, 0, BrasConstants.kMaxMat);
+
     //Mettre une tolérance de 5 mm.
     pid.setTolerance(5);
     //On vérifie si la longueur cible est entre le Max du mat et 0. 
     
     //Utiliser la fonction "clamp" pour ramener la longueur dans cet interval si nécessaire
-
-
+    longueur = MathUtil.clamp(longueur, 0, BrasConstants.kMaxMat);
+    pid.setGoal(longueur);
   }
 
   @Override
   public void execute() {
 
     //C'est ici que le calcul doit se faire et être envoyer au moteur !
-
-
+    voltage = pid.calculate(bras.getPosition());
+    bras.setVoltage(voltage);
   }
 
   @Override
@@ -54,6 +59,7 @@ public class BrasAuto extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return false;
+    return pid.atGoal();
   }
+
 }

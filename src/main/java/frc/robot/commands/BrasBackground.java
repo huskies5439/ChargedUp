@@ -30,7 +30,7 @@ public class BrasBackground extends CommandBase {
   //Reset si détecteur magnétique
 
   if (bras.getDetecteurMagnetic()){
-    bras.resetEncodeurMat();
+    bras.resetEncodeur();
   }
 
 
@@ -38,7 +38,7 @@ public class BrasBackground extends CommandBase {
   //Applique un voltage constant si l'encodeur >0
   // Le voltage est à trouver, mais surement vraiment faible, genre 1 V
 
-  if (bras.getPositionMat() > 0) {
+  if (bras.getPosition() > 0) {
     bras.setVoltage(1);
   }
 }
