@@ -13,6 +13,7 @@ import frc.robot.commands.Conduire;
 import frc.robot.commands.PincerAuto;
 import frc.robot.subsystems.BasePilotable;
 import frc.robot.subsystems.Bras;
+import frc.robot.subsystems.Coude;
 import frc.robot.subsystems.Pince;
 
 /**
@@ -26,6 +27,7 @@ public class RobotContainer {
   private final BasePilotable basePilotable = new BasePilotable();
   private final Bras bras = new Bras();
   private final Pince pince = new Pince();
+  private final Coude coude = new Coude();
   CommandXboxController pilote = new CommandXboxController(0);
   
   
@@ -39,9 +41,10 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    pilote.a().whileTrue(new StartEndCommand(bras::allonger,bras::stop , bras));
-    pilote.b().whileTrue(new StartEndCommand(bras::retracter,bras::stop , bras));
-
+    pilote.povUp().whileTrue(new StartEndCommand(bras::allonger,bras::stop , bras));
+    pilote.povDown().whileTrue(new StartEndCommand(bras::retracter,bras::stop , bras));
+    pilote.povRight().whileTrue(new StartEndCommand(coude::monter, coude::stop, coude));
+    pilote.povLeft().whileTrue(new StartEndCommand(coude::descendre, coude::stop, coude));
     //Sur bouton x : le bras va à 0 m
     //Sur bouton y : le bras va à 30 cm de longueur (0.3 m)
 

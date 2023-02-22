@@ -50,7 +50,7 @@ public class Coude extends SubsystemBase {
       setVoltage(-3);
     }
     else{
-      setVoltage(0);
+      stop();
     }
     
   }
@@ -59,8 +59,13 @@ public class Coude extends SubsystemBase {
         setVoltage(3);
     }
     else {
-      setVoltage(0);
+      stop();
   
    }
+  }
+
+  public void stop(){
+    setVoltage(0);
+
   }
 }
