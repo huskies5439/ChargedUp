@@ -9,10 +9,11 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Conduire;
 import frc.robot.commands.PincerAuto;
 import frc.robot.subsystems.BasePilotable;
-import frc.robot.subsystems.Bras;
+import frc.robot.subsystems.Echelle;
 import frc.robot.subsystems.Coude;
 import frc.robot.subsystems.Pince;
 
@@ -25,11 +26,11 @@ import frc.robot.subsystems.Pince;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final BasePilotable basePilotable = new BasePilotable();
-  private final Bras bras = new Bras();
+  private final Echelle echelle = new Echelle();
   private final Pince pince = new Pince();
   private final Coude coude = new Coude();
   CommandXboxController pilote = new CommandXboxController(0);
-  
+  Trigger aimantechelle = new Trigger(echelle::getDetecteurMagnetic);
   
   public RobotContainer() {
     
@@ -37,17 +38,28 @@ public class RobotContainer {
     
     basePilotable.setDefaultCommand(new Conduire(pilote::getLeftY,pilote::getRightX, basePilotable));
     //pince.setDefaultCommand(new PincerAuto(pince)); Remettre dans le code quand les capteurs seront posés
-    //Placer BrasBackground ici
+    echelle.setDefaultCommand(new RunCommand(echelle::pidEchelle, echelle));
+    coude.setDefaultCommand(new RunCommand(coude::pidCoude, coude));
   }
 
   private void configureBindings() {
-    pilote.povUp().whileTrue(new StartEndCommand(bras::allonger,bras::stop , bras));
-    pilote.povDown().whileTrue(new StartEndCommand(bras::retracter,bras::stop , bras));
+    pilote.povUp().whileTrue(new StartEndCommand(echelle::allonger,echelle::stop , echelle));
+    pilote.povDown().whileTrue(new StartEndCommand(echelle::retracter,echelle::stop , echelle));
     pilote.povRight().whileTrue(new StartEndCommand(coude::monter, coude::stop, coude));
     pilote.povLeft().whileTrue(new StartEndCommand(coude::descendre, coude::stop, coude));
     //Sur bouton x : le bras va à 0 m
     //Sur bouton y : le bras va à 30 cm de longueur (0.3 m)
+    pilote.x().onTrue(new InstantCommand(()->echelle.setCible(0)));
+    pilote.y().onTrue(new InstantCommand(()->echelle.setCible(0.3)));//ne requiert pas l'echelle pas grave????
+    //sur bouton a : le coude va à 0 degré
+    //sur bouton b : le coude va à 90 degré
+    pilote.a().onTrue(new InstantCommand(()->coude.setCible(0)));
+    pilote.b().onTrue(new InstantCommand(()->coude.setCible(90)));
 
+    //pilote.a().ontrue(conditionalcommand(commandeOnTrue : cube, commandOnFalse : cone, conditiontrue))
+
+    //reset encodeur quand l'aimant est activer
+    aimantechelle.onTrue(new InstantCommand(echelle::resetEncodeur));
 
     pilote.rightBumper().onTrue(new InstantCommand(pince::togglePince, pince)); //Pas un toggle car cela désactiverais le PincerAuto qui doit fonctionner en permanence
   }

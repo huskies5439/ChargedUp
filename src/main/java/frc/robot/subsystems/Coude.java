@@ -9,19 +9,36 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.fasterxml.jackson.databind.JsonSerializable.Base;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.BrasConstants;
+import frc.robot.Constants.CoudeConstance;
+import frc.robot.Constants.EchelleConstants;
 
 public class Coude extends SubsystemBase {
+
+
   double conversionEncodeur;
   private Encoder encodeur = new Encoder(4, 5);
   private WPI_TalonFX moteur = new WPI_TalonFX(6);
-  
+  private ProfiledPIDController pid;
+
+
   public Coude() {
-    conversionEncodeur = 1; //Trouver la vraie valeur lorsque le CAD sera fait.
+
+  pid = new ProfiledPIDController(0, 0, 0,
+  //Vitesse et accélération max vraiment faibles pour tester     
+  new TrapezoidProfile.Constraints(5,5));
+
+  pid.setTolerance(5);
+    conversionEncodeur = 360/(256*32/14); //360 degre,256 clics d'encodeur par tour,ratio encodeur-coude 32:14
+    encodeur.setDistancePerPulse(conversionEncodeur);
     moteur.setNeutralMode(NeutralMode.Brake);
+
+    setCible(0);
   }
 
   @Override
@@ -55,7 +72,7 @@ public class Coude extends SubsystemBase {
     
   }
     public void monter() {
-    if (getPosition() < BrasConstants.kMaxCoude){
+    if (getPosition() < CoudeConstance.kMaxCoude){
         setVoltage(3);
     }
     else {
@@ -67,5 +84,12 @@ public class Coude extends SubsystemBase {
   public void stop(){
     setVoltage(0);
 
+  }
+  public void pidCoude() {
+    setVoltage(pid.calculate(getPosition()));
+  }
+  public void setCible(double cible){
+    cible = MathUtil.clamp(cible, 0, CoudeConstance.kMaxCoude);
+    pid.setGoal(cible);
   }
 }

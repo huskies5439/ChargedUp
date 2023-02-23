@@ -14,7 +14,7 @@ public final class Constants {
   }
   
 
-  public static final class BrasConstants{
+  public static final class EchelleConstants{
     public static final double kSElevator = 0.0;
     public static final double kGElevator = 0.0;
     public static final double kVElevator = 0.0;
@@ -22,8 +22,10 @@ public final class Constants {
   
   
   
-    public static final double kMaxMat = 0.58; //en mètre
-    public static final double kMaxCoude = 0.5; //à trouver
+    public static final double kMaxEchelle = 0.58; //en mètre
+    
   }
-
+public static final class CoudeConstance{
+  public static final double kMaxCoude = 135;
+}
 }

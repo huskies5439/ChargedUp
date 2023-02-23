@@ -8,17 +8,17 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.subsystems.Bras;
+import frc.robot.subsystems.Echelle;
 
 
-public class HomingBras extends SequentialCommandGroup {
+public class HomingEchelle extends SequentialCommandGroup {
   //Sert à mettre le bras à 0 entre les matchs.
   //Présentement ne fait que le Mat. Si le coude reste dépendant du bras, ne rien changer
   //Si le coude devient un système indépendant, on pourra ajouter la séquence après celle-ci
 
   //À lier à un bouton incongru, genre select
 
-  public HomingBras(Bras bras) {
+  public HomingEchelle(Echelle bras) {
     
     addCommands(
       //on recule jusqu'à l'interrupteur magnétique et on reset l'encodeur
