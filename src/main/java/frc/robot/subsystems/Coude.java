@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.JsonSerializable.Base;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -25,16 +26,16 @@ public class Coude extends SubsystemBase {
   private Encoder encodeur = new Encoder(4, 5);
   private WPI_TalonFX moteur = new WPI_TalonFX(6);
   private ProfiledPIDController pid;
-
+  private DigitalInput detecteurMagnetiqueCoude = new DigitalInput(8);
 
   public Coude() {
 
-  pid = new ProfiledPIDController(0, 0, 0,
+  pid = new ProfiledPIDController(0.1, 0, 0,
   //Vitesse et accélération max vraiment faibles pour tester     
-  new TrapezoidProfile.Constraints(5,5));
+  new TrapezoidProfile.Constraints(15,15));
 
-  pid.setTolerance(5);
-    conversionEncodeur = 360/(256*32/14); //360 degre,256 clics d'encodeur par tour,ratio encodeur-coude 32:14
+  pid.setTolerance(1);
+    conversionEncodeur = 360.0/(360.0*40.0/14.0); //360 degre,360 clics d'encodeur par tour,ratio encodeur-coude 40:14
     encodeur.setDistancePerPulse(conversionEncodeur);
     moteur.setNeutralMode(NeutralMode.Brake);
 
@@ -63,12 +64,12 @@ public class Coude extends SubsystemBase {
     moteur.setVoltage(voltage);
   }
      public void descendre() {
-    if (getPosition() > 0){
+    // if (getPosition() > 0){
       setVoltage(-3);
-    }
-    else{
-      stop();
-    }
+    // }
+    // else{
+      // stop();
+    // }
     
   }
     public void monter() {
@@ -91,5 +92,9 @@ public class Coude extends SubsystemBase {
   public void setCible(double cible){
     cible = MathUtil.clamp(cible, 0, CoudeConstance.kMaxCoude);
     pid.setGoal(cible);
+  }
+
+  public boolean getDetecteurMagnetiqueCoude() {
+    return detecteurMagnetiqueCoude.get();
   }
 }

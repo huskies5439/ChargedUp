@@ -11,10 +11,9 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Conduire;
-import frc.robot.commands.PincerAuto;
 import frc.robot.subsystems.BasePilotable;
-import frc.robot.subsystems.Echelle;
 import frc.robot.subsystems.Coude;
+import frc.robot.subsystems.Echelle;
 import frc.robot.subsystems.Pince;
 
 /**
@@ -30,7 +29,7 @@ public class RobotContainer {
   private final Pince pince = new Pince();
   private final Coude coude = new Coude();
   CommandXboxController pilote = new CommandXboxController(0);
-  Trigger aimantechelle = new Trigger(echelle::getDetecteurMagnetic);
+  Trigger aimantechelle = new Trigger(echelle::getDetecteurMagnetique);
   
   public RobotContainer() {
     
@@ -45,7 +44,7 @@ public class RobotContainer {
   private void configureBindings() {
     pilote.povUp().whileTrue(new StartEndCommand(echelle::allonger,echelle::stop , echelle));
     pilote.povDown().whileTrue(new StartEndCommand(echelle::retracter,echelle::stop , echelle));
-    pilote.povRight().whileTrue(new StartEndCommand(coude::monter, coude::stop, coude));
+   pilote.povRight().whileTrue(new StartEndCommand(coude::monter, coude::stop, coude));
     pilote.povLeft().whileTrue(new StartEndCommand(coude::descendre, coude::stop, coude));
     //Sur bouton x : le bras va à 0 m
     //Sur bouton y : le bras va à 30 cm de longueur (0.3 m)
@@ -54,12 +53,12 @@ public class RobotContainer {
     //sur bouton a : le coude va à 0 degré
     //sur bouton b : le coude va à 90 degré
     pilote.a().onTrue(new InstantCommand(()->coude.setCible(0)));
-    pilote.b().onTrue(new InstantCommand(()->coude.setCible(90)));
+    pilote.b().onTrue(new InstantCommand(()->coude.setCible(45)));
 
     //pilote.a().ontrue(conditionalcommand(commandeOnTrue : cube, commandOnFalse : cone, conditiontrue))
 
     //reset encodeur quand l'aimant est activer
-    aimantechelle.onTrue(new InstantCommand(echelle::resetEncodeur));
+   aimantechelle.onTrue(new InstantCommand(echelle::resetEncodeur));
 
     pilote.rightBumper().onTrue(new InstantCommand(pince::togglePince, pince)); //Pas un toggle car cela désactiverais le PincerAuto qui doit fonctionner en permanence
   }

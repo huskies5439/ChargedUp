@@ -22,7 +22,7 @@ import pabeles.concurrency.ConcurrencyOps.Reset;
 public class Echelle extends SubsystemBase {
   private WPI_TalonFX moteurBras = new WPI_TalonFX(5);
   private double conversionEncodeur;
-  private DigitalInput detecteurMagnetic = new DigitalInput(9);
+  private DigitalInput detecteurMagnetique = new DigitalInput(9);
   private ProfiledPIDController pid;
 
 
@@ -39,9 +39,9 @@ public class Echelle extends SubsystemBase {
     de 16 dents qui fait tourner la chaine 25. Chaque maille de la chaine fait 0.25 pouces*/
     conversionEncodeur = (1.0/2048)*(14.0/40)*(14.0/60)*(16.0)*Units.inchesToMeters(0.25);
 
-    pid = new ProfiledPIDController(0, 0, 0,
+    pid = new ProfiledPIDController(100, 0, 0,
             //Vitesse et accélération max vraiment faibles pour tester     
-            new TrapezoidProfile.Constraints(0.1,0.1));
+            new TrapezoidProfile.Constraints(2,4));
             pid.setTolerance(5);
 
     setCible(0);
@@ -55,6 +55,10 @@ public class Echelle extends SubsystemBase {
   SmartDashboard.putNumber("Position Mat", getPosition());
   SmartDashboard.putNumber("Vitesse Mat", getVitesse());
 
+  
+
+ // pidEchelle();
+
   }
 
   public void setVoltage(double voltage) {
@@ -66,21 +70,28 @@ public class Echelle extends SubsystemBase {
   }
 
   public void allonger() {
+    setVoltage(3);
+    /*
     if (getPosition()< EchelleConstants.kMaxEchelle){
-        setVoltage(3);
+      setVoltage(3);
     }
     else {
       stop();
-    }
+    } */
+    
   
   }
   public void retracter() {
+    setVoltage(-3);
+    /*
     if (getPosition() > 0){
       setVoltage(-3);
     }
     else{
       stop();
     }
+     */
+    
     
   }
 
@@ -98,8 +109,8 @@ public class Echelle extends SubsystemBase {
   }
 
  
-  public boolean getDetecteurMagnetic() {
-    return detecteurMagnetic.get();
+  public boolean getDetecteurMagnetique() {
+    return detecteurMagnetique.get();
   }
 
 public void pidEchelle() {

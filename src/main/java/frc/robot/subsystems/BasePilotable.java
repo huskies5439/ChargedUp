@@ -71,6 +71,7 @@ public class BasePilotable extends SubsystemBase {
 
     //Odometrie
     odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getAngle()), getPositionG(), getPositionD());
+    lowGear();
   }
 
   @Override
@@ -82,6 +83,8 @@ public class BasePilotable extends SubsystemBase {
     SmartDashboard.putNumber("Pitch", getPitch());
     SmartDashboard.putNumber("position", getPosition());
     SmartDashboard.putNumber("vitesse", getVitesse());
+    //SmartDashboard.putNumber("gauche",getPositionG());
+    //SmartDashboard.putNumber("droite", getPositionD());
     
   }
 
