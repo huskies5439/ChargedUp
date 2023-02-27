@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Pince extends SubsystemBase { 
   private DoubleSolenoid pinceGris = new DoubleSolenoid(PneumaticsModuleType.REVPH, 6, 5);
-  private WPI_TalonSRX pince = new WPI_TalonSRX(7);
+  //private WPI_TalonSRX pince = new WPI_TalonSRX(7);
   private DigitalInput lightBreak = new DigitalInput(7);
   private boolean capteurArmer = true;
   private boolean ouverture;
@@ -36,8 +36,8 @@ public class Pince extends SubsystemBase {
   ColorMatchResult comparaisonCouleur;
 
   public Pince() {
-    pince.setInverted(false);
-    pince.setNeutralMode(NeutralMode.Brake);
+    /*  pince.setInverted(false);
+    pince.setNeutralMode(NeutralMode.Brake);*/
     
     
 
@@ -74,10 +74,8 @@ public class Pince extends SubsystemBase {
       ouvrir();
     }
   }
-  //#endregion
-  
-  //#region //Pince motoriser
-  public void ouvrirMoteur(){
+  //Pince motoriser
+  /*public void ouvrirMoteur(){
     pince.setVoltage(1);
   }
 
@@ -87,10 +85,9 @@ public class Pince extends SubsystemBase {
 
   public void stopMoteur(){
     pince.setVoltage(0);
-  }
+  }*/
 
 
-  //#endregion
 
   // capteur pas bloqué true capteur bloqué false
   public boolean getFaisceau() {

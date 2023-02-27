@@ -64,6 +64,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return new RunCommand(() -> basePilotable.autoConduire(5, 5), basePilotable);
+    return null;//new RunCommand(() -> basePilotable.autoConduire(5, 5), basePilotable);
   }
 }
