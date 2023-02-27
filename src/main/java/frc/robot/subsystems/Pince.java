@@ -5,6 +5,10 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
@@ -19,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Pince extends SubsystemBase { 
   private DoubleSolenoid pinceGris = new DoubleSolenoid(PneumaticsModuleType.REVPH, 6, 5);
-
+  private WPI_TalonSRX pince = new WPI_TalonSRX(7);
   private DigitalInput lightBreak = new DigitalInput(7);
   private boolean capteurArmer = true;
   private boolean ouverture;
@@ -32,6 +36,11 @@ public class Pince extends SubsystemBase {
   ColorMatchResult comparaisonCouleur;
 
   public Pince() {
+    pince.setInverted(false);
+    pince.setNeutralMode(NeutralMode.Brake);
+    
+    
+
     ouvrir();
 
     colorMatcher.addColorMatch(kCouleurCone);
@@ -43,6 +52,7 @@ public class Pince extends SubsystemBase {
     //This method will be called once per scheduler run
   }
 
+  //#region //Pince pneumatique
   public void ouvrir() {
     pinceGris.set(Value.kForward);
     ouverture = true;
@@ -64,6 +74,23 @@ public class Pince extends SubsystemBase {
       ouvrir();
     }
   }
+  //#endregion
+  
+  //#region //Pince motoriser
+  public void ouvrirMoteur(){
+    pince.setVoltage(1);
+  }
+
+  public void fermerMoteur(){
+    pince.setVoltage(-1);
+  }
+
+  public void stopMoteur(){
+    pince.setVoltage(0);
+  }
+
+
+  //#endregion
 
   // capteur pas bloqué true capteur bloqué false
   public boolean getFaisceau() {

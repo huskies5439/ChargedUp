@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -24,7 +25,7 @@ public class Echelle extends SubsystemBase {
   private double conversionEncodeur;
   private DigitalInput detecteurMagnetique = new DigitalInput(9);
   private ProfiledPIDController pid;
-
+  boolean pidEchelleActif;
 
 
   public Echelle() {
@@ -44,7 +45,8 @@ public class Echelle extends SubsystemBase {
             new TrapezoidProfile.Constraints(2,4));
             pid.setTolerance(5);
 
-    setCible(0);
+    pidEchelleActif = false;
+    // setCible(0);
 
   }
 
@@ -71,6 +73,7 @@ public class Echelle extends SubsystemBase {
 
   public void allonger() {
     setVoltage(3);
+    pidEchelleActif = false;
     /*
     if (getPosition()< EchelleConstants.kMaxEchelle){
       setVoltage(3);
@@ -83,6 +86,7 @@ public class Echelle extends SubsystemBase {
   }
   public void retracter() {
     setVoltage(-3);
+    pidEchelleActif = false;
     /*
     if (getPosition() > 0){
       setVoltage(-3);
@@ -114,10 +118,14 @@ public class Echelle extends SubsystemBase {
   }
 
 public void pidEchelle() {
-  setVoltage(pid.calculate(getPosition()));
+  if(pidEchelleActif){
+    setVoltage(pid.calculate(getPosition()));
+  }
 }
 public void setCible(double cible){
+  cible = MathUtil.clamp(cible, 0, EchelleConstants.kMaxEchelle);
   pid.setGoal(cible);
+  pidEchelleActif = true;
 }
 
 

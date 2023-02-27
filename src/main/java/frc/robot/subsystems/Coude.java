@@ -23,6 +23,7 @@ public class Coude extends SubsystemBase {
 
 
   double conversionEncodeur;
+  boolean pidCoudeActif;
   private Encoder encodeur = new Encoder(4, 5);
   private WPI_TalonFX moteur = new WPI_TalonFX(6);
   private ProfiledPIDController pid;
@@ -32,14 +33,15 @@ public class Coude extends SubsystemBase {
 
   pid = new ProfiledPIDController(0.1, 0, 0,
   //Vitesse et accélération max vraiment faibles pour tester     
-  new TrapezoidProfile.Constraints(15,15));
+    new TrapezoidProfile.Constraints(15,15));
 
   pid.setTolerance(1);
     conversionEncodeur = 360.0/(360.0*40.0/14.0); //360 degre,360 clics d'encodeur par tour,ratio encodeur-coude 40:14
     encodeur.setDistancePerPulse(conversionEncodeur);
     moteur.setNeutralMode(NeutralMode.Brake);
 
-    setCible(0);
+    pidCoudeActif = false;
+    // setCible(0);
   }
 
   @Override
@@ -70,16 +72,18 @@ public class Coude extends SubsystemBase {
     // else{
       // stop();
     // }
+    pidCoudeActif = false;
     
   }
     public void monter() {
-    if (getPosition() < CoudeConstance.kMaxCoude){
+    // if (getPosition() < CoudeConstance.kMaxCoude){
         setVoltage(3);
-    }
-    else {
-      stop();
+    // }
+    // else {
+      // stop();
   
-   }
+  //  }
+    pidCoudeActif = false;
   }
 
   public void stop(){
@@ -87,11 +91,14 @@ public class Coude extends SubsystemBase {
 
   }
   public void pidCoude() {
-    setVoltage(pid.calculate(getPosition()));
+    if(pidCoudeActif){
+      setVoltage(pid.calculate(getPosition()));
+    }
   }
   public void setCible(double cible){
     cible = MathUtil.clamp(cible, 0, CoudeConstance.kMaxCoude);
     pid.setGoal(cible);
+    pidCoudeActif = true;
   }
 
   public boolean getDetecteurMagnetiqueCoude() {
