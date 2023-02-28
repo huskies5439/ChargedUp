@@ -28,12 +28,12 @@ public class Pince extends SubsystemBase {
   private boolean capteurArmer = true;
   private boolean ouverture;
 
-  ColorSensorV3 capteurCouleur = new ColorSensorV3(I2C.Port.kOnboard);
+  /*ColorSensorV3 capteurCouleur = new ColorSensorV3(I2C.Port.kOnboard);
   private final ColorMatch colorMatcher = new ColorMatch();
   private final Color kCouleurCone = new Color(0.359, 0.485, 0.158);
   private final Color kCouleurCube = new Color(0.26, 0.429, 0.311);
 
-  ColorMatchResult comparaisonCouleur;
+  ColorMatchResult comparaisonCouleur;*/
 
   public Pince() {
     /*  pince.setInverted(false);
@@ -43,8 +43,8 @@ public class Pince extends SubsystemBase {
 
     ouvrir();
 
-    colorMatcher.addColorMatch(kCouleurCone);
-    colorMatcher.addColorMatch(kCouleurCube);
+    /*colorMatcher.addColorMatch(kCouleurCone);
+    colorMatcher.addColorMatch(kCouleurCube);*/
   }
 
   @Override
@@ -102,7 +102,7 @@ public class Pince extends SubsystemBase {
     capteurArmer = estActif;
   }
 
-  public Color getCouleur() {
+  /*public Color getCouleur() {
     return capteurCouleur.getColor();
 
   }
@@ -126,6 +126,6 @@ public class Pince extends SubsystemBase {
   public boolean isCube() {
     return comparerCouleur() == kCouleurCube && isDetected();
 
-  }
+  }*/
 
 }
