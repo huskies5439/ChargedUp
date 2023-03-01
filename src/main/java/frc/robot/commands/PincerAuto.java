@@ -13,23 +13,20 @@ public class PincerAuto extends CommandBase {
     boolean capteurPasse;
     boolean capteurActuel;
 
-    boolean etatPasse=true;
-    boolean etatActuel=true;
+    boolean etatPasse = true;
+    boolean etatActuel = true;
 
   public PincerAuto(Pince pince) {
    this.pince = pince;
    addRequirements(pince);
   }
   
-
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     etatPasse=true;
     etatActuel=true;
   }
-
-  // Called every time the scheduler runs while the command is scheduled.
+  
   @Override
   public void execute() {
 
@@ -39,23 +36,21 @@ public class PincerAuto extends CommandBase {
     pince.setArmer(false);
     pince.fermer();
   }
+
   if (!etatPasse && etatActuel){
     pince.setArmer(true);
     pince.ouvrir();
   }
+
   etatPasse = etatActuel;
   
 }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
-
-  // Returns true when the command should end.
+  
   @Override
   public boolean isFinished() {
     return false;
   }
-
 }
-

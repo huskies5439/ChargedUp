@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Conduire;
+import frc.robot.commands.HomingBras;
 import frc.robot.subsystems.BasePilotable;
 import frc.robot.subsystems.Coude;
 import frc.robot.subsystems.Echelle;
@@ -44,7 +45,7 @@ public class RobotContainer {
   private void configureBindings() {
     pilote.povUp().whileTrue(new StartEndCommand(echelle::allonger,echelle::stop , echelle));
     pilote.povDown().whileTrue(new StartEndCommand(echelle::retracter,echelle::stop , echelle));
-   pilote.povRight().whileTrue(new StartEndCommand(coude::monter, coude::stop, coude));
+    pilote.povRight().whileTrue(new StartEndCommand(coude::monter, coude::stop, coude));
     pilote.povLeft().whileTrue(new StartEndCommand(coude::descendre, coude::stop, coude));
     //Sur bouton x : le bras va à 0 m
     //Sur bouton y : le bras va à 30 cm de longueur (0.3 m)
@@ -58,12 +59,20 @@ public class RobotContainer {
     //pilote.a().ontrue(conditionalcommand(commandeOnTrue : cube, commandOnFalse : cone, conditiontrue))
 
     //reset encodeur quand l'aimant est activer
-   aimantechelle.onTrue(new InstantCommand(echelle::resetEncodeur));
+    aimantechelle.onTrue(new InstantCommand(echelle::resetEncodeur));
 
+    //pince pneumatique
     pilote.rightBumper().onTrue(new InstantCommand(pince::togglePince, pince)); //Pas un toggle car cela désactiverais le PincerAuto qui doit fonctionner en permanence
+    
+    //pince motorisée
+    pilote.rightTrigger().whileTrue(new StartEndCommand(pince::ouvrirMoteur, pince::stopMoteur, pince));
+    pilote.leftTrigger().whileTrue(new StartEndCommand(pince::fermerMoteur, pince::stopMoteur, pince));
+  
+    //Homing
+    pilote.start().onTrue(new HomingBras(echelle, coude));
   }
 
   public Command getAutonomousCommand() {
-    return null;//new RunCommand(() -> basePilotable.autoConduire(5, 5), basePilotable);
+    return null; //new RunCommand(() -> basePilotable.autoConduire(5, 5), basePilotable);
   }
 }

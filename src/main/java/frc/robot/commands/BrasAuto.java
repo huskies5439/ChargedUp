@@ -9,15 +9,12 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.subsystems.Coude;
 import frc.robot.subsystems.Echelle;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class BrasAuto extends ParallelCommandGroup {
-  /** Creates a new BrasAuto. */
-  public BrasAuto(double cibleAngle, double cibleLongeur, Coude coude, Echelle echelle) {
+
+  public BrasAuto(double[] cible, Coude coude, Echelle echelle) {
     addCommands(
-      new InstantCommand(()->coude.setCible(cibleAngle)),
-      new InstantCommand(()->echelle.setCible(cibleLongeur))
+      new InstantCommand(()->coude.setCible(cible[0])),
+      new InstantCommand(()->echelle.setCible(cible[1]))
     );
   }
 }

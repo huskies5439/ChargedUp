@@ -5,10 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.fasterxml.jackson.databind.JsonSerializable.Base;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -16,11 +13,9 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.CoudeConstance;
-import frc.robot.Constants.EchelleConstants;
+import frc.robot.Constants.CoudeConstants;
 
 public class Coude extends SubsystemBase {
-
 
   double conversionEncodeur;
   boolean pidCoudeActif;
@@ -33,24 +28,22 @@ public class Coude extends SubsystemBase {
 
   pid = new ProfiledPIDController(0.1, 0, 0,
   //Vitesse et accélération max vraiment faibles pour tester     
-    new TrapezoidProfile.Constraints(15,15));
+  new TrapezoidProfile.Constraints(15,15));
 
   pid.setTolerance(1);
-    conversionEncodeur = 360.0/(360.0*40.0/14.0); //360 degre,360 clics d'encodeur par tour,ratio encodeur-coude 40:14
+    conversionEncodeur = 360.0/(360.0 * 40.0/14.0); //360 degre, 360 clics d'encodeur par tour,ratio encodeur-coude 40:14.
     encodeur.setDistancePerPulse(conversionEncodeur);
     moteur.setNeutralMode(NeutralMode.Brake);
 
     pidCoudeActif = false;
-    // setCible(0);
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
     SmartDashboard.putNumber("Vitesse Coude", getVitesse());
     SmartDashboard.putNumber("Distance Coude", getPosition());
-  
   }
+
   public double getPosition() {
     return encodeur.getDistance();
   }
@@ -62,46 +55,46 @@ public class Coude extends SubsystemBase {
   public void resetEncodeur() {
     encodeur.reset();
   }
+
   public void setVoltage(double voltage) {
     moteur.setVoltage(voltage);
   }
+
      public void descendre() {
     // if (getPosition() > 0){
       setVoltage(-3);
     // }
     // else{
-      // stop();
+    //  stop();
     // }
     pidCoudeActif = false;
-    
   }
     public void monter() {
     // if (getPosition() < CoudeConstance.kMaxCoude){
         setVoltage(3);
-    // }
     // else {
-      // stop();
-  
-  //  }
+    //   stop();
+
     pidCoudeActif = false;
   }
 
-  public void stop(){
+  public void stop() {
     setVoltage(0);
-
   }
+
   public void pidCoude() {
     if(pidCoudeActif){
       setVoltage(pid.calculate(getPosition()));
     }
   }
+
   public void setCible(double cible){
-    cible = MathUtil.clamp(cible, 0, CoudeConstance.kMaxCoude);
+    cible = MathUtil.clamp(cible, CoudeConstants.kMinCoude, CoudeConstants.kMaxCoude);
     pid.setGoal(cible);
     pidCoudeActif = true;
   }
 
   public boolean getDetecteurMagnetiqueCoude() {
-    return detecteurMagnetiqueCoude.get();
+    return !detecteurMagnetiqueCoude.get();
   }
 }

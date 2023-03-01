@@ -9,16 +9,13 @@ import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.EchelleConstants;
-import pabeles.concurrency.ConcurrencyOps.Reset;
 
 public class Echelle extends SubsystemBase {
   private WPI_TalonFX moteurBras = new WPI_TalonFX(5);
@@ -26,7 +23,6 @@ public class Echelle extends SubsystemBase {
   private DigitalInput detecteurMagnetique = new DigitalInput(9);
   private ProfiledPIDController pid;
   boolean pidEchelleActif;
-
 
   public Echelle() {
 
@@ -46,25 +42,18 @@ public class Echelle extends SubsystemBase {
             pid.setTolerance(5);
 
     pidEchelleActif = false;
-    // setCible(0);
-
   }
 
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
   SmartDashboard.putNumber("Position Mat", getPosition());
   SmartDashboard.putNumber("Vitesse Mat", getVitesse());
-
-  
-
- // pidEchelle();
-
+  SmartDashboard.putBoolean("Capteur magnétique", getDetecteurMagnetique());
   }
 
   public void setVoltage(double voltage) {
-  moteurBras.setVoltage(voltage);
+    moteurBras.setVoltage(voltage);
   }
 
   public void stop() {
@@ -72,36 +61,33 @@ public class Echelle extends SubsystemBase {
   }
 
   public void allonger() {
-    setVoltage(3);
-    pidEchelleActif = false;
-    /*
+   
     if (getPosition()< EchelleConstants.kMaxEchelle){
       setVoltage(3);
     }
+
     else {
       stop();
-    } */
-    
-  
-  }
-  public void retracter() {
-    setVoltage(-3);
+    }
+
     pidEchelleActif = false;
-    /*
-    if (getPosition() > 0){
+  }
+
+  public void retracter() {
+    if (getPosition() > 0) {
       setVoltage(-3);
     }
-    else{
+
+    else {
       stop();
     }
-     */
-    
-    
+
+    pidEchelleActif = false;
   }
 
   //////Encodeur Mât
   public double getPosition() {
-  return moteurBras.getSelectedSensorPosition()*conversionEncodeur;
+    return moteurBras.getSelectedSensorPosition()*conversionEncodeur;
   }
 
   public double getVitesse() {
@@ -112,21 +98,19 @@ public class Echelle extends SubsystemBase {
     moteurBras.setSelectedSensorPosition(0);
   }
 
- 
   public boolean getDetecteurMagnetique() {
-    return detecteurMagnetique.get();
+    return !detecteurMagnetique.get();
   }
 
-public void pidEchelle() {
-  if(pidEchelleActif){
-    setVoltage(pid.calculate(getPosition()));
+  public void pidEchelle() {
+    if (pidEchelleActif) {
+      setVoltage(pid.calculate(getPosition()));
+    }
   }
-}
-public void setCible(double cible){
-  cible = MathUtil.clamp(cible, 0, EchelleConstants.kMaxEchelle);
-  pid.setGoal(cible);
-  pidEchelleActif = true;
-}
 
-
+  public void setCible(double cible) {
+    cible = MathUtil.clamp(cible, 0, EchelleConstants.kMaxEchelle);
+    pid.setGoal(cible);
+    pidEchelleActif = true;
+  }
 }

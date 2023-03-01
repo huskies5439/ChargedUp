@@ -50,7 +50,6 @@ public class BasePilotable extends SubsystemBase {
   //Odometrie
   private DifferentialDriveOdometry odometry;
   
-  /** Creates a new BasePilotable. */
   public BasePilotable() {
     //Reset intiaux
     resetEncodeur();
@@ -65,7 +64,7 @@ public class BasePilotable extends SubsystemBase {
     moteursD.setInverted(false);
     moteursG.setInverted(true);
 
-    //Remp et Break
+    //Ramp et Break
     setRamp(0);
     setBrake(false);
 
@@ -83,9 +82,6 @@ public class BasePilotable extends SubsystemBase {
     SmartDashboard.putNumber("Pitch", getPitch());
     SmartDashboard.putNumber("position", getPosition());
     SmartDashboard.putNumber("vitesse", getVitesse());
-    //SmartDashboard.putNumber("gauche",getPositionG());
-    //SmartDashboard.putNumber("droite", getPositionD());
-    
   }
 
   //////////////////////////////////////////// MÉTHODES ////////////////////////////////////////////
@@ -135,7 +131,7 @@ public class BasePilotable extends SubsystemBase {
   }
 
   //Ramp/Brake
-  public void setRamp(double ramp){
+  public void setRamp(double ramp) {
     moteurAvantG.configOpenloopRamp(ramp);
     moteurArriereG.configOpenloopRamp(ramp);
     moteurAvantD.configOpenloopRamp(ramp);
@@ -197,6 +193,7 @@ public class BasePilotable extends SubsystemBase {
   public boolean isNotBalance() {
     return Math.abs(getPitch()) >= BasePilotableConstants.kToleranceBalancer; //Depend de comment le gyro est placé dans le robot pour le sens Pitch ou Roll
   }
+  
 //Odométrie
  public double[] getOdometry(){
   double[] position = new double[3];

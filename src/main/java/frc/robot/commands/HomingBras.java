@@ -7,7 +7,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Coude;
 import frc.robot.subsystems.Echelle;
 
@@ -20,20 +19,22 @@ public class HomingBras extends SequentialCommandGroup {
   //À lier à un bouton incongru, genre select
 
   public HomingBras(Echelle echelle, Coude coude) {
-    
     addCommands(
+      //Avance un peu
+      new RunCommand(()-> echelle.setVoltage(2), echelle).withTimeout(0.5),
+    
       //on recule jusqu'à l'interrupteur magnétique et on reset l'encodeur
       new RunCommand(()-> echelle.setVoltage(-1), echelle).until(echelle::getDetecteurMagnetique), 
       new InstantCommand(echelle::stop),
       new InstantCommand(echelle::resetEncodeur),
-      new WaitCommand(0.5),
 
       //On réavance, puis on recule à nouveau vers l'interrupteur pour valider.
-      new RunCommand(()-> echelle.setVoltage(1), echelle).withTimeout(1),
+      new RunCommand(()-> echelle.setVoltage(1), echelle).withTimeout(0.5),
       new RunCommand(()-> echelle.setVoltage(-1), echelle).until(echelle::getDetecteurMagnetique),
       new InstantCommand(echelle::stop),
-      new InstantCommand(echelle::resetEncodeur),
+      new InstantCommand(echelle::resetEncodeur)
 
+/* //Partie coude 
       //on recule jusqu'à l'interrupteur magnétique et on reset l'encodeur
       new RunCommand(()-> coude.setVoltage(-1), coude).until(coude::getDetecteurMagnetiqueCoude),
       new InstantCommand(coude::stop),
@@ -44,8 +45,7 @@ public class HomingBras extends SequentialCommandGroup {
       new RunCommand(()-> coude.setVoltage(1), coude).withTimeout(1),
       new RunCommand(()-> coude.setVoltage(-1), coude).until(coude::getDetecteurMagnetiqueCoude),
       new InstantCommand(coude::stop),
-      new InstantCommand(coude::resetEncodeur)
-
+      new InstantCommand(coude::resetEncodeur) */
     );
   }
 }
