@@ -20,6 +20,7 @@ public class HomingBras extends SequentialCommandGroup {
 
   public HomingBras(Echelle echelle, Coude coude) {
     addCommands(
+ //Partie échelle
       //Avance un peu
       new RunCommand(()-> echelle.setVoltage(2), echelle).withTimeout(0.5),
     
@@ -32,20 +33,22 @@ public class HomingBras extends SequentialCommandGroup {
       new RunCommand(()-> echelle.setVoltage(1), echelle).withTimeout(0.5),
       new RunCommand(()-> echelle.setVoltage(-1), echelle).until(echelle::getDetecteurMagnetique),
       new InstantCommand(echelle::stop),
-      new InstantCommand(echelle::resetEncodeur)
+      new InstantCommand(echelle::resetEncodeur),
 
-/* //Partie coude 
+ //Partie coude 
+      //Avance un peu
+      new RunCommand(()-> coude.setVoltage(2), coude).withTimeout(0.5),
+
       //on recule jusqu'à l'interrupteur magnétique et on reset l'encodeur
       new RunCommand(()-> coude.setVoltage(-1), coude).until(coude::getDetecteurMagnetiqueCoude),
       new InstantCommand(coude::stop),
       new InstantCommand(coude::resetEncodeur),
-      new WaitCommand(0.5),
 
       //On réavance, puis on recule à nouveau vers l'interrupteur pour valider.
-      new RunCommand(()-> coude.setVoltage(1), coude).withTimeout(1),
+      new RunCommand(()-> coude.setVoltage(1), coude).withTimeout(0.5),
       new RunCommand(()-> coude.setVoltage(-1), coude).until(coude::getDetecteurMagnetiqueCoude),
       new InstantCommand(coude::stop),
-      new InstantCommand(coude::resetEncodeur) */
+      new InstantCommand(coude::resetEncodeur) 
     );
   }
 }

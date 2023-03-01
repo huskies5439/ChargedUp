@@ -14,11 +14,11 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Pince extends SubsystemBase { 
-  private DoubleSolenoid pinceGris = new DoubleSolenoid(PneumaticsModuleType.REVPH, 6, 5);
-  private WPI_TalonSRX pince = new WPI_TalonSRX(7);
+  private DoubleSolenoid pincePiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, 6, 5);
+  private WPI_TalonSRX pinceMoteur = new WPI_TalonSRX(7);
   private DigitalInput lightBreak = new DigitalInput(7);
   private boolean capteurArmer = true;
-  private boolean ouverture;
+  private boolean ouverturePiston;
 
   /*
   ColorSensorV3 capteurCouleur = new ColorSensorV3(I2C.Port.kOnboard);
@@ -30,10 +30,10 @@ public class Pince extends SubsystemBase {
   */
 
   public Pince() {
-    pince.setInverted(false);
-    pince.setNeutralMode(NeutralMode.Brake);
+    pinceMoteur.setInverted(false);
+    pinceMoteur.setNeutralMode(NeutralMode.Brake);
     
-    ouvrir();
+    ouvrirPiston();
     stopMoteur();
 
     /*
@@ -46,39 +46,39 @@ public class Pince extends SubsystemBase {
   public void periodic() {}
 
   //Pince pneumatique
-  public void ouvrir() {
-    pinceGris.set(Value.kForward);
-    ouverture = true;
+  public void ouvrirPiston() {
+    pincePiston.set(Value.kForward);
+    ouverturePiston = true;
   }
 
-  public void fermer() {
-    pinceGris.set(Value.kReverse);
-    ouverture = false;
+  public void fermerPiston() {
+    pincePiston.set(Value.kReverse);
+    ouverturePiston = false;
   }
 
-  public boolean getOuverture() {
-    return ouverture;
+  public boolean getOuverturePiston() {
+    return ouverturePiston;
   }
 
-  public void togglePince() {
-    if (ouverture) {
-      fermer();
+  public void togglePincePiston() {
+    if (ouverturePiston) {
+      fermerPiston();
     } else {
-      ouvrir();
+      ouvrirPiston();
     }
   }
 
   //Pince motoriser
   public void ouvrirMoteur() {
-    pince.setVoltage(12);
+    pinceMoteur.setVoltage(12);
   }
 
   public void fermerMoteur() {
-    pince.setVoltage(-12);
+    pinceMoteur.setVoltage(-12);
   }
 
   public void stopMoteur() {
-    pince.setVoltage(0);
+    pinceMoteur.setVoltage(0);
   }
 
   //Capteur pas bloqué true capteur bloqué false

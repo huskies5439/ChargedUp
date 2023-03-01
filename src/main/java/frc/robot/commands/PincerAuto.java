@@ -34,12 +34,12 @@ public class PincerAuto extends CommandBase {
   
   if (pince.getArmer() && !etatActuel){
     pince.setArmer(false);
-    pince.fermer();
+    pince.fermerPiston();
   }
 
   if (!etatPasse && etatActuel){
     pince.setArmer(true);
-    pince.ouvrir();
+    pince.ouvrirPiston();
   }
 
   etatPasse = etatActuel;

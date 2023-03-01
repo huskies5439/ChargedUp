@@ -36,10 +36,10 @@ public class Echelle extends SubsystemBase {
     de 16 dents qui fait tourner la chaine 25. Chaque maille de la chaine fait 0.25 pouces*/
     conversionEncodeur = (1.0/2048)*(14.0/40)*(14.0/60)*(16.0)*Units.inchesToMeters(0.25);
 
-    pid = new ProfiledPIDController(100, 0, 0,
+    pid = new ProfiledPIDController(EchelleConstants.kP, 0, 0,
             //Vitesse et accélération max vraiment faibles pour tester     
-            new TrapezoidProfile.Constraints(2,4));
-            pid.setTolerance(5);
+            new TrapezoidProfile.Constraints(EchelleConstants.kMaxVelocity, EchelleConstants.kMaxAcceleration));
+            pid.setTolerance(EchelleConstants.kPositionTolerance);
 
     pidEchelleActif = false;
   }
