@@ -25,9 +25,7 @@ public final class Constants {
 
   public static final class CoudeConstants {
     public static final double kMaxCoude = 135;
-    public static final double kMinCoude = -10;
-
-    public static final double kOffsetAngle = 0; //à savoir la distance
+    public static final double kMinCoude = -15;
     
     //Pour le PID
     public static final double kP = 0.1;

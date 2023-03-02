@@ -58,7 +58,7 @@ public class Coude extends SubsystemBase {
   }
 
   public double getPosition() {
-    return (encodeur.getDistance() - CoudeConstants.kOffsetAngle);
+    return (encodeur.getDistance() - CoudeConstants.kMinCoude);
   }
 
   public double getVitesse() {
