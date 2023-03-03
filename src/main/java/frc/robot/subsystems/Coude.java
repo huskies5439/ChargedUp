@@ -39,7 +39,7 @@ public class Coude extends SubsystemBase {
 
     conversionEncodeur = 360.0/(360.0 * 40.0/14.0); //360 degre, 360 clics d'encodeur par tour,ratio encodeur-coude 40:14.
     encodeur.setDistancePerPulse(conversionEncodeur);
-
+    moteur.setInverted(true);
   
     pid = new ProfiledPIDController(CoudeConstants.kP, 0, 0,
         new TrapezoidProfile.Constraints(CoudeConstants.kMaxVelocity, CoudeConstants.kMaxVelocity));
@@ -58,7 +58,7 @@ public class Coude extends SubsystemBase {
   }
 
   public double getPosition() {
-    return (encodeur.getDistance() - CoudeConstants.kMinCoude);
+    return (encodeur.getDistance() + CoudeConstants.kOffset);
   }
 
   public double getVitesse() {
@@ -74,20 +74,21 @@ public class Coude extends SubsystemBase {
   }
 
      public void descendre() {
-    // if (getPosition() > 0){
-      setVoltage(-3);
-    // }
-    // else{
-    //  stop();
-    // }
+      if (getPosition() > CoudeConstants.kMin){
+        setVoltage(-3);
+      }
+      else{
+        stop();
+    }
     pidCoudeActif = false;
   }
     public void monter() {
-    // if (getPosition() < CoudeConstance.kMaxCoude){
+      if (getPosition() < CoudeConstants.kMax) {
         setVoltage(3);
-    // else {
-    //   stop();
-
+      }
+      else {
+        stop();
+      }
     pidCoudeActif = false;
   }
 
@@ -111,7 +112,7 @@ public class Coude extends SubsystemBase {
     vitessePasse = 0;
     tempsPasse = Timer.getFPGATimestamp();
 
-    cible = MathUtil.clamp(cible, CoudeConstants.kMinCoude, CoudeConstants.kMaxCoude);
+    cible = MathUtil.clamp(cible, CoudeConstants.kMin, CoudeConstants.kMax);
     pid.setGoal(cible);
     pidCoudeActif = true;
   }

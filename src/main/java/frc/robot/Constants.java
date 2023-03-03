@@ -13,7 +13,7 @@ public final class Constants {
   }
   
   public static final class EchelleConstants {
-    public static final double kMaxEchelle = 0.58; //en mètre
+    public static final double kMaxEchelle = 0.56; //en mètre
 
     //Pour le PID
     public static final double kP = 100;
@@ -24,14 +24,15 @@ public final class Constants {
   }
 
   public static final class CoudeConstants {
-    public static final double kMaxCoude = 135;
-    public static final double kMinCoude = -15;
+    public static final double kMax = 100;
+    public static final double kMin = -15;
+    public static final double kOffset = -8;
     
     //Pour le PID
-    public static final double kP = 0.1;
+    public static final double kP = 0.15;
 
-    public static final double kMaxVelocity = 15; //en degré/s
-    public static final double kMaxAcceleration = 15; //en degré/s²
+    public static final double kMaxVelocity = 270; //en degré/s
+    public static final double kMaxAcceleration = 180; //en degré/s²
     public static final double kPositionTolerance = 1; // en degré
 
     //Pour le feedforward
@@ -43,8 +44,8 @@ public final class Constants {
 
   public static final class Cible {
     //angle [degrés] du coude en premier, puis hauteur [m] de l'échelle
-    public static final double[] kBas = {0, 0};
-    public static final double[] kMilieu = {20, 0.2};
-    public static final double[] kHaut = {45, 0.4};
+    public static final double[] kBas = {-10, 0};
+    public static final double[] kMilieu = {95, 0};
+    public static final double[] kHaut = {95, 0.45};
   }
 }

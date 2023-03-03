@@ -62,7 +62,7 @@ public class RobotContainer {
 
     //reset encodeur quand l'aimant est activer
     aimantechelle.onTrue(new InstantCommand(echelle::resetEncodeur));
-    aimantcoude.onTrue(new InstantCommand(coude::resetEncodeur));
+    //aimantcoude.onTrue(new InstantCommand(coude::resetEncodeur));
 
     //pince pneumatique
     pilote.rightBumper().onTrue(new InstantCommand(pince::togglePincePiston, pince)); //Pas un toggle car cela désactiverais le PincerAuto qui doit fonctionner en permanence
@@ -73,6 +73,7 @@ public class RobotContainer {
   
     //Homing
     pilote.start().onTrue(new HomingBras(echelle, coude));
+    pilote.back().onTrue(new InstantCommand(coude::resetEncodeur));
   }
 
   public Command getAutonomousCommand() {
