@@ -41,7 +41,7 @@ public class Coude extends SubsystemBase {
     encodeur.setDistancePerPulse(conversionEncodeur);
 
   
-    pid = new ProfiledPIDController(CoudeConstants.kP, 0, 0,    
+    pid = new ProfiledPIDController(CoudeConstants.kP, 0, 0,
         new TrapezoidProfile.Constraints(CoudeConstants.kMaxVelocity, CoudeConstants.kMaxVelocity));
 
     pid.setTolerance(CoudeConstants.kPositionTolerance);
@@ -58,7 +58,7 @@ public class Coude extends SubsystemBase {
   }
 
   public double getPosition() {
-    return encodeur.getDistance();
+    return (encodeur.getDistance() - CoudeConstants.kMinCoude);
   }
 
   public double getVitesse() {

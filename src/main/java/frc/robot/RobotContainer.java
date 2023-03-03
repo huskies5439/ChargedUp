@@ -33,6 +33,7 @@ public class RobotContainer {
   private final Coude coude = new Coude();
   CommandXboxController pilote = new CommandXboxController(0);
   Trigger aimantechelle = new Trigger(echelle::getDetecteurMagnetique);
+  Trigger aimantcoude = new Trigger(coude::getDetecteurMagnetiqueCoude);
   
   public RobotContainer() {
     
@@ -61,6 +62,7 @@ public class RobotContainer {
 
     //reset encodeur quand l'aimant est activer
     aimantechelle.onTrue(new InstantCommand(echelle::resetEncodeur));
+    aimantcoude.onTrue(new InstantCommand(coude::resetEncodeur));
 
     //pince pneumatique
     pilote.rightBumper().onTrue(new InstantCommand(pince::togglePincePiston, pince)); //Pas un toggle car cela désactiverais le PincerAuto qui doit fonctionner en permanence
