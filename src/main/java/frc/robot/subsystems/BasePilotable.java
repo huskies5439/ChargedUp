@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -28,7 +29,7 @@ public class BasePilotable extends SubsystemBase {
   private WPI_TalonFX moteurArriereG = new WPI_TalonFX(3);
   private WPI_TalonFX moteurAvantD = new WPI_TalonFX(1);
   private WPI_TalonFX moteurArriereD = new WPI_TalonFX(2);
-                                                                                                  
+
   private MotorControllerGroup moteursG = new MotorControllerGroup(moteurAvantG, moteurArriereG);
   private MotorControllerGroup moteursD = new MotorControllerGroup(moteurAvantD, moteurArriereD);
 
@@ -39,10 +40,6 @@ public class BasePilotable extends SubsystemBase {
   private Encoder encodeurD = new Encoder(2, 3, true);
   private double conversionEncodeur; 
 
-  //Pneumatique
-  private DoubleSolenoid pistonTransmission = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1, 2);
-  private boolean isHighGear = false;
-
   //Gyro
   private PigeonIMU gyro = new PigeonIMU(0);
   private double pitchOffset;
@@ -50,6 +47,13 @@ public class BasePilotable extends SubsystemBase {
   //Odometrie
   private DifferentialDriveOdometry odometry;
   
+  //Pneumatique
+  private DoubleSolenoid pistonTransmission = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1, 2);
+  private boolean isHighGear = false;
+
+  //PID Balancer
+  private PIDController pidBalancer = new PIDController(-0.05, 0, 0);
+
   public BasePilotable() {
     //Reset intiaux
     resetEncodeur();
@@ -65,12 +69,15 @@ public class BasePilotable extends SubsystemBase {
     moteursG.setInverted(true);
 
     //Ramp et Break
-    setRamp(0);
-    setBrake(false);
+    setBrakeEtRampTeleop(true);
 
     //Odometrie
     odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getAngle()), getPositionG(), getPositionD());
     lowGear();
+
+    pidBalancer.setSetpoint(0);
+
+    pidBalancer.setTolerance(2.5);
   }
 
   @Override
@@ -80,6 +87,7 @@ public class BasePilotable extends SubsystemBase {
 
     SmartDashboard.putNumber("Angle", getAngle());
     SmartDashboard.putNumber("Pitch", getPitch());
+    SmartDashboard.putBoolean("balacer", isBalancer());
     SmartDashboard.putNumber("position", getPosition());
     SmartDashboard.putNumber("vitesse", getVitesse());
   }
@@ -130,7 +138,7 @@ public class BasePilotable extends SubsystemBase {
     return (getVitesseD() + getVitesseG()) / 2.0;
   }
 
-  //Ramp/Brake
+  //Ramp et Brake
   public void setRamp(double ramp) {
     moteurAvantG.configOpenloopRamp(ramp);
     moteurArriereG.configOpenloopRamp(ramp);
@@ -151,6 +159,18 @@ public class BasePilotable extends SubsystemBase {
       moteurArriereD.setNeutralMode(NeutralMode.Coast);
       moteurAvantG.setNeutralMode(NeutralMode.Coast);
       moteurArriereG.setNeutralMode(NeutralMode.Coast);
+    }
+  }
+
+  public void setBrakeEtRampTeleop(boolean estTeleop) {
+    if (estTeleop) {
+      setBrake(false);
+      setRamp(BasePilotableConstants.rampTeleop);
+    }
+
+    else {
+      setBrake(true);
+      setRamp(0);
     }
   }
 
@@ -194,25 +214,34 @@ public class BasePilotable extends SubsystemBase {
     return Math.abs(getPitch()) >= BasePilotableConstants.kToleranceBalancer; //Depend de comment le gyro est placé dans le robot pour le sens Pitch ou Roll
   }
   
-//Odométrie
- public double[] getOdometry(){
-  double[] position = new double[3];
-  double x = getPose().getTranslation().getX();
-  double y = getPose().getTranslation().getY();
-  double theta = getPose().getRotation().getDegrees();
-  position[0] = x;
-  position[1] = y;
-  position[2] = theta;
-  return position;
- }
+  //Odométrie
+  public double[] getOdometry() {
+    double[] position = new double[3];
+    double x = getPose().getTranslation().getX();
+    double y = getPose().getTranslation().getY();
+    double theta = getPose().getRotation().getDegrees();
+    position[0] = x;
+    position[1] = y;
+    position[2] = theta;
+    return position;
+  }
 
- public Pose2d getPose() {
-  return odometry.getPoseMeters();
- }
+  public Pose2d getPose() {
+    return odometry.getPoseMeters();
+  }
 
- public void resetOdometry() {
-  resetEncodeur();
-  resetGyro();
-  odometry.resetPosition(Rotation2d.fromDegrees(getAngle()), getPositionG(), getPositionD(), getPose());
- }
+  public void resetOdometry() {
+    resetEncodeur();
+    resetGyro();
+    odometry.resetPosition(Rotation2d.fromDegrees(getAngle()), getPositionG(), getPositionD(), getPose());
+  }
+
+  //Balancer
+  public double voltagePIDBalancer() {
+    return pidBalancer.calculate(getRoll(), 0);
+  }
+
+  public boolean isBalancer() {
+    return pidBalancer.atSetpoint();
+  }
 }

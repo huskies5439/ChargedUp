@@ -64,7 +64,7 @@ public class Coude extends SubsystemBase {
   public double getVitesse() {
     return encodeur.getRate();
   }
-
+  
   public void resetEncodeur() {
     encodeur.reset();
   }
@@ -107,7 +107,7 @@ public class Coude extends SubsystemBase {
     }
   }
 
-  public void setCible(double cible){
+  public void setCible(double cible) {
     //Initialisation du calcul pour le feed forward
     vitessePasse = 0;
     tempsPasse = Timer.getFPGATimestamp();

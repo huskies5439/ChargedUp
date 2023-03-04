@@ -85,7 +85,7 @@ public class Echelle extends SubsystemBase {
     pidEchelleActif = false;
   }
 
-  //////Encodeur Mât
+  //Encodeur Mât
   public double getPosition() {
     return moteurBras.getSelectedSensorPosition()*conversionEncodeur;
   }

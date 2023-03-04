@@ -7,12 +7,14 @@ package frc.robot;
 public final class Constants {
 
   public static final class BasePilotableConstants {
+
     public static final double rampTeleop = 0.2;
 
     public static final int kToleranceBalancer = 5;
   }
   
   public static final class EchelleConstants {
+
     public static final double kMaxEchelle = 0.56; //en mètre
 
     //Pour le PID
@@ -24,6 +26,7 @@ public final class Constants {
   }
 
   public static final class CoudeConstants {
+    
     public static final double kMax = 100;
     public static final double kMin = -15;
     public static final double kOffset = -8;
