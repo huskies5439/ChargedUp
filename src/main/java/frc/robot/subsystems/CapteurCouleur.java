@@ -11,11 +11,13 @@ import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.PicoColorSensor;
+import frc.robot.PicoColorSensor.RawColor;
 
 public class CapteurCouleur extends SubsystemBase {
   
   //Capteur de Couleur
-  ColorSensorV3 capteuCouleur = new ColorSensorV3(I2C.Port.kOnboard);
+  PicoColorSensor capteurCouleur = new PicoColorSensor();
   private final ColorMatch colorMatcher = new ColorMatch();
   private final Color kCouleurCone = new Color(0.359, 0.485, 0.158);
   private final Color kCouleurCube = new Color(0.26, 0.429, 0.311);
@@ -33,7 +35,9 @@ public class CapteurCouleur extends SubsystemBase {
   }
 
   public Color getCouleur() {
-    return capteuCouleur.getColor();
+    RawColor rawColor = capteurCouleur.getRawColor0();
+    double mag = rawColor.red + rawColor.green + rawColor.blue;
+    return new Color(rawColor.red/mag, rawColor.green/mag, rawColor.blue/mag);
   }
 
   public Color comparerCouleur() {
@@ -42,7 +46,7 @@ public class CapteurCouleur extends SubsystemBase {
   }
 
   public boolean isDetected() {
-    return capteuCouleur.getProximity() > 115;
+    return capteurCouleur.getProximity0() > 115;
   }
 
   public boolean isCone() {
