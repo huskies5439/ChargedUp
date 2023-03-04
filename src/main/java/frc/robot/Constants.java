@@ -32,7 +32,11 @@ public final class Constants {
     public static final double kOffset = -8;
     
     //Pour le PID
-    public static final double kP = 0.15;
+    public static final double kP = 0.225;
+
+    /*public static final double kMaxVelocity = 270; //en degré/s
+    public static final double kMaxAcceleration = 180; //en degré/s²
+    public static final double kPositionTolerance = 1; // en degré*/
 
     public static final double kMaxVelocity = 270; //en degré/s
     public static final double kMaxAcceleration = 180; //en degré/s²
@@ -48,7 +52,7 @@ public final class Constants {
   public static final class Cible {
     //angle [degrés] du coude en premier, puis hauteur [m] de l'échelle
     public static final double[] kBas = {-10, 0};
-    public static final double[] kMilieu = {95, 0};
+    public static final double[] kMilieu = {95, 0}; //95 normalement
     public static final double[] kHaut = {95, 0.45};
   }
 }

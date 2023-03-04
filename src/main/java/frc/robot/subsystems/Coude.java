@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Constants.Cible;
 import frc.robot.Constants.CoudeConstants;
 
 public class Coude extends SubsystemBase {
@@ -24,14 +26,12 @@ public class Coude extends SubsystemBase {
   private Encoder encodeur = new Encoder(4, 5);
   private double conversionEncodeur;
 
-  private DigitalInput detecteurMagnetiqueCoude = new DigitalInput(8);
+  private DigitalInput limitSwitch = new DigitalInput(8);
 
   private ProfiledPIDController pid;
   private boolean pidCoudeActif;
 
-  private ArmFeedforward feedforward;
-  private double vitessePasse;
-  private double tempsPasse;
+  
 
   public Coude() {
 
@@ -48,11 +48,12 @@ public class Coude extends SubsystemBase {
   
     pidCoudeActif = false;
 
-    feedforward = new ArmFeedforward(CoudeConstants.kS, CoudeConstants.kG, CoudeConstants.kV, CoudeConstants.kA);
+    
   }
 
   @Override
   public void periodic() {
+    SmartDashboard.putBoolean("Detecteur coude", getLimitSwitch());
     SmartDashboard.putNumber("Vitesse Coude", getVitesse());
     SmartDashboard.putNumber("Distance Coude", getPosition());
   }
@@ -98,26 +99,23 @@ public class Coude extends SubsystemBase {
 
   public void pidCoude() {
     if(pidCoudeActif) {
-      double accelerationProfil = ((pid.getSetpoint().velocity - vitessePasse) / (Timer.getFPGATimestamp() - tempsPasse));
-
-      setVoltage(pid.calculate(getPosition()) + feedforward.calculate(pid.getSetpoint().velocity, accelerationProfil));
-
-      vitessePasse = pid.getSetpoint().velocity;
-      tempsPasse = Timer.getFPGATimestamp();
+      if(pid.getGoal().position == Cible.kBas[0] && getPosition() < 0 && !getLimitSwitch()){
+        setVoltage(-1);
+      }
+      else{
+        setVoltage(pid.calculate(getPosition()));
+      }
+      
     }
   }
 
   public void setCible(double cible) {
-    //Initialisation du calcul pour le feed forward
-    vitessePasse = 0;
-    tempsPasse = Timer.getFPGATimestamp();
-
     cible = MathUtil.clamp(cible, CoudeConstants.kMin, CoudeConstants.kMax);
     pid.setGoal(cible);
     pidCoudeActif = true;
   }
 
-  public boolean getDetecteurMagnetiqueCoude() {
-    return !detecteurMagnetiqueCoude.get();
+  public boolean getLimitSwitch() {
+    return !limitSwitch.get();
   }
 }
