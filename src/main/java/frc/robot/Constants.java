@@ -4,16 +4,36 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+
 public final class Constants {
 
-  public static final class BasePilotableConstants {
+  public static final class BasePilotableConstantes {
 
     public static final double rampTeleop = 0.2;
 
+    
+    public static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.635);//a déterminer dans sis id
+
+    public static final double maxVitesse = 1.0;//ir dev = 3
+    public static final double maxAcceleration = 1.0;//ir dev = 3
+
+    public static final double kS = 0;
+    public static final double kV = 0;
+    public static final double kA = 0;
+    public static final double kPRamsete = 0;
+
+    public static final SimpleMotorFeedforward feedforward = 
+            new SimpleMotorFeedforward(BasePilotableConstantes.kS, BasePilotableConstantes.kV, BasePilotableConstantes.kA);
+
+    public static final double kPBalancer = -0.05; // à valider4
     public static final int kToleranceBalancer = 5;
+    
+
   }
   
-  public static final class EchelleConstants {
+  public static final class EchelleConstantes {
 
     public static final double kMaxEchelle = 0.56; //en mètre
 
@@ -25,7 +45,7 @@ public final class Constants {
     public static final double kPositionTolerance = 5;// en m
   }
 
-  public static final class CoudeConstants {
+  public static final class CoudeConstantes {
     
     public static final double kMax = 100;
     public static final double kMin = -15;
@@ -34,19 +54,13 @@ public final class Constants {
     //Pour le PID
     public static final double kP = 0.225;
 
-    /*public static final double kMaxVelocity = 270; //en degré/s
-    public static final double kMaxAcceleration = 180; //en degré/s²
-    public static final double kPositionTolerance = 1; // en degré*/
+   
 
     public static final double kMaxVelocity = 270; //en degré/s
     public static final double kMaxAcceleration = 180; //en degré/s²
     public static final double kPositionTolerance = 1; // en degré
 
-    //Pour le feedforward
-    public static final double kS = 0;
-    public static final double kG = 0;
-    public static final double kV = 0;
-    public static final double kA = 0;
+    
   }
 
   public static final class Cible {

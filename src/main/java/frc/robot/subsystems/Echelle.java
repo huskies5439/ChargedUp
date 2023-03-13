@@ -15,7 +15,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.EchelleConstants;
+import frc.robot.Constants.EchelleConstantes;
 
 public class Echelle extends SubsystemBase {
   private WPI_TalonFX moteurBras = new WPI_TalonFX(5);
@@ -36,10 +36,10 @@ public class Echelle extends SubsystemBase {
     de 16 dents qui fait tourner la chaine 25. Chaque maille de la chaine fait 0.25 pouces*/
     conversionEncodeur = (1.0/2048)*(14.0/40)*(14.0/60)*(16.0)*Units.inchesToMeters(0.25);
 
-    pid = new ProfiledPIDController(EchelleConstants.kP, 0, 0,
+    pid = new ProfiledPIDController(EchelleConstantes.kP, 0, 0,
             //Vitesse et accélération max vraiment faibles pour tester     
-            new TrapezoidProfile.Constraints(EchelleConstants.kMaxVelocity, EchelleConstants.kMaxAcceleration));
-            pid.setTolerance(EchelleConstants.kPositionTolerance);
+            new TrapezoidProfile.Constraints(EchelleConstantes.kMaxVelocity, EchelleConstantes.kMaxAcceleration));
+            pid.setTolerance(EchelleConstantes.kPositionTolerance);
 
     pidEchelleActif = false;
   }
@@ -62,7 +62,7 @@ public class Echelle extends SubsystemBase {
 
   public void allonger() {
    
-    if (getPosition()< EchelleConstants.kMaxEchelle){
+    if (getPosition()< EchelleConstantes.kMaxEchelle){
       setVoltage(3);
     }
 
@@ -109,7 +109,7 @@ public class Echelle extends SubsystemBase {
   }
 
   public void setCible(double cible) {
-    cible = MathUtil.clamp(cible, 0, EchelleConstants.kMaxEchelle);
+    cible = MathUtil.clamp(cible, 0, EchelleConstantes.kMaxEchelle);
     pid.setGoal(cible);
     pidEchelleActif = true;
   }

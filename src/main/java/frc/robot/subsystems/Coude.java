@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Cible;
-import frc.robot.Constants.CoudeConstants;
+import frc.robot.Constants.CoudeConstantes;
 
 public class Coude extends SubsystemBase {
 
@@ -41,10 +41,10 @@ public class Coude extends SubsystemBase {
     encodeur.setDistancePerPulse(conversionEncodeur);
     moteur.setInverted(true);
   
-    pid = new ProfiledPIDController(CoudeConstants.kP, 0, 0,
-        new TrapezoidProfile.Constraints(CoudeConstants.kMaxVelocity, CoudeConstants.kMaxVelocity));
+    pid = new ProfiledPIDController(CoudeConstantes.kP, 0, 0,
+        new TrapezoidProfile.Constraints(CoudeConstantes.kMaxVelocity, CoudeConstantes.kMaxVelocity));
 
-    pid.setTolerance(CoudeConstants.kPositionTolerance);
+    pid.setTolerance(CoudeConstantes.kPositionTolerance);
   
     pidCoudeActif = false;
 
@@ -59,7 +59,7 @@ public class Coude extends SubsystemBase {
   }
 
   public double getPosition() {
-    return (encodeur.getDistance() + CoudeConstants.kOffset);
+    return (encodeur.getDistance() + CoudeConstantes.kOffset);
   }
 
   public double getVitesse() {
@@ -75,7 +75,7 @@ public class Coude extends SubsystemBase {
   }
 
      public void descendre() {
-      if (getPosition() > CoudeConstants.kMin){
+      if (getPosition() > CoudeConstantes.kMin){
         setVoltage(-3);
       }
       else{
@@ -84,7 +84,7 @@ public class Coude extends SubsystemBase {
     pidCoudeActif = false;
   }
     public void monter() {
-      if (getPosition() < CoudeConstants.kMax) {
+      if (getPosition() < CoudeConstantes.kMax) {
         setVoltage(3);
       }
       else {
@@ -110,7 +110,7 @@ public class Coude extends SubsystemBase {
   }
 
   public void setCible(double cible) {
-    cible = MathUtil.clamp(cible, CoudeConstants.kMin, CoudeConstants.kMax);
+    cible = MathUtil.clamp(cible, CoudeConstantes.kMin, CoudeConstantes.kMax);
     pid.setGoal(cible);
     pidCoudeActif = true;
   }

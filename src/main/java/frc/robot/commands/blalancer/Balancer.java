@@ -39,7 +39,7 @@ public class Balancer extends CommandBase {
 
   @Override
   public void execute() {
-    angleActuel = Math.abs(basePilotable.getRoll());
+    angleActuel = Math.abs(basePilotable.getPitch());
 
     deltaAngle = angleActuel-anglePasse;
 

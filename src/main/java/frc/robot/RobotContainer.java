@@ -67,7 +67,7 @@ public class RobotContainer {
   
     //Homing
     pilote.start().onTrue(new HomingBras(echelle, coude));
-    pilote.back().onTrue(new InstantCommand(coude::resetEncodeur));
+   
   }
 
   public Command getAutonomousCommand() {

@@ -5,23 +5,41 @@
 
 package frc.robot.subsystems;
 
+import java.io.IOException;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPoint;
+import com.pathplanner.lib.commands.PPRamseteCommand;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.BasePilotableConstants;
+import frc.robot.Constants.BasePilotableConstantes;
 
 public class BasePilotable extends SubsystemBase {
   //Moteurs
@@ -42,17 +60,20 @@ public class BasePilotable extends SubsystemBase {
 
   //Gyro
   private PigeonIMU gyro = new PigeonIMU(0);
-  private double pitchOffset;
+  private double pitchOffset = 0;
+  private Field2d field = new Field2d();
 
   //Odometrie
-  private DifferentialDriveOdometry odometry;
+  private DifferentialDrivePoseEstimator poseEstimator;
+
+  
   
   //Pneumatique
   private DoubleSolenoid pistonTransmission = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1, 2);
   private boolean isHighGear = false;
 
   //PID Balancer
-  private PIDController pidBalancer = new PIDController(-0.05, 0, 0);
+  private PIDController pidBalancer = new PIDController(BasePilotableConstantes.kPBalancer, 0, 0);
 
   public BasePilotable() {
     //Reset intiaux
@@ -71,25 +92,34 @@ public class BasePilotable extends SubsystemBase {
     //Ramp et Break
     setBrakeEtRampTeleop(true);
 
-    //Odometrie
-    odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getAngle()), getPositionG(), getPositionD());
+    //Pose estimateur
+    poseEstimator = new DifferentialDrivePoseEstimator(BasePilotableConstantes.kinematics, Rotation2d.fromDegrees(getAngle()), 
+            getPositionG(), getPositionD(), new Pose2d());
+    
+
+    //transmission
     lowGear();
 
+    //pid balancer
     pidBalancer.setSetpoint(0);
-
     pidBalancer.setTolerance(2.5);
   }
 
   @Override
   public void periodic() {
   
-    odometry.update(Rotation2d.fromDegrees(getAngle()), getPositionG(), getPositionD());
+    poseEstimator.update(Rotation2d.fromDegrees(getAngle()), getPositionG(), getPositionD());
+
+    field.setRobotPose(poseEstimator.getEstimatedPosition());
 
     SmartDashboard.putNumber("Angle", getAngle());
     SmartDashboard.putNumber("Pitch", getPitch());
     SmartDashboard.putBoolean("balacer", isBalancer());
     SmartDashboard.putNumber("position", getPosition());
     SmartDashboard.putNumber("vitesse", getVitesse());
+
+    SmartDashboard.putNumber("Position x", poseEstimator.getEstimatedPosition().getX());
+    SmartDashboard.putNumber("Position y",poseEstimator. getEstimatedPosition().getY());
   }
 
   //////////////////////////////////////////// MÉTHODES ////////////////////////////////////////////
@@ -109,6 +139,8 @@ public class BasePilotable extends SubsystemBase {
     drive.arcadeDrive(0, 0);
   }
 
+
+  //Encodeur
   public void resetEncodeur() {
     encodeurD.reset();
     encodeurG.reset();
@@ -165,7 +197,7 @@ public class BasePilotable extends SubsystemBase {
   public void setBrakeEtRampTeleop(boolean estTeleop) {
     if (estTeleop) {
       setBrake(false);
-      setRamp(BasePilotableConstants.rampTeleop);
+      setRamp(BasePilotableConstantes.rampTeleop);
     }
 
     else {
@@ -198,24 +230,16 @@ public class BasePilotable extends SubsystemBase {
 
   public void resetGyro() {
     gyro.setYaw(0);
-    pitchOffset = gyro.getRoll();
+    pitchOffset = gyro.getPitch();
   }
 
 
   public double getPitch() {
   return -(gyro.getPitch() - pitchOffset);
   }
-
-  public double getRoll() {
-    return gyro.getRoll();
-  }
-
-  public boolean isNotBalance() {
-    return Math.abs(getPitch()) >= BasePilotableConstants.kToleranceBalancer; //Depend de comment le gyro est placé dans le robot pour le sens Pitch ou Roll
-  }
   
   //Odométrie
-  public double[] getOdometry() {
+  public double[] getOdometry() {//seulement utile pour le dash bord
     double[] position = new double[3];
     double x = getPose().getTranslation().getX();
     double y = getPose().getTranslation().getY();
@@ -227,21 +251,76 @@ public class BasePilotable extends SubsystemBase {
   }
 
   public Pose2d getPose() {
-    return odometry.getPoseMeters();
+    return poseEstimator.getEstimatedPosition();
   }
 
-  public void resetOdometry() {
+  public void addVisionMeasurement(Pose2d position, double delaiLimelight){
+    poseEstimator.addVisionMeasurement(position, Timer.getFPGATimestamp() - delaiLimelight);
+  }
+
+  public void resetOdometry(Pose2d pose) {
     resetEncodeur();
     resetGyro();
-    odometry.resetPosition(Rotation2d.fromDegrees(getAngle()), getPositionG(), getPositionD(), getPose());
+    poseEstimator.resetPosition(Rotation2d.fromDegrees(getAngle()), getPositionG(), getPositionD(), getPose());
   }
 
   //Balancer
   public double voltagePIDBalancer() {
-    return pidBalancer.calculate(getRoll(), 0);
+    return pidBalancer.calculate(getPitch(), 0);
   }
 
   public boolean isBalancer() {
     return pidBalancer.atSetpoint();
+  }
+
+  //déplacement trajectoire
+public DifferentialDriveWheelSpeeds getWheelSpeeds(){
+  return new DifferentialDriveWheelSpeeds(getVitesseG(), getVitesseD());
+}
+
+  public Trajectory creerTrajectoire(String trajet){
+    String trajetJSON = "output/" + trajet + ".wpilib.json";
+
+    try {
+      var path = Filesystem.getDeployDirectory().toPath().resolve(trajetJSON);
+      return TrajectoryUtil.fromPathweaverJson(path);
+    }
+
+    catch (IOException e) {
+      DriverStation.reportError("Unable to open trajectory :" + trajetJSON, e.getStackTrace());
+      return null;
+    }
+  }
+
+  public PathPlannerTrajectory creerTrajectoirePathPlanner(String trajet, boolean reversed) {
+    return PathPlanner.loadPath(trajet, BasePilotableConstantes.maxVitesse, BasePilotableConstantes.maxAcceleration, reversed);
+  }
+
+  public PathPlannerTrajectory creerTrajectoire(double x, double y, double angle) {
+    PathPlannerTrajectory trajectoire = PathPlanner.generatePath(
+        new PathConstraints(BasePilotableConstantes.maxVitesse, BasePilotableConstantes.maxAcceleration),
+        new PathPoint(poseEstimator.getEstimatedPosition().getTranslation(),
+            poseEstimator.getEstimatedPosition().getRotation()),
+        new PathPoint(new Translation2d(x - 0.5, y), new Rotation2d(Math.toRadians(angle))),
+        new PathPoint(new Translation2d(x, y), new Rotation2d(Math.toRadians(angle))));
+    return trajectoire;
+  }
+
+  public Command ramsetePathPlanner(PathPlannerTrajectory trajectoire) {
+    PPRamseteCommand ramseteCommand = new PPRamseteCommand(
+        trajectoire,
+        this::getPose,
+        new RamseteController(),
+        BasePilotableConstantes.feedforward,
+        BasePilotableConstantes.kinematics,
+        this::getWheelSpeeds,
+        new PIDController(BasePilotableConstantes.kPRamsete, 0, 0),
+        new PIDController(BasePilotableConstantes.kPRamsete, 0, 0),
+        this::autoConduire,
+        true,
+        this);
+
+    return ramseteCommand.andThen(() -> autoConduire(0, 0));
+
   }
 }
