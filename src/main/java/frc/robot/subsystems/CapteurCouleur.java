@@ -6,9 +6,9 @@ package frc.robot.subsystems;
 
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
-import com.revrobotics.ColorSensorV3;
 
-import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.math.filter.LinearFilter;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PicoColorSensor;
@@ -19,11 +19,12 @@ public class CapteurCouleur extends SubsystemBase {
   //Capteur de Couleur
   PicoColorSensor capteurCouleur = new PicoColorSensor();
   private final ColorMatch colorMatcher = new ColorMatch();
-  private final Color kCouleurCone = new Color(0.359, 0.485, 0.158);
-  private final Color kCouleurCube = new Color(0.26, 0.429, 0.311);
+  private final Color kCouleurCone = new Color(0.359, 0.158, 0.485);
+  private final Color kCouleurCube = new Color(0.26, 0.311, 0.429);
 
   String colorString;
   ColorMatchResult comparaisonCouleur;
+  LinearFilter filter = LinearFilter.singlePoleIIR(0.2, 0.02);
 
   public CapteurCouleur() {
     colorMatcher.addColorMatch(kCouleurCube);
@@ -31,7 +32,9 @@ public class CapteurCouleur extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
+  public void periodic() { 
+    SmartDashboard.putBoolean("Cone?", isCone());
+    SmartDashboard.putBoolean("Cube?", isCube());
   }
 
   public Color getCouleur() {
@@ -43,6 +46,10 @@ public class CapteurCouleur extends SubsystemBase {
   public Color comparerCouleur() {
     comparaisonCouleur = colorMatcher.matchClosestColor(getCouleur());
     return comparaisonCouleur.color;
+  }
+
+  public double getProximity() {
+    return filter.calculate(capteurCouleur.getProximity0());
   }
 
   public boolean isDetected() {

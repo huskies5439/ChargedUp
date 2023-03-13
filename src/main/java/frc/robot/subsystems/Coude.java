@@ -6,16 +6,14 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.Cible;
 import frc.robot.Constants.CoudeConstantes;
 
@@ -99,13 +97,13 @@ public class Coude extends SubsystemBase {
 
   public void pidCoude() {
     if(pidCoudeActif) {
-      if(pid.getGoal().position == Cible.kBas[0] && getPosition() < 0 && !getLimitSwitch()){
+      if(pid.getGoal().position == Cible.kBas[0] && getPosition() < 0 && !getLimitSwitch()) {
         setVoltage(-1);
       }
-      else{
+
+      else {
         setVoltage(pid.calculate(getPosition()));
       }
-      
     }
   }
 

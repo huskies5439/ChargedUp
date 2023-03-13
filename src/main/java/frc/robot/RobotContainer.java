@@ -14,9 +14,11 @@ import frc.robot.Constants.Cible;
 import frc.robot.commands.BrasAuto;
 import frc.robot.commands.Conduire;
 import frc.robot.commands.HomingBras;
+import frc.robot.commands.blalancer.UpdatePosition;
 import frc.robot.subsystems.BasePilotable;
 import frc.robot.subsystems.Coude;
 import frc.robot.subsystems.Echelle;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pince;
 
 public class RobotContainer {
@@ -24,6 +26,7 @@ public class RobotContainer {
   private final Echelle echelle = new Echelle();
   private final Pince pince = new Pince();
   private final Coude coude = new Coude();
+  private final Limelight limelight = new Limelight();
 
   CommandXboxController pilote = new CommandXboxController(0);
 
@@ -37,6 +40,7 @@ public class RobotContainer {
     //pince.setDefaultCommand(new PincerAuto(pince)); Remettre dans le code quand les capteurs seront posés
     echelle.setDefaultCommand(new RunCommand(echelle::pidEchelle, echelle));
     coude.setDefaultCommand(new RunCommand(coude::pidCoude, coude));
+    limelight.setDefaultCommand(new UpdatePosition(basePilotable, limelight));
   }
 
   private void configureBindings() {
