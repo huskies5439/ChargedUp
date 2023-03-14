@@ -10,9 +10,6 @@ import frc.robot.subsystems.Pince;
 public class PincerAuto extends CommandBase {
     Pince pince;
 
-    boolean capteurPasse;
-    boolean capteurActuel;
-
     boolean etatPasse = true;
     boolean etatActuel = true;
 
@@ -23,8 +20,9 @@ public class PincerAuto extends CommandBase {
   
   @Override
   public void initialize() {
-    etatPasse=true;
-    etatActuel=true;
+    etatPasse = true;
+    etatActuel = true;
+    pince.setArmer(true);
   }
   
   @Override
@@ -32,18 +30,19 @@ public class PincerAuto extends CommandBase {
 
   etatActuel = pince.getFaisceau();
   
+  // Si on permet au robot de pincer et qu'il y a rien dans la pince, ferme le piston et ne permet pas au robot de pincer.
   if (pince.getArmer() && !etatActuel){
     pince.setArmer(false);
     pince.fermerPiston();
   }
 
+  // Si le capteur infrarouge était pas activer dans le passé et est activer maintenant, ouvre le piston et permet au robot de pincer.
   if (!etatPasse && etatActuel){
     pince.setArmer(true);
     pince.ouvrirPiston();
   }
-
+  // La valeur actuelle du capteur infrarouge devient maintenant celle du passé (la valeur actuelle est reset au début de la loop).
   etatPasse = etatActuel;
-  
 }
 
   @Override

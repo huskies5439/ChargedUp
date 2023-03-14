@@ -69,9 +69,11 @@ public class Limelight extends SubsystemBase {
     if (DriverStation.getAlliance() == Alliance.Red) {
       alliance = "red";
     }
+
     else {
       alliance = "blue";
     }
+    
     botpose = limelight.getEntry("botpose_wpi" + alliance);
   }
 }
