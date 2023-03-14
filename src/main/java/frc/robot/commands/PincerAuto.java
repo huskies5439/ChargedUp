@@ -22,7 +22,7 @@ public class PincerAuto extends CommandBase {
   public void initialize() {
     etatPasse = true;
     etatActuel = true;
-    pince.setArmer(true);
+  
   }
   
   @Override
