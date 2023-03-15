@@ -34,7 +34,7 @@ public class HomingBras extends SequentialCommandGroup {
       new RunCommand(()-> echelle.setVoltage(-1), echelle).until(echelle::getDetecteurMagnetique),
       new InstantCommand(echelle::stop),
       new InstantCommand(echelle::resetEncodeur),
-
+      
   //Partie coude 
       //Avance un peu
       new RunCommand(()-> coude.setVoltage(2), coude).withTimeout(0.5),

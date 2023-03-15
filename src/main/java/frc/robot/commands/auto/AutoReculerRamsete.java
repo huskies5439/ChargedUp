@@ -6,19 +6,20 @@ package frc.robot.commands.auto;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.BasePilotable;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoReculerRamsete extends SequentialCommandGroup {
-  /** Creates a new AutoReculerRamsete. */
+  
   public AutoReculerRamsete(BasePilotable basePilotable) {
 
     PathPlannerTrajectory reculer = basePilotable.creerTrajectoire("Reculer", true);
 
     addCommands(
+      new InstantCommand(() -> basePilotable.placerRobotPositionInitial(reculer)),
+      new InstantCommand(() -> basePilotable.setBrakeEtRampTeleop(false)),
+
       basePilotable.ramsete(reculer)
 
     );

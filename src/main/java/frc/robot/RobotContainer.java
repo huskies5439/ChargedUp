@@ -20,10 +20,6 @@ import frc.robot.commands.PincerAuto;
 import frc.robot.commands.auto.AutoCubeRetourCone;
 import frc.robot.commands.auto.AutoReculerRamsete;
 import frc.robot.commands.auto.BalancerAuto;
-import frc.robot.commands.blalancer.DetecterPente;
-import frc.robot.commands.blalancer.Stabiliser;
-import frc.robot.commands.blalancer.Balancer;
-import frc.robot.commands.blalancer.UpdatePosition;
 import frc.robot.subsystems.BasePilotable;
 import frc.robot.subsystems.Coude;
 import frc.robot.subsystems.Echelle;
@@ -47,10 +43,6 @@ public class RobotContainer {
 
   Trigger aimantechelle = new Trigger(echelle::getDetecteurMagnetique);
   Trigger limitSwitchCoude = new Trigger(coude::getLimitSwitch);
-
-
-
- 
   
   public RobotContainer() {
 
@@ -65,7 +57,7 @@ public class RobotContainer {
     pince.setDefaultCommand(new PincerAuto(pince)); //Remettre dans le code quand les capteurs seront posés
     echelle.setDefaultCommand(new RunCommand(echelle::pidEchelle, echelle));
     coude.setDefaultCommand(new RunCommand(coude::pidCoude, coude));
-   // limelight.setDefaultCommand(new UpdatePosition(basePilotable, limelight));
+    //limelight.setDefaultCommand(new UpdatePosition(basePilotable, limelight));
   }
 
   private void configureBindings() {
@@ -74,6 +66,7 @@ public class RobotContainer {
     pilote.a().onTrue(new BrasAuto(Cible.kBas, coude, echelle));
     pilote.b().onTrue(new BrasAuto(Cible.kMilieu, coude, echelle));
     pilote.y().onTrue(new BrasAuto(Cible.kHaut, coude, echelle));
+    //pilote.x().onTrue(new BrasAuto(Cible.kPickUp, coude, echelle));
     // pilote.a().whileTrue(new Balancer(basePilotable, false));
     // pilote.b().whileTrue(new Balancer(basePilotable, true));
     //example de code si capteur de couleur: pilote.a().ontrue(conditionalcommand(commandeOnTrue : cube, commandOnFalse : cone, pince::isCube))
@@ -88,13 +81,9 @@ public class RobotContainer {
     aimantechelle.onTrue(new InstantCommand(echelle::resetEncodeur));
     limitSwitchCoude.onTrue(new InstantCommand(coude::resetEncodeur));
 
-    //pince pneumatique
+    //pince 
     pilote.rightBumper().onTrue(new InstantCommand(pince::togglePincePiston, pince)); //Pas un toggle car cela désactiverais le PincerAuto qui doit fonctionner en permanence
-    
-    //pince motorisée
-    pilote.rightTrigger().whileTrue(new StartEndCommand(pince::ouvrirMoteur, pince::stopMoteur, pince));
-    pilote.leftTrigger().whileTrue(new StartEndCommand(pince::fermerMoteur, pince::stopMoteur, pince));
-  
+
     //Homing
     pilote.start().onTrue(new HomingBras(echelle, coude));
    

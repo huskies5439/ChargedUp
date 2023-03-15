@@ -25,15 +25,17 @@ public class Limelight extends SubsystemBase {
 
   private NetworkTableEntry botpose;
   private NetworkTableEntry stream = limelight.getEntry("stream");
+
   double[] result;
   double[] temp = {0,0,0,0,0,0};
+
   String alliance;
   
   public Limelight() {
-
     stream.setNumber(2);
     alliance = "blue";
     botpose = limelight.getEntry("botpose" + alliance);
+
   }
 
   @Override
@@ -41,8 +43,10 @@ public class Limelight extends SubsystemBase {
     SmartDashboard.putNumber("Rz Camera", Math.toDegrees(getVisionPosition().getRotation().getZ()));
     SmartDashboard.putNumber("Latence", getTotalLatency());
     SmartDashboard.putBoolean("April Tag", getTv());
+
   }
-  public Pose3d getVisionPosition(){
+
+  public Pose3d getVisionPosition() {
     result = botpose.getDoubleArray(temp);
 
     Translation3d tran3d = new Translation3d(result[0], result[1], result[2]);
@@ -51,23 +55,28 @@ public class Limelight extends SubsystemBase {
     Pose3d p3d = new Pose3d(tran3d, r3d);
 
     return p3d;
+
   }
 
   public double getTotalLatency() {
     return tl.getDouble(0) + cl.getDouble(0);
+
   }
 
   public boolean getTv() {
     return tv.getDouble(0) == 1;
+
   }
 
   public double getTa() {
     return ta.getDouble(0);
+
   }
 
-  public void setAlliance(){
+  public void setAlliance() {
     if (DriverStation.getAlliance() == Alliance.Red) {
       alliance = "red";
+
     }
 
     else {
@@ -75,5 +84,6 @@ public class Limelight extends SubsystemBase {
     }
     
     botpose = limelight.getEntry("botpose_wpi" + alliance);
+    
   }
 }

@@ -29,8 +29,6 @@ public class Coude extends SubsystemBase {
   private ProfiledPIDController pid;
   private boolean pidCoudeActif;
 
-  
-
   public Coude() {
 
     moteur.setNeutralMode(NeutralMode.Brake);
@@ -44,9 +42,7 @@ public class Coude extends SubsystemBase {
 
     pid.setTolerance(CoudeConstantes.kPositionTolerance);
   
-    pidCoudeActif = false;
-
-    
+    pidCoudeActif = false;  
   }
 
   @Override
@@ -78,6 +74,7 @@ public class Coude extends SubsystemBase {
       if (getPosition() > CoudeConstantes.kMin){
         setVoltage(-3);
       }
+      
       else{
         stop();
     }
@@ -87,6 +84,7 @@ public class Coude extends SubsystemBase {
       if (getPosition() < CoudeConstantes.kMax) {
         setVoltage(3);
       }
+
       else {
         stop();
       }
@@ -100,7 +98,7 @@ public class Coude extends SubsystemBase {
   public void pidCoude() {
     if(pidCoudeActif) {
       if(pid.getGoal().position == Cible.kBas[0] && getPosition() < 0 && !getLimitSwitch()) {
-        setVoltage(-1);
+        setVoltage(-1); //MEttre la fonction décsendre à la place
       }
 
       else {
@@ -119,8 +117,7 @@ public class Coude extends SubsystemBase {
     return !limitSwitch.get();
   }
 
-  public boolean getCible(){
+  public boolean getCible() {
     return pid.atGoal();
-
   }
 }

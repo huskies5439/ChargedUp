@@ -5,8 +5,6 @@
 
 package frc.robot.subsystems;
 
-import java.io.IOException;
-
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
@@ -23,13 +21,10 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -122,12 +117,11 @@ public class BasePilotable extends SubsystemBase {
     SmartDashboard.putData(field);
   }
 
-  //////////////////////////////////////////// MÉTHODES
-  //////////////////////////////////////////// ////////////////////////////////////////////
+                /* MÉTHODES */
 
   // Méthode pour conduire
   public void conduire(double vx, double vz) {
-    drive.arcadeDrive(-0.65 * vx, -0.75 * vz);
+    drive.arcadeDrive(-0.55 * vx, -0.75 * vz);
   }
 
   public void autoConduire(double voltGauche, double voltDroit) {
@@ -313,6 +307,5 @@ public class BasePilotable extends SubsystemBase {
         this);
 
     return ramseteCommand.andThen(() -> autoConduire(0, 0));
-
   }
 }

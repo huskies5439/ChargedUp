@@ -106,7 +106,9 @@ public class Echelle extends SubsystemBase {
 
   public void pidEchelle() {
     if (pidEchelleActif) {
-      setVoltage(pid.calculate(getPosition()));
+      double voltage = pid.calculate(getPosition());
+      setVoltage(voltage);
+
     }
   }
 
@@ -116,8 +118,7 @@ public class Echelle extends SubsystemBase {
     pidEchelleActif = true;
   }
 
-  public boolean getCible(){
+  public boolean getCible() {
     return pid.atGoal();
-
   }
 }

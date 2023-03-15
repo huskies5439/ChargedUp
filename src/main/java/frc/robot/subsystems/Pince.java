@@ -5,9 +5,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -16,60 +13,50 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Pince extends SubsystemBase { 
-  private DoubleSolenoid pincePiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, 5, 6);
-  private WPI_TalonSRX pinceMoteur = new WPI_TalonSRX(7);
+  private DoubleSolenoid pince = new DoubleSolenoid(PneumaticsModuleType.REVPH, 5, 6);
   private DigitalInput lightBreak = new DigitalInput(7);
   private boolean capteurArmer = true;
   private boolean ouverturePiston;
 
   public Pince() {
-    pinceMoteur.setInverted(false);
-    pinceMoteur.setNeutralMode(NeutralMode.Brake);
-    
-    ouvrirPiston();
-    stopMoteur();
+    ouvrir();
+
   }
 
   @Override
   public void periodic() {
     SmartDashboard.putBoolean("armer", getArmer());
     SmartDashboard.putBoolean("infrarouge", getFaisceau());
+
   }
 
-  //Pince pneumatique
-  public void ouvrirPiston() {
-    pincePiston.set(Value.kForward);
+  public void ouvrir() {
+    pince.set(Value.kForward);
     ouverturePiston = true;
+
   }
 
-  public void fermerPiston() {
-    pincePiston.set(Value.kReverse);
+  public void fermer() {
+    pince.set(Value.kReverse);
     ouverturePiston = false;
+
   }
 
   public boolean getOuverturePiston() {
     return ouverturePiston;
+
   }
 
   public void togglePincePiston() {
     if (ouverturePiston) {
-      fermerPiston();
-    } else {
-      ouvrirPiston();
+      fermer();
+
     }
-  }
 
-  //Pince motoriser
-  public void ouvrirMoteur() {
-    pinceMoteur.setVoltage(12);
-  }
-
-  public void fermerMoteur() {
-    pinceMoteur.setVoltage(-12);
-  }
-
-  public void stopMoteur() {
-    pinceMoteur.setVoltage(0);
+    else {
+      ouvrir();
+      
+    }
   }
 
   //Capteur pas bloqué true capteur bloqué false
