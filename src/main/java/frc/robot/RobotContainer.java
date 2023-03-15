@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -14,6 +15,11 @@ import frc.robot.Constants.Cible;
 import frc.robot.commands.BrasAuto;
 import frc.robot.commands.Conduire;
 import frc.robot.commands.HomingBras;
+import frc.robot.commands.PincerAuto;
+import frc.robot.commands.auto.AutoCubeCone;
+import frc.robot.commands.blalancer.DetecterPente;
+import frc.robot.commands.blalancer.Stabiliser;
+import frc.robot.commands.blalancer.Balancer;
 import frc.robot.commands.blalancer.UpdatePosition;
 import frc.robot.subsystems.BasePilotable;
 import frc.robot.subsystems.Coude;
@@ -32,15 +38,19 @@ public class RobotContainer {
 
   Trigger aimantechelle = new Trigger(echelle::getDetecteurMagnetique);
   Trigger limitSwitchCoude = new Trigger(coude::getLimitSwitch);
+
+  Command autoCubeCone = new AutoCubeCone(basePilotable, echelle, coude, pince);
+
+ 
   
   public RobotContainer() {
     configureBindings();
     
     basePilotable.setDefaultCommand(new Conduire(pilote::getLeftY,pilote::getRightX, basePilotable));
-    //pince.setDefaultCommand(new PincerAuto(pince)); Remettre dans le code quand les capteurs seront posés
+    pince.setDefaultCommand(new PincerAuto(pince)); //Remettre dans le code quand les capteurs seront posés
     echelle.setDefaultCommand(new RunCommand(echelle::pidEchelle, echelle));
     coude.setDefaultCommand(new RunCommand(coude::pidCoude, coude));
-    limelight.setDefaultCommand(new UpdatePosition(basePilotable, limelight));
+   // limelight.setDefaultCommand(new UpdatePosition(basePilotable, limelight));
   }
 
   private void configureBindings() {
@@ -49,7 +59,8 @@ public class RobotContainer {
     pilote.a().onTrue(new BrasAuto(Cible.kBas, coude, echelle));
     pilote.b().onTrue(new BrasAuto(Cible.kMilieu, coude, echelle));
     pilote.y().onTrue(new BrasAuto(Cible.kHaut, coude, echelle));
-
+    // pilote.a().whileTrue(new Balancer(basePilotable, false));
+    // pilote.b().whileTrue(new Balancer(basePilotable, true));
     //example de code si capteur de couleur: pilote.a().ontrue(conditionalcommand(commandeOnTrue : cube, commandOnFalse : cone, pince::isCube))
 
     //Bouger le bras manuellement
@@ -75,6 +86,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return null; //new RunCommand(() -> basePilotable.autoConduire(5, 5), basePilotable);
+    return autoCubeCone;
   }
 }

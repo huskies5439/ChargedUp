@@ -41,7 +41,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.BasePilotableConstantes;
 
 public class BasePilotable extends SubsystemBase {
-  //Moteurs
+  // Moteurs
   private WPI_TalonFX moteurAvantG = new WPI_TalonFX(4);
   private WPI_TalonFX moteurArriereG = new WPI_TalonFX(3);
   private WPI_TalonFX moteurAvantD = new WPI_TalonFX(1);
@@ -51,62 +51,61 @@ public class BasePilotable extends SubsystemBase {
   private MotorControllerGroup moteursD = new MotorControllerGroup(moteurAvantD, moteurArriereD);
 
   private DifferentialDrive drive = new DifferentialDrive(moteursG, moteursD);
-  
-  //Encodeurs
+
+  // Encodeurs
   private Encoder encodeurG = new Encoder(0, 1, false);
   private Encoder encodeurD = new Encoder(2, 3, true);
-  private double conversionEncodeur; 
+  private double conversionEncodeur;
 
-  //Gyro
+  // Gyro
   private PigeonIMU gyro = new PigeonIMU(0);
   private double pitchOffset = 0;
   private Field2d field = new Field2d();
 
-  //Odometrie
+  // Odometrie
   private DifferentialDrivePoseEstimator poseEstimator;
 
-  
-  
-  //Pneumatique
+  // Pneumatique
   private DoubleSolenoid pistonTransmission = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1, 2);
   private boolean isHighGear = false;
 
-  //PID Balancer
+  // PID Balancer
   private PIDController pidBalancer = new PIDController(BasePilotableConstantes.kPBalancer, 0, 0);
 
   public BasePilotable() {
-    //Reset intiaux
+    // Reset intiaux
     resetEncodeur();
     resetGyro();
 
-    //Configuration des encodeurs externes
+    // Configuration des encodeurs externes
 
-    //Roue de 8 pouces, 256 clics d'encodeur par tour, ratio encodeur-shaft 3:1, ratio shaft-roue 54:30
-    conversionEncodeur = Math.PI * Units.inchesToMeters(8) / (256 * 3 * 54 / 30); 
+    // Roue de 8 pouces, 256 clics d'encodeur par tour, ratio encodeur-shaft 3:1,
+    // ratio shaft-roue 54:30
+    conversionEncodeur = Math.PI * Units.inchesToMeters(8) / (256 * 3 * 54 / 30);
     encodeurG.setDistancePerPulse(conversionEncodeur);
     encodeurD.setDistancePerPulse(conversionEncodeur);
     moteursD.setInverted(false);
     moteursG.setInverted(true);
 
-    //Ramp et Break
+    // Ramp et Break
     setBrakeEtRampTeleop(true);
 
-    //Pose estimateur
-    poseEstimator = new DifferentialDrivePoseEstimator(BasePilotableConstantes.kinematics, Rotation2d.fromDegrees(getAngle()), 
-            getPositionG(), getPositionD(), new Pose2d());
-    
+    // Pose estimateur
+    poseEstimator = new DifferentialDrivePoseEstimator(BasePilotableConstantes.kinematics,
+        Rotation2d.fromDegrees(getAngle()),
+        getPositionG(), getPositionD(), new Pose2d());
 
-    //transmission
+    // transmission
     lowGear();
 
-    //pid balancer
+    // pid balancer
     pidBalancer.setSetpoint(0);
     pidBalancer.setTolerance(2.5);
   }
 
   @Override
   public void periodic() {
-  
+
     poseEstimator.update(Rotation2d.fromDegrees(getAngle()), getPositionG(), getPositionD());
 
     field.setRobotPose(poseEstimator.getEstimatedPosition());
@@ -118,14 +117,17 @@ public class BasePilotable extends SubsystemBase {
     SmartDashboard.putNumber("vitesse", getVitesse());
 
     SmartDashboard.putNumber("Position x", poseEstimator.getEstimatedPosition().getX());
-    SmartDashboard.putNumber("Position y",poseEstimator. getEstimatedPosition().getY());
+    SmartDashboard.putNumber("Position y", poseEstimator.getEstimatedPosition().getY());
+    
+    SmartDashboard.putData(field);
   }
 
-  //////////////////////////////////////////// MÉTHODES ////////////////////////////////////////////
+  //////////////////////////////////////////// MÉTHODES
+  //////////////////////////////////////////// ////////////////////////////////////////////
 
-  //Méthode pour conduire
+  // Méthode pour conduire
   public void conduire(double vx, double vz) {
-    drive.arcadeDrive(-0.65 * vx, -0.5 * vz);
+    drive.arcadeDrive(-0.65 * vx, -0.75 * vz);
   }
 
   public void autoConduire(double voltGauche, double voltDroit) {
@@ -138,8 +140,7 @@ public class BasePilotable extends SubsystemBase {
     drive.arcadeDrive(0, 0);
   }
 
-
-  //Encodeur
+  // Encodeur
   public void resetEncodeur() {
     encodeurD.reset();
     encodeurG.reset();
@@ -169,7 +170,7 @@ public class BasePilotable extends SubsystemBase {
     return (getVitesseD() + getVitesseG()) / 2.0;
   }
 
-  //Ramp et Brake
+  // Ramp et Brake
   public void setRamp(double ramp) {
     moteurAvantG.configOpenloopRamp(ramp);
     moteurArriereG.configOpenloopRamp(ramp);
@@ -205,7 +206,7 @@ public class BasePilotable extends SubsystemBase {
     }
   }
 
-  //Transmission
+  // Transmission
   public boolean getIsHighGear() {
     return isHighGear;
   }
@@ -222,7 +223,7 @@ public class BasePilotable extends SubsystemBase {
     isHighGear = false;
   }
 
-  //Angle
+  // Angle
   public double getAngle() {
     return gyro.getYaw();
   }
@@ -232,13 +233,12 @@ public class BasePilotable extends SubsystemBase {
     pitchOffset = gyro.getPitch();
   }
 
-
   public double getPitch() {
-  return -(gyro.getPitch() - pitchOffset);
+    return (gyro.getPitch() - pitchOffset);
   }
-  
-  //Odométrie
-  public double[] getOdometry() {//seulement utile pour le dash bord
+
+  // Odométrie
+  public double[] getOdometry() {// seulement utile pour le dash bord
     double[] position = new double[3];
     double x = getPose().getTranslation().getX();
     double y = getPose().getTranslation().getY();
@@ -253,17 +253,23 @@ public class BasePilotable extends SubsystemBase {
     return poseEstimator.getEstimatedPosition();
   }
 
-  public void addVisionMeasurement(Pose2d position, double delaiLimelight){
+  public void addVisionMeasurement(Pose2d position, double delaiLimelight) {
     poseEstimator.addVisionMeasurement(position, Timer.getFPGATimestamp() - delaiLimelight);
   }
 
   public void resetOdometry(Pose2d pose) {
     resetEncodeur();
     resetGyro();
-    poseEstimator.resetPosition(Rotation2d.fromDegrees(getAngle()), getPositionG(), getPositionD(), getPose());
+    poseEstimator.resetPosition(Rotation2d.fromDegrees(getAngle()), getPositionG(), getPositionD(), pose);
   }
 
-  //Balancer
+  public void placerRobotPositionInitial(PathPlannerTrajectory trajectory)
+  {
+    trajectory = PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory, DriverStation.getAlliance());
+    resetOdometry(trajectory.getInitialPose());
+  }
+
+  // Balancer
   public double voltagePIDBalancer() {
     return pidBalancer.calculate(getPitch(), 0);
   }
@@ -272,30 +278,17 @@ public class BasePilotable extends SubsystemBase {
     return pidBalancer.atSetpoint();
   }
 
-  //déplacement trajectoire
-public DifferentialDriveWheelSpeeds getWheelSpeeds(){
-  return new DifferentialDriveWheelSpeeds(getVitesseG(), getVitesseD());
-}
-
-  public Trajectory creerTrajectoire(String trajet){
-    String trajetJSON = "output/" + trajet + ".wpilib.json";
-
-    try {
-      var path = Filesystem.getDeployDirectory().toPath().resolve(trajetJSON);
-      return TrajectoryUtil.fromPathweaverJson(path);
-    }
-
-    catch (IOException e) {
-      DriverStation.reportError("Unable to open trajectory :" + trajetJSON, e.getStackTrace());
-      return null;
-    }
+  // déplacement trajectoire
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(getVitesseG(), getVitesseD());
   }
 
-  public PathPlannerTrajectory creerTrajectoirePathPlanner(String trajet, boolean reversed) {
-    return PathPlanner.loadPath(trajet, BasePilotableConstantes.maxVitesse, BasePilotableConstantes.maxAcceleration, reversed);
+  public PathPlannerTrajectory creerTrajectoire(String trajet, boolean reversed) {
+    return PathPlanner.loadPath(trajet, BasePilotableConstantes.maxVitesse, BasePilotableConstantes.maxAcceleration,
+        reversed);
   }
 
-  public PathPlannerTrajectory creerTrajectoire(double x, double y, double angle) {
+  public PathPlannerTrajectory creerTrajectoirePoint(double x, double y, double angle) {
     PathPlannerTrajectory trajectoire = PathPlanner.generatePath(
         new PathConstraints(BasePilotableConstantes.maxVitesse, BasePilotableConstantes.maxAcceleration),
         new PathPoint(poseEstimator.getEstimatedPosition().getTranslation(),
@@ -305,7 +298,7 @@ public DifferentialDriveWheelSpeeds getWheelSpeeds(){
     return trajectoire;
   }
 
-  public Command ramsetePathPlanner(PathPlannerTrajectory trajectoire) {
+  public Command ramsete(PathPlannerTrajectory trajectoire) {
     PPRamseteCommand ramseteCommand = new PPRamseteCommand(
         trajectoire,
         this::getPose,

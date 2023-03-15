@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Pince extends SubsystemBase { 
-  private DoubleSolenoid pincePiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, 6, 5);
+  private DoubleSolenoid pincePiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, 5, 6);
   private WPI_TalonSRX pinceMoteur = new WPI_TalonSRX(7);
   private DigitalInput lightBreak = new DigitalInput(7);
   private boolean capteurArmer = true;

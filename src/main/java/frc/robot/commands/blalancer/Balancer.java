@@ -4,61 +4,25 @@
 
 package frc.robot.commands.blalancer;
 
-import edu.wpi.first.math.filter.LinearFilter;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.BasePilotable;
 
-public class Balancer extends CommandBase {
+public class Balancer extends SequentialCommandGroup {
   
   BasePilotable basePilotable;
-  double anglePasse;
-  double angleActuel;
-  double deltaAngle;
-  double voltage;
-  LinearFilter filtre = LinearFilter.singlePoleIIR(0.1, 0.02);
 
-  public Balancer(double voltage, BasePilotable basePilotable, boolean reculer) {
-    this.basePilotable = basePilotable;
+  public Balancer(BasePilotable basePilotable, boolean reculer) {
 
-    if (reculer == true) {
-      voltage *= -1;
-    }
-
-    this.voltage = voltage;
-
-    addRequirements(basePilotable);
-  }
-
-  @Override
-  public void initialize() {
-    basePilotable.setBrakeEtRampTeleop(false);
-    angleActuel = 0;
-    anglePasse = 0;
-  }
-
-  @Override
-  public void execute() {
-    angleActuel = Math.abs(basePilotable.getPitch());
-
-    deltaAngle = angleActuel-anglePasse;
-
-    deltaAngle = filtre.calculate(deltaAngle);
-
-    SmartDashboard.putNumber("delta angle", deltaAngle);
-
-    basePilotable.autoConduire(voltage, voltage);
-
-    anglePasse = angleActuel;
-  }
-
-  @Override
-  public void end(boolean interrupted) {
-    basePilotable.stop();
-  }
-
-  @Override
-  public boolean isFinished() {
-    return angleActuel > 12 && deltaAngle < -0.05;
+    addCommands(
+      //Grimper sur la balance jusqu'a temp que la balance penche
+      new DetecterPente(5, basePilotable,reculer),
+      //Avancer Un peu pour stabiliser la balance
+      new RunCommand(()-> basePilotable.autoConduire(4,4)).withTimeout(0.15),
+      //Avancer jusqu'a ce que la balance se replace au milieu
+      new DetecterPente(3,basePilotable, reculer),
+      //Stabilise le robot
+      new Stabiliser(basePilotable)
+    );
   }
 }

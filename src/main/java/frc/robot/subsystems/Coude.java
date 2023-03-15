@@ -54,6 +54,8 @@ public class Coude extends SubsystemBase {
     SmartDashboard.putBoolean("Detecteur coude", getLimitSwitch());
     SmartDashboard.putNumber("Vitesse Coude", getVitesse());
     SmartDashboard.putNumber("Distance Coude", getPosition());
+
+    SmartDashboard.putBoolean("CibleCoude", getCible());
   }
 
   public double getPosition() {
@@ -97,13 +99,13 @@ public class Coude extends SubsystemBase {
 
   public void pidCoude() {
     if(pidCoudeActif) {
-      if(pid.getGoal().position == Cible.kBas[0] && getPosition() < 0 && !getLimitSwitch()) {
+      /*if(pid.getGoal().position == Cible.kBas[0] && getPosition() < 0 && !getLimitSwitch()) {
         setVoltage(-1);
       }
 
-      else {
+      else {*/
         setVoltage(pid.calculate(getPosition()));
-      }
+      //}
     }
   }
 
@@ -115,5 +117,10 @@ public class Coude extends SubsystemBase {
 
   public boolean getLimitSwitch() {
     return !limitSwitch.get();
+  }
+
+  public boolean getCible(){
+    return pid.atGoal();
+
   }
 }

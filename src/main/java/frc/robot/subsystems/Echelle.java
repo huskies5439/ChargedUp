@@ -50,6 +50,8 @@ public class Echelle extends SubsystemBase {
   SmartDashboard.putNumber("Position Mat", getPosition());
   SmartDashboard.putNumber("Vitesse Mat", getVitesse());
   SmartDashboard.putBoolean("Capteur magnétique", getDetecteurMagnetique());
+
+  SmartDashboard.putBoolean("CibleMat", getCible());
   }
 
   public void setVoltage(double voltage) {
@@ -112,5 +114,10 @@ public class Echelle extends SubsystemBase {
     cible = MathUtil.clamp(cible, 0, EchelleConstantes.kMaxEchelle);
     pid.setGoal(cible);
     pidEchelleActif = true;
+  }
+
+  public boolean getCible(){
+    return pid.atGoal();
+
   }
 }

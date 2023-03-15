@@ -1,0 +1,48 @@
+{
+  "canivore names": [
+    "rio",
+    "rio"
+  ],
+  "counts per rotation": 256.0,
+  "encoder canivore name": "rio",
+  "encoder type": "roboRIO quadrature",
+  "encoding": false,
+  "gearing denominator": 10.0,
+  "gearing numerator": 54.0,
+  "gyro": "Pigeon",
+  "gyro canivore name": "rio",
+  "gyro ctor": "0",
+  "is drivetrain": true,
+  "motor controllers": [
+    "TalonFX",
+    "TalonFX"
+  ],
+  "number of samples per average": 5,
+  "primary encoder inverted": false,
+  "primary encoder ports": [
+    0,
+    1
+  ],
+  "primary motor ports": [
+    4,
+    3
+  ],
+  "primary motors inverted": [
+    true,
+    true
+  ],
+  "secondary encoder inverted": true,
+  "secondary encoder ports": [
+    2,
+    3
+  ],
+  "secondary motor ports": [
+    1,
+    2
+  ],
+  "secondary motors inverted": [
+    false,
+    false
+  ],
+  "velocity measurement period": 5
+}

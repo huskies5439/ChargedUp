@@ -19,15 +19,15 @@ public final class Constants {
     public static final double maxVitesse = 1.0;//ir dev = 3
     public static final double maxAcceleration = 1.0;//ir dev = 3
 
-    public static final double kS = 0;
-    public static final double kV = 0;
-    public static final double kA = 0;
-    public static final double kPRamsete = 0;
+    public static final double kS = 0.11989;
+    public static final double kV = 2.3714;
+    public static final double kA = 0.78828;
+    public static final double kPRamsete = 3.2252;
 
     public static final SimpleMotorFeedforward feedforward = 
             new SimpleMotorFeedforward(BasePilotableConstantes.kS, BasePilotableConstantes.kV, BasePilotableConstantes.kA);
 
-    public static final double kPBalancer = -0.05; // à valider4
+    public static final double kPBalancer = -0.2; // à valider4
     public static final int kToleranceBalancer = 5;
     
 
@@ -42,7 +42,7 @@ public final class Constants {
     
     public static final double kMaxVelocity = 2; //en m/s
     public static final double kMaxAcceleration = 4; //en m/s²
-    public static final double kPositionTolerance = 5;// en m
+    public static final double kPositionTolerance = 0.05;// en m
   }
 
   public static final class CoudeConstantes {
@@ -58,7 +58,7 @@ public final class Constants {
 
     public static final double kMaxVelocity = 270; //en degré/s
     public static final double kMaxAcceleration = 180; //en degré/s²
-    public static final double kPositionTolerance = 1; // en degré
+    public static final double kPositionTolerance = 5; // en degré
 
     
   }
