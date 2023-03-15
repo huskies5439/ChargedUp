@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -16,7 +17,9 @@ import frc.robot.commands.BrasAuto;
 import frc.robot.commands.Conduire;
 import frc.robot.commands.HomingBras;
 import frc.robot.commands.PincerAuto;
-import frc.robot.commands.auto.AutoCubeCone;
+import frc.robot.commands.auto.AutoCubeRetourCone;
+import frc.robot.commands.auto.AutoReculerRamsete;
+import frc.robot.commands.auto.BalancerAuto;
 import frc.robot.commands.blalancer.DetecterPente;
 import frc.robot.commands.blalancer.Stabiliser;
 import frc.robot.commands.blalancer.Balancer;
@@ -36,14 +39,26 @@ public class RobotContainer {
 
   CommandXboxController pilote = new CommandXboxController(0);
 
+  private final SendableChooser<Command> chooser = new SendableChooser<>();
+  private final Command autoCubeRetourCone = new AutoCubeRetourCone(basePilotable, echelle, coude, pince);
+  private final Command autoReculerRamsete = new AutoReculerRamsete(basePilotable);
+  private final Command autoBalancer = new BalancerAuto(basePilotable);
+
+
   Trigger aimantechelle = new Trigger(echelle::getDetecteurMagnetique);
   Trigger limitSwitchCoude = new Trigger(coude::getLimitSwitch);
 
-  Command autoCubeCone = new AutoCubeCone(basePilotable, echelle, coude, pince);
+
 
  
   
   public RobotContainer() {
+
+    SmartDashboard.putData(chooser);
+    chooser.addOption("CubeRetourCone", autoCubeRetourCone);
+    chooser.addOption("ReculerRamsete", autoReculerRamsete);
+    chooser.addOption("Balancer", autoBalancer);
+
     configureBindings();
     
     basePilotable.setDefaultCommand(new Conduire(pilote::getLeftY,pilote::getRightX, basePilotable));
@@ -86,6 +101,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return autoCubeCone;
+    return chooser.getSelected();
   }
 }

@@ -20,22 +20,17 @@ import frc.robot.subsystems.Pince;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AutoCubeCone extends SequentialCommandGroup {
+public class AutoCubeRetourCone extends SequentialCommandGroup {
   /** Creates a new Auto2Objets. */
-  public AutoCubeCone(BasePilotable basePilotable, Echelle echelle, Coude coude, Pince pince) {
+  public AutoCubeRetourCone(BasePilotable basePilotable, Echelle echelle, Coude coude, Pince pince) {
     PathPlannerTrajectory cubeChercherCone = basePilotable.creerTrajectoire("CubeChercherCone", true);
     PathPlannerTrajectory retourAvecCone = basePilotable.creerTrajectoire("RetourAvecCone", true);
 
     addCommands(
       new InstantCommand(() -> basePilotable.placerRobotPositionInitial(cubeChercherCone)),
-      new InstantCommand(() -> basePilotable.setBrakeEtRampTeleop(false))
+      new InstantCommand(() -> basePilotable.setBrakeEtRampTeleop(false)),
 
-      //new InstantCommand(pince::fermerPiston),
-      //new WaitCommand(0.2),
-      //new BrasAuto(Cible.kHaut, coude, echelle),
-      //new BrasEnPosition(echelle, coude),
-      //new InstantCommand(pince::ouvrirPiston),
-      //new BrasAuto(Cible.kBas, coude, echelle),
+      new AutoPlacer(echelle, coude, pince)
 
       //basePilotable.ramsete(cubeChercherCone).raceWith(new InstantCommand(pince::getFaisceau)),
       //basePilotable.ramsete(retourAvecCone)

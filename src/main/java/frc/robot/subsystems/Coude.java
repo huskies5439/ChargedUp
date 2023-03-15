@@ -99,13 +99,13 @@ public class Coude extends SubsystemBase {
 
   public void pidCoude() {
     if(pidCoudeActif) {
-      /*if(pid.getGoal().position == Cible.kBas[0] && getPosition() < 0 && !getLimitSwitch()) {
+      if(pid.getGoal().position == Cible.kBas[0] && getPosition() < 0 && !getLimitSwitch()) {
         setVoltage(-1);
       }
 
-      else {*/
+      else {
         setVoltage(pid.calculate(getPosition()));
-      //}
+      }
     }
   }
 
