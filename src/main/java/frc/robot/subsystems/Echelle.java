@@ -16,6 +16,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.Cible;
 import frc.robot.Constants.EchelleConstantes;
 
 public class Echelle extends SubsystemBase {
@@ -44,9 +45,8 @@ public class Echelle extends SubsystemBase {
 
     pidEchelleActif = false;
 
-    //Trouver le courant nécessaire pour maintenir l'échelle dans les airs, puis changer les paramètres ci-bas
-    moteur.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(false,20,25,1));
-  }
+    limiteCourant(false); 
+ }
 
 
   @Override
@@ -111,6 +111,12 @@ public class Echelle extends SubsystemBase {
 
   public void pidEchelle() {
     if (pidEchelleActif) {
+      if (pid.getGoal().position==Cible.kHaut[1] && getPosition() > 0.9*Cible.kHaut[1]){
+        limiteCourant(true);
+      }
+      else{
+        limiteCourant(false);
+      }
       double voltage = pid.calculate(getPosition());
       setVoltage(voltage);
 
@@ -125,5 +131,14 @@ public class Echelle extends SubsystemBase {
 
   public boolean getCible() {
     return pid.atGoal();
+  }
+
+  public void limiteCourant(boolean active){
+    if(active){
+      moteur.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 15, 20, 1));
+    }
+    else{//Les valeurs ne changent rien car la limite n'est pas enable
+      moteur.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(false, 30, 30, 1));
+    }
   }
 }

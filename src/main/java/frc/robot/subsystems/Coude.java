@@ -107,7 +107,7 @@ public class Coude extends SubsystemBase {
           //Quand le coude est rentré, on force mais en limitant le courant pour maintenir le coude en place
            limiteCourant(true);
           }
-        setVoltage(-1); //mettre descendre à la place ???
+        setVoltage(-1);
       }
 
       else {
