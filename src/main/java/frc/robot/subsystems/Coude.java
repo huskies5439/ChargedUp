@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.MathUtil;
@@ -42,16 +43,19 @@ public class Coude extends SubsystemBase {
 
     pid.setTolerance(CoudeConstantes.kPositionTolerance);
   
-    pidCoudeActif = false;  
+    pidCoudeActif = false; 
+    
+    limiteCourant(false);
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("Detecteur coude", getLimitSwitch());
-    SmartDashboard.putNumber("Vitesse Coude", getVitesse());
-    SmartDashboard.putNumber("Distance Coude", getPosition());
+    SmartDashboard.putBoolean("Limit Switch coude", getLimitSwitch());
+   // SmartDashboard.putNumber("Vitesse Coude", getVitesse());
+    SmartDashboard.putNumber("Angle Coude", getPosition());
 
     SmartDashboard.putBoolean("CibleCoude", getCible());
+    //SmartDashboard.putNumber("Coude Current", moteur.getStatorCurrent());
   }
 
   public double getPosition() {
@@ -97,11 +101,17 @@ public class Coude extends SubsystemBase {
 
   public void pidCoude() {
     if(pidCoudeActif) {
-      if(pid.getGoal().position == Cible.kBas[0] && getPosition() < 0 && !getLimitSwitch()) {
-        setVoltage(-1); //MEttre la fonction décsendre à la place
+      if(pid.getGoal().position == Cible.kBas[0] && getPosition() < -5) {
+       //Lorsque le coude est presque rendu aux limit switches, on met un voltage constant au lieu de la fin du PID.
+        if(getLimitSwitch()){
+          //Quand le coude est rentré, on force mais en limitant le courant pour maintenir le coude en place
+           limiteCourant(true);
+          }
+        setVoltage(-1); //mettre descendre à la place ???
       }
 
       else {
+        limiteCourant(false);//On ne limite jamais le courant si la pince n'est pas au fond du U
         setVoltage(pid.calculate(getPosition()));
       }
     }
@@ -111,6 +121,10 @@ public class Coude extends SubsystemBase {
     cible = MathUtil.clamp(cible, CoudeConstantes.kMin, CoudeConstantes.kMax);
     pid.setGoal(cible);
     pidCoudeActif = true;
+  
+   
+   
+
   }
 
   public boolean getLimitSwitch() {
@@ -119,5 +133,14 @@ public class Coude extends SubsystemBase {
 
   public boolean getCible() {
     return pid.atGoal();
+  }
+
+  public void limiteCourant(boolean active){
+    if(active){
+      moteur.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 10, 15, 1));
+    }
+    else{//Les valeurs ne changent rien car la limite n'est pas enable
+      moteur.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(false, 30, 30, 1));
+    }
   }
 }

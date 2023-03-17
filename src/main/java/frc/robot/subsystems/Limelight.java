@@ -24,7 +24,6 @@ public class Limelight extends SubsystemBase {
   private NetworkTableEntry cl = limelight.getEntry("cl"); //Captured Latency
 
   private NetworkTableEntry botpose;
-  private NetworkTableEntry stream = limelight.getEntry("stream");
 
   double[] result;
   double[] temp = {0,0,0,0,0,0};
@@ -32,16 +31,16 @@ public class Limelight extends SubsystemBase {
   String alliance;
   
   public Limelight() {
-    stream.setNumber(2);
-    alliance = "blue";
-    botpose = limelight.getEntry("botpose" + alliance);
+    /*alliance = "blue";
+    botpose = limelight.getEntry("botpose" + alliance);*/
+    setAlliance();
 
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Rz Camera", Math.toDegrees(getVisionPosition().getRotation().getZ()));
-    SmartDashboard.putNumber("Latence", getTotalLatency());
+   // SmartDashboard.putNumber("Rz Camera", Math.toDegrees(getVisionPosition().getRotation().getZ()));
+    //SmartDashboard.putNumber("Latence", getTotalLatency());
     SmartDashboard.putBoolean("April Tag", getTv());
 
   }

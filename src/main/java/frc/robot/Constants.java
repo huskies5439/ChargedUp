@@ -48,7 +48,7 @@ public final class Constants {
   public static final class CoudeConstantes {
     
     public static final double kMax = 110;
-    public static final double kMin = -15;
+    public static final double kMin = -10;
     public static final double kOffset = -8;
     
     //Pour le PID
@@ -69,6 +69,5 @@ public final class Constants {
     public static final double[] kMilieu = {100, 0}; //95 normalement
     public static final double[] kHaut = {100, 0.45};
 
-    //public static final double[] kPickUp = {110, 0.25};
   }
 }

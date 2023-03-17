@@ -54,7 +54,7 @@ public class RobotContainer {
     configureBindings();
     
     basePilotable.setDefaultCommand(new Conduire(pilote::getLeftY,pilote::getRightX, basePilotable));
-    pince.setDefaultCommand(new PincerAuto(pince)); //Remettre dans le code quand les capteurs seront posés
+    pince.setDefaultCommand(new PincerAuto(pince)); 
     echelle.setDefaultCommand(new RunCommand(echelle::pidEchelle, echelle));
     coude.setDefaultCommand(new RunCommand(coude::pidCoude, coude));
     //limelight.setDefaultCommand(new UpdatePosition(basePilotable, limelight));
@@ -66,10 +66,8 @@ public class RobotContainer {
     pilote.a().onTrue(new BrasAuto(Cible.kBas, coude, echelle));
     pilote.b().onTrue(new BrasAuto(Cible.kMilieu, coude, echelle));
     pilote.y().onTrue(new BrasAuto(Cible.kHaut, coude, echelle));
-    //pilote.x().onTrue(new BrasAuto(Cible.kPickUp, coude, echelle));
     // pilote.a().whileTrue(new Balancer(basePilotable, false));
     // pilote.b().whileTrue(new Balancer(basePilotable, true));
-    //example de code si capteur de couleur: pilote.a().ontrue(conditionalcommand(commandeOnTrue : cube, commandOnFalse : cone, pince::isCube))
 
     //Bouger le bras manuellement
     pilote.povUp().whileTrue(new StartEndCommand(echelle::allonger,echelle::stop , echelle));

@@ -25,8 +25,8 @@ public class Pince extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("armer", getArmer());
-    SmartDashboard.putBoolean("infrarouge", getFaisceau());
+   // SmartDashboard.putBoolean("armer", getArmer());
+    //SmartDashboard.putBoolean("infrarouge", getFaisceau());
 
   }
 

@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
@@ -18,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.EchelleConstantes;
 
 public class Echelle extends SubsystemBase {
-  private WPI_TalonFX moteurBras = new WPI_TalonFX(5);
+  private WPI_TalonFX moteur = new WPI_TalonFX(5);
   private double conversionEncodeur;
   private DigitalInput detecteurMagnetique = new DigitalInput(9);
   private ProfiledPIDController pid;
@@ -26,9 +27,9 @@ public class Echelle extends SubsystemBase {
 
   public Echelle() {
 
-    moteurBras.setInverted(false);
-    moteurBras.setNeutralMode(NeutralMode.Brake);
-    moteurBras.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
+    moteur.setInverted(false);
+    moteur.setNeutralMode(NeutralMode.Brake);
+    moteur.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
     resetEncodeur();
 
     /*1 tour de falcon = 2048 clic. Pignon 14 dents sur le falcon fait tourner gear 40 dents. La gear 40 dents est solidaire d'une
@@ -42,6 +43,9 @@ public class Echelle extends SubsystemBase {
             pid.setTolerance(EchelleConstantes.kPositionTolerance);
 
     pidEchelleActif = false;
+
+    //Trouver le courant nécessaire pour maintenir l'échelle dans les airs, puis changer les paramètres ci-bas
+    moteur.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(false,20,25,1));
   }
 
 
@@ -52,10 +56,11 @@ public class Echelle extends SubsystemBase {
   SmartDashboard.putBoolean("Capteur magnétique", getDetecteurMagnetique());
 
   SmartDashboard.putBoolean("CibleMat", getCible());
+  SmartDashboard.putNumber("courant échelle", moteur.getStatorCurrent());
   }
 
   public void setVoltage(double voltage) {
-    moteurBras.setVoltage(voltage);
+    moteur.setVoltage(voltage);
   }
 
   public void stop() {
@@ -89,15 +94,15 @@ public class Echelle extends SubsystemBase {
 
   //Encodeur Mât
   public double getPosition() {
-    return moteurBras.getSelectedSensorPosition()*conversionEncodeur;
+    return moteur.getSelectedSensorPosition()*conversionEncodeur;
   }
 
   public double getVitesse() {
-    return moteurBras.getSelectedSensorVelocity()*conversionEncodeur*10; //x10 car les encodeur des falcon donne des click par 100 ms.
+    return moteur.getSelectedSensorVelocity()*conversionEncodeur*10; //x10 car les encodeur des falcon donne des click par 100 ms.
   }
   
   public void resetEncodeur() {
-    moteurBras.setSelectedSensorPosition(0);
+    moteur.setSelectedSensorPosition(0);
   }
 
   public boolean getDetecteurMagnetique() {

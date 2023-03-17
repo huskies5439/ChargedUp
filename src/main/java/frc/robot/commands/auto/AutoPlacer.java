@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.Cible;
 import frc.robot.commands.BrasAuto;
+import frc.robot.commands.BrasEnPosition;
 import frc.robot.subsystems.Coude;
 import frc.robot.subsystems.Echelle;
 import frc.robot.subsystems.Pince;
