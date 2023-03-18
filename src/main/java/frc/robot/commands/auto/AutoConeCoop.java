@@ -23,8 +23,12 @@ public class AutoConeCoop extends SequentialCommandGroup {
 
 
     addCommands(
-      new AutoPlacer(echelle, coude, pince),
-      new InstantCommand(()-> basePilotable.placerRobotPositionInitial(coopConeChercherCone)) 
+      new InstantCommand(()-> basePilotable.placerRobotPositionInitial(coopConeChercherCone)), 
+      new InstantCommand(() -> basePilotable.setBrakeEtRampTeleop(false)),
+
+      new AutoPlacer(true, echelle, coude, pince, basePilotable),
+      basePilotable.ramsete(coopConeChercherCone)
+     
     );
   }
 }

@@ -31,8 +31,8 @@ public class Limelight extends SubsystemBase {
   String alliance;
   
   public Limelight() {
-    /*alliance = "blue";
-    botpose = limelight.getEntry("botpose" + alliance);*/
+    alliance = "blue";
+    botpose = limelight.getEntry("botpose" + alliance);
     setAlliance();
 
   }

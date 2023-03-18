@@ -58,7 +58,7 @@ public final class Constants {
 
     public static final double kMaxVelocity = 270; //en degré/s
     public static final double kMaxAcceleration = 180; //en degré/s²
-    public static final double kPositionTolerance = 5; // en degré
+    public static final double kTolerance = 10; // en degré
 
     
   }
@@ -66,8 +66,8 @@ public final class Constants {
   public static final class Cible {
     //angle [degrés] du coude en premier, puis hauteur [m] de l'échelle
     public static final double[] kBas = {-10, 0};
-    public static final double[] kMilieu = {100, 0}; //95 normalement
-    public static final double[] kHaut = {100, 0.45};
+    public static final double[] kMilieu = {105, 0}; //95 normalement
+    public static final double[] kHaut = {105, 0.45};
 
   }
 }

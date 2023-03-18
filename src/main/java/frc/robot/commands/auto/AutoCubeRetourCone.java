@@ -23,7 +23,7 @@ public class AutoCubeRetourCone extends SequentialCommandGroup {
       new InstantCommand(() -> basePilotable.placerRobotPositionInitial(cubeChercherCone)),
       new InstantCommand(() -> basePilotable.setBrakeEtRampTeleop(false)),
 
-      new AutoPlacer(echelle, coude, pince)
+      new AutoPlacer(false, echelle, coude, pince, basePilotable)
 
       //basePilotable.ramsete(cubeChercherCone).raceWith(new InstantCommand(pince::getFaisceau)),
       //basePilotable.ramsete(retourAvecCone)

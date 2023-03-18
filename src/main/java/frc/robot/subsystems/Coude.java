@@ -41,7 +41,7 @@ public class Coude extends SubsystemBase {
     pid = new ProfiledPIDController(CoudeConstantes.kP, 0, 0,
         new TrapezoidProfile.Constraints(CoudeConstantes.kMaxVelocity, CoudeConstantes.kMaxVelocity));
 
-    pid.setTolerance(CoudeConstantes.kPositionTolerance);
+    pid.setTolerance(CoudeConstantes.kTolerance);
   
     pidCoudeActif = false; 
     

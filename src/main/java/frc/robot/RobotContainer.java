@@ -13,11 +13,15 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.Cible;
+import frc.robot.commands.AvancerDistance;
+import frc.robot.commands.AvancerDistanceSimple;
 import frc.robot.commands.BrasAuto;
 import frc.robot.commands.Conduire;
 import frc.robot.commands.HomingBras;
 import frc.robot.commands.PincerAuto;
+import frc.robot.commands.UpdatePosition;
 import frc.robot.commands.auto.AutoCubeRetourCone;
+import frc.robot.commands.auto.AutoPlacer;
 import frc.robot.commands.auto.AutoReculerRamsete;
 import frc.robot.commands.auto.BalancerAuto;
 import frc.robot.subsystems.BasePilotable;
@@ -39,7 +43,10 @@ public class RobotContainer {
   private final Command autoCubeRetourCone = new AutoCubeRetourCone(basePilotable, echelle, coude, pince);
   private final Command autoReculerRamsete = new AutoReculerRamsete(basePilotable);
   private final Command autoBalancer = new BalancerAuto(basePilotable);
-
+  private final Command autoPlacerCone = new AutoPlacer(true,echelle, coude, pince, basePilotable);
+  private final Command autoPlacerCube = new AutoPlacer(false,echelle, coude, pince, basePilotable);
+  private final Command avancerDistance = new AvancerDistance(basePilotable, 0);
+  private final Command avancerDistanceSimple = new AvancerDistanceSimple(0.3, basePilotable);
 
   Trigger aimantechelle = new Trigger(echelle::getDetecteurMagnetique);
   Trigger limitSwitchCoude = new Trigger(coude::getLimitSwitch);
@@ -50,6 +57,10 @@ public class RobotContainer {
     chooser.addOption("CubeRetourCone", autoCubeRetourCone);
     chooser.addOption("ReculerRamsete", autoReculerRamsete);
     chooser.addOption("Balancer", autoBalancer);
+    chooser.addOption("Auto Placer Cube", autoPlacerCube);
+    chooser.addOption("Auto Placer Cone", autoPlacerCone);
+    chooser.addOption("Avancer Distance", avancerDistance);
+    chooser.addOption("Avancer Distance Simple", avancerDistanceSimple);
 
     configureBindings();
     
@@ -57,7 +68,7 @@ public class RobotContainer {
     pince.setDefaultCommand(new PincerAuto(pince)); 
     echelle.setDefaultCommand(new RunCommand(echelle::pidEchelle, echelle));
     coude.setDefaultCommand(new RunCommand(coude::pidCoude, coude));
-    //limelight.setDefaultCommand(new UpdatePosition(basePilotable, limelight));
+    limelight.setDefaultCommand(new UpdatePosition(basePilotable, limelight));
   }
 
   private void configureBindings() {
