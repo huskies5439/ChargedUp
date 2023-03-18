@@ -40,7 +40,7 @@ public class AutoPlacer extends SequentialCommandGroup {
 
       //Avancer en levant le bras à sa position finale
       new AvancerDistanceSimple(distanceDepart, basePilotable),
-          // .alongWith(new BrasAutoAvecCheck(Cible.kHaut, echelle, coude)),
+        
 
       //Ouvrir la pince
       new InstantCommand(pince::ouvrir).andThen(new WaitCommand(0.2)),
@@ -48,7 +48,7 @@ public class AutoPlacer extends SequentialCommandGroup {
       //Reculer
       new AvancerDistanceSimple(-distanceDepart, basePilotable),
 
-      //Descendre le bras en 2 étapes ?????
+      //Descendre le bras
    
       new BrasAutoAvecCheck(Cible.kBas, echelle, coude)
     );

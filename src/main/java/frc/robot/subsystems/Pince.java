@@ -13,7 +13,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Pince extends SubsystemBase { 
-  private DoubleSolenoid pince = new DoubleSolenoid(PneumaticsModuleType.REVPH, 5, 6);
+  private DoubleSolenoid pinceGauche = new DoubleSolenoid(PneumaticsModuleType.REVPH, 5, 6);
+  private DoubleSolenoid pinceDroite = new DoubleSolenoid(PneumaticsModuleType.REVPH, 3, 4);
   private DigitalInput lightBreak = new DigitalInput(7);
   private boolean capteurArmer = true;
   private boolean ouverturePiston;
@@ -31,13 +32,15 @@ public class Pince extends SubsystemBase {
   }
 
   public void ouvrir() {
-    pince.set(Value.kForward);
+    pinceGauche.set(Value.kForward);
+    pinceDroite.set(Value.kForward);
     ouverturePiston = true;
 
   }
 
   public void fermer() {
-    pince.set(Value.kReverse);
+    pinceGauche.set(Value.kReverse);
+    pinceDroite.set(Value.kReverse);
     ouverturePiston = false;
 
   }

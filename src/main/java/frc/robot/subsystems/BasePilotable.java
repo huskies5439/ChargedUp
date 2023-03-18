@@ -55,10 +55,11 @@ public class BasePilotable extends SubsystemBase {
   // Gyro
   private PigeonIMU gyro = new PigeonIMU(0);
   private double pitchOffset = 0;
-  private Field2d field = new Field2d();
+  
 
   // Odometrie
   private DifferentialDrivePoseEstimator poseEstimator;
+  private Field2d field = new Field2d();
 
   // Pneumatique
   private DoubleSolenoid pistonTransmission = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1, 2);
@@ -285,9 +286,8 @@ public class BasePilotable extends SubsystemBase {
   public PathPlannerTrajectory creerTrajectoirePoint(double x, double y, double angle) {
     PathPlannerTrajectory trajectoire = PathPlanner.generatePath(
         new PathConstraints(BasePilotableConstantes.maxVitesse, BasePilotableConstantes.maxAcceleration),
-        new PathPoint(poseEstimator.getEstimatedPosition().getTranslation(),
-            poseEstimator.getEstimatedPosition().getRotation()),
-        new PathPoint(new Translation2d(x - 0.5, y), new Rotation2d(Math.toRadians(angle))),
+        new PathPoint(getPose().getTranslation(), getPose().getRotation()),
+        //new PathPoint(new Translation2d(x - 0.5, y), new Rotation2d(Math.toRadians(angle))),//necessaire ??
         new PathPoint(new Translation2d(x, y), new Rotation2d(Math.toRadians(angle))));
     return trajectoire;
   }

@@ -41,12 +41,10 @@ public class RobotContainer {
 
   private final SendableChooser<Command> chooser = new SendableChooser<>();
   private final Command autoCubeRetourCone = new AutoCubeRetourCone(basePilotable, echelle, coude, pince);
-  private final Command autoReculerRamsete = new AutoReculerRamsete(basePilotable);
   private final Command autoBalancer = new BalancerAuto(basePilotable);
   private final Command autoPlacerCone = new AutoPlacer(true,echelle, coude, pince, basePilotable);
   private final Command autoPlacerCube = new AutoPlacer(false,echelle, coude, pince, basePilotable);
-  private final Command avancerDistance = new AvancerDistance(basePilotable, 0);
-  private final Command avancerDistanceSimple = new AvancerDistanceSimple(0.3, basePilotable);
+  private final Command avancerDistance = new AvancerDistance(0.4, basePilotable);
 
   Trigger aimantechelle = new Trigger(echelle::getDetecteurMagnetique);
   Trigger limitSwitchCoude = new Trigger(coude::getLimitSwitch);
@@ -55,12 +53,10 @@ public class RobotContainer {
 
     SmartDashboard.putData(chooser);
     chooser.addOption("CubeRetourCone", autoCubeRetourCone);
-    chooser.addOption("ReculerRamsete", autoReculerRamsete);
     chooser.addOption("Balancer", autoBalancer);
     chooser.addOption("Auto Placer Cube", autoPlacerCube);
     chooser.addOption("Auto Placer Cone", autoPlacerCone);
     chooser.addOption("Avancer Distance", avancerDistance);
-    chooser.addOption("Avancer Distance Simple", avancerDistanceSimple);
 
     configureBindings();
     

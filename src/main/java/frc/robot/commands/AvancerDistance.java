@@ -14,14 +14,16 @@ import frc.robot.subsystems.BasePilotable;
 
 public class AvancerDistance extends SequentialCommandGroup {
   BasePilotable basePilotable;
-  double cible;
+  double distance;
   double PoseDepart;
   /** Creates a new AvancerDistance. */
-  public AvancerDistance(BasePilotable basePilotable, double cible) {
+  public AvancerDistance(double distance, BasePilotable basePilotable ) {
   this.basePilotable = basePilotable;
-  this.cible = cible;
+  this.distance = distance;
+
     addRequirements(basePilotable);
-    PathPlannerTrajectory trajet = basePilotable.creerTrajectoirePoint(1,basePilotable.getPose().getY(),0);
+    PathPlannerTrajectory trajet = basePilotable.creerTrajectoirePoint(basePilotable.getPose().getX()+distance,
+                                  basePilotable.getPose().getY(),0); //ou angle = 180 ???
     addCommands(
       new InstantCommand(() -> basePilotable.setBrakeEtRampTeleop(false)),
 
