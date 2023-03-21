@@ -2,49 +2,46 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.balancer;
+
+import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.BasePilotable;
 
-public class AvancerDistanceSimple extends CommandBase {
-  double distance;
-  BasePilotable basePilotable;
-  double positionDepart;
-  double voltage;
-  /** Creates a new AvancerDistanceSimple. */
-  public AvancerDistanceSimple(double distance, double voltage, BasePilotable basePilotable) {
-    this.distance = distance;
-    this.basePilotable = basePilotable;
-    this.voltage = voltage;
-    addRequirements(basePilotable);
+public class AncrerBalance extends CommandBase {
+  /** Creates a new AncrerBalance. */
+BasePilotable basePilotable;
+DoubleSupplier vx;
+DoubleSupplier vz;
 
+  public AncrerBalance(DoubleSupplier vx, DoubleSupplier vz, BasePilotable basePilotable) {
+    this.basePilotable = basePilotable;
+    this.vx = vx;
+    this.vz = vz;
+    addRequirements(basePilotable);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    positionDepart = basePilotable.getPosition();
     basePilotable.setBrakeEtRampTeleop(false);
-    voltage = voltage*Math.signum(distance);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    basePilotable.autoConduire(voltage, voltage);
+    basePilotable.conduire(0.5*vx.getAsDouble(), vz.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    basePilotable.stop();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(basePilotable.getPosition() -positionDepart) > Math.abs(distance);
+    return false;
   }
 }

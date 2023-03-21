@@ -4,9 +4,6 @@
 
 package frc.robot.commands.auto;
 
-import java.nio.file.Path;
-
-import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;

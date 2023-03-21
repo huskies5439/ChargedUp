@@ -7,20 +7,23 @@ package frc.robot.commands.balancer;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.BasePilotable;
+import frc.robot.commands.AvancerDistancePID;
+import frc.robot.commands.AvancerDistanceSimple;
 
 public class Balancer extends SequentialCommandGroup {
   
   BasePilotable basePilotable;
 
   public Balancer(BasePilotable basePilotable, boolean reculer) {
-
+    double voltage = 3;
     addCommands(
       //Grimper sur la balance jusqu'a temp que la balance penche
-      new DetecterPente(5, basePilotable,reculer),
-      //Avancer Un peu pour stabiliser la balance
-      new RunCommand(()-> basePilotable.autoConduire(4,4)).withTimeout(0.15),
+      new DetecterSurRampe(voltage, reculer, basePilotable),
+
+      //new RunCommand(()-> basePilotable.autoConduire(voltage,voltage)).withTimeout(1.45),
+      new AvancerDistanceSimple(1.25, voltage, basePilotable),
       //Avancer jusqu'a ce que la balance se replace au milieu
-      new DetecterPente(3,basePilotable, reculer),
+      //new DetecterPenteDescendante(voltage,basePilotable, reculer),
       //Stabilise le robot
       new Stabiliser(basePilotable)
     );

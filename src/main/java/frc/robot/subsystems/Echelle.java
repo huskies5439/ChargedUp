@@ -52,11 +52,7 @@ public class Echelle extends SubsystemBase {
   @Override
   public void periodic() {
   SmartDashboard.putNumber("Position Mat", getPosition());
-  SmartDashboard.putNumber("Vitesse Mat", getVitesse());
-  SmartDashboard.putBoolean("Capteur magnétique", getDetecteurMagnetique());
 
-  SmartDashboard.putBoolean("CibleMat", getCible());
-  SmartDashboard.putNumber("courant échelle", moteur.getStatorCurrent());
   }
 
   public void setVoltage(double voltage) {

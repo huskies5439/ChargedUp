@@ -8,10 +8,9 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.Cible;
+import frc.robot.commands.AvancerDistancePID;
 import frc.robot.commands.AvancerDistanceSimple;
-import frc.robot.commands.BrasAuto;
 import frc.robot.commands.BrasAutoAvecCheck;
-import frc.robot.commands.BrasEnPosition;
 import frc.robot.subsystems.BasePilotable;
 import frc.robot.subsystems.Coude;
 import frc.robot.subsystems.Echelle;
@@ -36,21 +35,22 @@ public class AutoPlacer extends SequentialCommandGroup {
       new InstantCommand(pince::fermer).andThen(new WaitCommand(0.2)),
 
       //Lever le coude
-      new BrasAutoAvecCheck(Cible.kHaut, echelle, coude),
+      new WaitCommand(1),//new BrasAutoAvecCheck(Cible.kHaut, echelle, coude),
 
       //Avancer en levant le bras à sa position finale
-      new AvancerDistanceSimple(distanceDepart, basePilotable),
+      new AvancerDistancePID(distanceDepart, basePilotable),
         
 
       //Ouvrir la pince
       new InstantCommand(pince::ouvrir).andThen(new WaitCommand(0.2)),
 
       //Reculer
-      new AvancerDistanceSimple(-distanceDepart, basePilotable),
+      new AvancerDistancePID(-distanceDepart, basePilotable),
 
       //Descendre le bras
    
-      new BrasAutoAvecCheck(Cible.kBas, echelle, coude)
+      new WaitCommand(1)
+      //new BrasAutoAvecCheck(Cible.kBas, echelle, coude)
     );
   }
 }

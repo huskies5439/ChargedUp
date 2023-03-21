@@ -4,47 +4,55 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.BasePilotableConstantes;
 import frc.robot.subsystems.BasePilotable;
 
-public class AvancerDistanceSimple extends CommandBase {
-  double distance;
+public class TournerPID extends CommandBase {
   BasePilotable basePilotable;
-  double positionDepart;
+  double angle;
   double voltage;
-  /** Creates a new AvancerDistanceSimple. */
-  public AvancerDistanceSimple(double distance, double voltage, BasePilotable basePilotable) {
-    this.distance = distance;
-    this.basePilotable = basePilotable;
-    this.voltage = voltage;
-    addRequirements(basePilotable);
+  double angleDepart;
+  ProfiledPIDController pid;
 
-    // Use addRequirements() here to declare subsystem dependencies.
+  public TournerPID(double angle, BasePilotable basePilotable) {
+    this.basePilotable = basePilotable;
+    this.angle = angle;
+    addRequirements(basePilotable);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    positionDepart = basePilotable.getPosition();
+    pid = new ProfiledPIDController(BasePilotableConstantes.kPTourner, 0, 0,
+        new TrapezoidProfile.Constraints(BasePilotableConstantes.maxVitesseTourner, BasePilotableConstantes.kMaxAccelerationTourner));
     basePilotable.setBrakeEtRampTeleop(false);
-    voltage = voltage*Math.signum(distance);
+    pid.setGoal(angle);
+    pid.setTolerance(5);
+    angleDepart = basePilotable.getAngle();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    basePilotable.autoConduire(voltage, voltage);
+    voltage = pid.calculate(basePilotable.getAngle() - angleDepart) + BasePilotableConstantes.feedforwardtourner.calculate(pid.getSetpoint().velocity);
+      basePilotable.autoConduire(-voltage, voltage);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    
+    voltage = 0;
+  
     basePilotable.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(basePilotable.getPosition() -positionDepart) > Math.abs(distance);
+    return pid.atGoal();
   }
 }

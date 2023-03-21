@@ -27,7 +27,6 @@ public class AutoCubeRetourCone extends SequentialCommandGroup {
 
       //basePilotable.ramsete(cubeChercherCone).raceWith(new InstantCommand(pince::getFaisceau)),
       //basePilotable.ramsete(retourAvecCone)
-
     );
   }
 }

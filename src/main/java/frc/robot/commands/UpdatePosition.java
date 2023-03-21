@@ -18,7 +18,9 @@ public class UpdatePosition extends CommandBase {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    limelight.setAlliance();
+  }
 
   @Override
   public void execute() {

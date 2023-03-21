@@ -16,21 +16,30 @@ public final class Constants {
     
     public static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.635);//a déterminer dans sis id
 
-    public static final double maxVitesse = 1.0;//ir dev = 3
-    public static final double maxAcceleration = 1.0;//ir dev = 3
+    public static final double maxVitesse = 3.0;//ir dev = 3
+    public static final double maxAcceleration = 3.0;//ir dev = 3
 
-    public static final double kS = 0.11989;
-    public static final double kV = 2.3714;
-    public static final double kA = 0.78828;
-    public static final double kPRamsete = 3.2252;
+    public static final double kS = 0.17836;
+    public static final double kV = 2.1008;
+    public static final double kA = 1.0138;
+    public static final double kPRamsete = 2.4443;
 
     public static final SimpleMotorFeedforward feedforward = 
             new SimpleMotorFeedforward(BasePilotableConstantes.kS, BasePilotableConstantes.kV, BasePilotableConstantes.kA);
 
-    public static final double kPBalancer = -0.2; // à valider4
-    public static final int kToleranceBalancer = 5;
+    public static final double kPBalancer = -0.085; 
+    public static final int kToleranceBalancer = 3;
     
+    public static final double kSTourner = 0.58645;
+    public static final double kVTourner = 0.004763;
+    public static final double kATourner = 0.002023;
+    public static final double kPTourner = 0.2;
 
+    public static final double maxVitesseTourner = 180; //en °/s
+    public static final double kMaxAccelerationTourner = 270; //en °/s²
+
+    public static final SimpleMotorFeedforward feedforwardtourner =
+            new SimpleMotorFeedforward(BasePilotableConstantes.kSTourner, BasePilotableConstantes.kVTourner, BasePilotableConstantes.kATourner);
   }
   
   public static final class EchelleConstantes {
@@ -59,8 +68,6 @@ public final class Constants {
     public static final double kMaxVelocity = 270; //en degré/s
     public static final double kMaxAcceleration = 180; //en degré/s²
     public static final double kTolerance = 10; // en degré
-
-    
   }
 
   public static final class Cible {

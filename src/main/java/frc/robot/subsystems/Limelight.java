@@ -12,7 +12,6 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase {
@@ -33,16 +32,13 @@ public class Limelight extends SubsystemBase {
   public Limelight() {
     alliance = "blue";
     botpose = limelight.getEntry("botpose" + alliance);
-    setAlliance();
-
   }
 
   @Override
   public void periodic() {
-   // SmartDashboard.putNumber("Rz Camera", Math.toDegrees(getVisionPosition().getRotation().getZ()));
+    //SmartDashboard.putNumber("Rz Camera", Math.toDegrees(getVisionPosition().getRotation().getZ()));
     //SmartDashboard.putNumber("Latence", getTotalLatency());
-    SmartDashboard.putBoolean("April Tag", getTv());
-
+    //SmartDashboard.putBoolean("April Tag", getTv());
   }
 
   public Pose3d getVisionPosition() {

@@ -50,12 +50,8 @@ public class Coude extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("Limit Switch coude", getLimitSwitch());
-   // SmartDashboard.putNumber("Vitesse Coude", getVitesse());
     SmartDashboard.putNumber("Angle Coude", getPosition());
 
-    SmartDashboard.putBoolean("CibleCoude", getCible());
-    //SmartDashboard.putNumber("Coude Current", moteur.getStatorCurrent());
   }
 
   public double getPosition() {
@@ -100,8 +96,8 @@ public class Coude extends SubsystemBase {
   }
 
   public void pidCoude() {
-    if(pidCoudeActif) {
-      if(pid.getGoal().position == Cible.kBas[0] && getPosition() < -5) {
+    if (pidCoudeActif) {
+      if (pid.getGoal().position == Cible.kBas[0] && getPosition() < -5 && getPosition() >= CoudeConstantes.kMin) {
        //Lorsque le coude est presque rendu aux limit switches, on met un voltage constant au lieu de la fin du PID.
         if(getLimitSwitch()){
           //Quand le coude est rentré, on force mais en limitant le courant pour maintenir le coude en place
