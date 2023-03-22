@@ -65,8 +65,7 @@ public class BasePilotable extends SubsystemBase {
   private DoubleSolenoid pistonTransmission = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1, 2);
   private boolean isHighGear = false;
 
-  // PID Balancer
-  private PIDController pidBalancer = new PIDController(BasePilotableConstantes.kPBalancer, 0, 0);
+  
 
   public BasePilotable() {
     // Reset intiaux
@@ -94,9 +93,7 @@ public class BasePilotable extends SubsystemBase {
     // transmission
     lowGear();
 
-    // pid balancer
-    pidBalancer.setSetpoint(0);
-    pidBalancer.setTolerance(2.5);
+   
   }
 
   @Override
@@ -265,14 +262,8 @@ public class BasePilotable extends SubsystemBase {
     resetOdometry(trajectory.getInitialPose());
   }
 
-  // Balancer
-  public double voltagePIDBalancer() {
-    return pidBalancer.calculate(getPitch(), 0);
-  }
 
-  public boolean isBalancer() {
-    return pidBalancer.atSetpoint();
-  }
+  
 
   // déplacement trajectoire
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {

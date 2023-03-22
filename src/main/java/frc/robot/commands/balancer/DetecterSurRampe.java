@@ -12,17 +12,15 @@ public class DetecterSurRampe extends CommandBase {
   /** Creates a new DetecterSurRampe. */
   BasePilotable basePilotable;
   double voltage;
-  boolean reculer;
+ 
 
   boolean detecterSurRampe;
 
-  public DetecterSurRampe(double voltage, boolean reculer, BasePilotable basePilotable) {
+  public DetecterSurRampe(double voltage, BasePilotable basePilotable) {
     this.basePilotable = basePilotable;
     this.voltage = voltage;
     
-    if (reculer == true) {
-      voltage *= -1;
-    }
+    
     addRequirements(basePilotable);
 
     // Use addRequirements() here to declare subsystem dependencies.

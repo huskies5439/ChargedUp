@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.auto;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -10,43 +10,41 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.BasePilotableConstantes;
 import frc.robot.subsystems.BasePilotable;
 
-public class AvancerDistancePID extends CommandBase {
-  /** Creates a new AvancerDistancePID. */
+public class TournerPID extends CommandBase {
   BasePilotable basePilotable;
-  double distance;
+  double angle;
   double voltage;
-  double positionDepart;
+  double angleDepart;
   ProfiledPIDController pid;
 
-
-  public AvancerDistancePID(double distance, BasePilotable basePilotable) {
+  public TournerPID(double angle, BasePilotable basePilotable) {
     this.basePilotable = basePilotable;
-    this.distance = distance;
+    this.angle = angle;
     addRequirements(basePilotable);
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    pid = new ProfiledPIDController(12, 0, 0,
-        new TrapezoidProfile.Constraints(BasePilotableConstantes.maxVitesse, BasePilotableConstantes.maxAcceleration) );
+    pid = new ProfiledPIDController(BasePilotableConstantes.kPTourner, 0, 0,
+        new TrapezoidProfile.Constraints(BasePilotableConstantes.maxVitesseTourner, BasePilotableConstantes.kMaxAccelerationTourner));
     basePilotable.setBrakeEtRampTeleop(false);
-    pid.setGoal(distance);
-    pid.setTolerance(0.03);
-    positionDepart = basePilotable.getPosition();
+    pid.setGoal(angle);
+    pid.setTolerance(5);
+    angleDepart = basePilotable.getAngle();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      voltage = pid.calculate(basePilotable.getPosition()-positionDepart) + BasePilotableConstantes.feedforward.calculate(pid.getSetpoint().velocity);
-      basePilotable.autoConduire(voltage, voltage);
+    voltage = pid.calculate(basePilotable.getAngle() - angleDepart) + BasePilotableConstantes.feedforwardtourner.calculate(pid.getSetpoint().velocity);
+      basePilotable.autoConduire(-voltage, voltage);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    
     voltage = 0;
   
     basePilotable.stop();

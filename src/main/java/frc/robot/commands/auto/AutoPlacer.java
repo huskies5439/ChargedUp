@@ -8,8 +8,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.Cible;
-import frc.robot.commands.AvancerDistancePID;
-import frc.robot.commands.AvancerDistanceSimple;
 import frc.robot.commands.BrasAutoAvecCheck;
 import frc.robot.subsystems.BasePilotable;
 import frc.robot.subsystems.Coude;

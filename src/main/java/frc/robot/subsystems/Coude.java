@@ -122,12 +122,14 @@ public class Coude extends SubsystemBase {
    
 
   }
-
+ public double getCible() {
+  return pid.getGoal().position;
+ }
   public boolean getLimitSwitch() {
     return !limitSwitch.get();
   }
 
-  public boolean getCible() {
+  public boolean getRenduCible() {
     return pid.atGoal();
   }
 

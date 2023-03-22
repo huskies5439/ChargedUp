@@ -4,12 +4,15 @@
 
 package frc.robot.commands.balancer;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.BasePilotable;
 
 public class Stabiliser extends CommandBase {
   BasePilotable basePilotable;
   double voltage;
+
+  PIDController pidBalancer;
 
   public Stabiliser(BasePilotable basePilotable) {
     this.basePilotable = basePilotable;
@@ -18,14 +21,19 @@ public class Stabiliser extends CommandBase {
 
   @Override
   public void initialize() {
+    pidBalancer = new PIDController(-0.085, 0, 0);
     basePilotable.setBrakeEtRampTeleop(false);
+
+     // pid balancer
+     pidBalancer.setSetpoint(0);
+     pidBalancer.setTolerance(2.5);
   }
 
   @Override
   public void execute() {
-    voltage = basePilotable.voltagePIDBalancer();
+    voltage = pidBalancer.calculate(basePilotable.getPitch(), 0);
 
-    if (basePilotable.isBalancer()) {
+    if (pidBalancer.atSetpoint()) {
       voltage = 0;
     }
 

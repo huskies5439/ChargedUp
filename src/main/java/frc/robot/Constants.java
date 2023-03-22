@@ -27,8 +27,6 @@ public final class Constants {
     public static final SimpleMotorFeedforward feedforward = 
             new SimpleMotorFeedforward(BasePilotableConstantes.kS, BasePilotableConstantes.kV, BasePilotableConstantes.kA);
 
-    public static final double kPBalancer = -0.085; 
-    public static final int kToleranceBalancer = 3;
     
     public static final double kSTourner = 0.58645;
     public static final double kVTourner = 0.004763;
@@ -73,8 +71,9 @@ public final class Constants {
   public static final class Cible {
     //angle [degrés] du coude en premier, puis hauteur [m] de l'échelle
     public static final double[] kBas = {-10, 0};
-    public static final double[] kMilieu = {105, 0}; //95 normalement
+    public static final double[] kMilieu = {105, 0}; 
     public static final double[] kHaut = {105, 0.45};
+    public static final double[] ksol = {35, 0};
 
   }
 }

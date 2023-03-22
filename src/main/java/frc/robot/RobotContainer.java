@@ -13,15 +13,14 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.Cible;
-import frc.robot.commands.AvancerDistancePID;
 import frc.robot.commands.BrasAuto;
 import frc.robot.commands.Conduire;
+import frc.robot.commands.DescendrePrecision;
 import frc.robot.commands.HomingBras;
 import frc.robot.commands.PincerAuto;
-import frc.robot.commands.TournerPID;
 import frc.robot.commands.UpdatePosition;
-import frc.robot.commands.auto.AutoCubeRetourCone;
 import frc.robot.commands.auto.AutoPlacer;
+import frc.robot.commands.auto.AvancerDistanceSimple;
 import frc.robot.commands.auto.Balancino;
 import frc.robot.commands.balancer.AncrerBalance;
 import frc.robot.commands.balancer.Balancer;
@@ -41,26 +40,36 @@ public class RobotContainer {
   CommandXboxController manette = new CommandXboxController(0);
 
   private final SendableChooser<Command> chooser = new SendableChooser<>();
-  private final Command autoCubeRetourCone = new AutoCubeRetourCone(basePilotable, echelle, coude, pince);
-  private final Command autoBalancer = new Balancer(basePilotable, false);
-  private final Command autoPlacerCone = new AutoPlacer(true,echelle, coude, pince, basePilotable);
-  private final Command autoPlacerCube = new AutoPlacer(false,echelle, coude, pince, basePilotable);
-  private final Command avancerDistance = new AvancerDistancePID(0.4, basePilotable);
-  private final Command tournerPID = new TournerPID(180, basePilotable);
-  private final Command balancino = new Balancino(basePilotable, echelle, coude, pince);
+  
+  //Autonomes de base
+  private final Command sortirZoneSimple = new AvancerDistanceSimple(5, 3, basePilotable);
+  private final Command balancer = new Balancer(basePilotable);
+  private final Command placerCone = new AutoPlacer(true,echelle, coude, pince, basePilotable);
+  private final Command placerCube = new AutoPlacer(false,echelle, coude, pince, basePilotable);
+
+
+  //Trajets
+  //Trajet au centre, de base avec Cone
+  private final Command balancino = new Balancino(true, basePilotable, echelle, coude, pince);
+  private final Command balancinoCube = new Balancino(false, basePilotable, echelle, coude, pince);
+
+
   Trigger aimantechelle = new Trigger(echelle::getDetecteurMagnetique);
   Trigger limitSwitchCoude = new Trigger(coude::getLimitSwitch);
   
   public RobotContainer() {
 
     SmartDashboard.putData(chooser);
-    chooser.addOption("CubeRetourCone", autoCubeRetourCone);
-    chooser.addOption("Balancer", autoBalancer);
-    chooser.addOption("Auto Placer Cube", autoPlacerCube);
-    chooser.addOption("Auto Placer Cone", autoPlacerCone);
-    chooser.addOption("Avancer Distance", avancerDistance);
-    chooser.addOption("TournerPID", tournerPID);
+    //Autonomes simples
+    chooser.addOption("Sortir zone SIMPLE", sortirZoneSimple);
+    chooser.addOption("Balancer", balancer);
+    chooser.addOption("Placer Cone", placerCone);
+    chooser.addOption("Placer Cube", placerCube);
+    
+    //Trajet du centre
     chooser.addOption("Balancino", balancino);
+    chooser.addOption("Balancino Cube", balancinoCube);
+    
     
 
     configureBindings();
@@ -78,12 +87,17 @@ public class RobotContainer {
     manette.a().onTrue(new BrasAuto(Cible.kBas, coude, echelle));
     manette.b().onTrue(new BrasAuto(Cible.kMilieu, coude, echelle));
     manette.y().onTrue(new BrasAuto(Cible.kHaut, coude, echelle));
-    // pilote.a().whileTrue(new Balancer(basePilotable, false));
-    
-    
-    manette.rightTrigger().whileTrue(new AncrerBalance(manette::getLeftY, manette::getRightX, basePilotable));
+    manette.x().onTrue(new BrasAuto(Cible.ksol, coude, echelle));
 
-    manette.leftTrigger().whileTrue(new Balancer(basePilotable, false));
+    manette.leftBumper().whileTrue(new DescendrePrecision(coude));
+
+
+    
+    
+    manette.leftTrigger().whileTrue(new AncrerBalance(manette::getLeftY, manette::getRightX, basePilotable));
+
+    //Pratique pour débugger le balancement
+    //manette.rightTrigger().whileTrue(new Balancer(basePilotable));
 
     //Bouger le bras manuellement
     manette.povUp().whileTrue(new StartEndCommand(echelle::allonger,echelle::stop , echelle));

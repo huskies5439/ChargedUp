@@ -16,7 +16,7 @@ public class BrasEnPosition extends ParallelCommandGroup {
     
     addCommands(
         new WaitUntilCommand(echelle::getCible),
-        new WaitUntilCommand(coude::getCible)
+        new WaitUntilCommand(coude::getRenduCible)
 
     );
   }
