@@ -4,11 +4,9 @@
 
 package frc.robot.commands.balancer;
 
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.BasePilotable;
-import frc.robot.commands.auto.AvancerDistancePID;
 import frc.robot.commands.auto.AvancerDistanceSimple;
+import frc.robot.subsystems.BasePilotable;
 
 public class Balancer extends SequentialCommandGroup {
   

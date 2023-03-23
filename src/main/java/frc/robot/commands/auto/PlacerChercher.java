@@ -12,12 +12,12 @@ import frc.robot.subsystems.Coude;
 import frc.robot.subsystems.Echelle;
 import frc.robot.subsystems.Pince;
 
-public class AutoPlacer extends SequentialCommandGroup {
+public class PlacerChercher extends SequentialCommandGroup {
   
-  public AutoPlacer(boolean cone, Echelle echelle, Coude coude, Pince pince, BasePilotable basePilotable) {
-
+  public PlacerChercher(boolean placerCone, boolean chercherCone, Echelle echelle, Coude coude, Pince pince ,BasePilotable basePilotable) {
+    
     double distanceDepart;
-    if(cone) {
+    if (placerCone) {
       distanceDepart = 0.4;
     }
     
@@ -29,8 +29,8 @@ public class AutoPlacer extends SequentialCommandGroup {
       //Attraper le cone
       new InstantCommand(pince::fermer).andThen(new WaitCommand(0.2)),
 
-      //Lever le coude
-      new WaitCommand(1), //new BrasAutoAvecCheck(Cible.kHaut, echelle, coude),
+      //Lever le bras
+      new WaitCommand(1), //new BrasAutoAvecCheck(Cible.kHaut, echelle, coude), 
 
       //Avancer en levant le bras à sa position finale
       new AvancerDistancePID(distanceDepart, basePilotable),
@@ -41,9 +41,13 @@ public class AutoPlacer extends SequentialCommandGroup {
       //Reculer
       new AvancerDistancePID(-distanceDepart, basePilotable),
 
-      //Descendre le bras
-      new WaitCommand(1) //new BrasAutoAvecCheck(Cible.kBas, echelle, coude),
+      //Baisser le bras
+      new WaitCommand(1), //new BrasAutoAvecCheck(Cible.kBas, echelle, coude),
 
+      //Chercher Cube/Cone (Utiliser un boolean pour avoir si c un cone ou un cube pis dire que true c un trajet et false un autre)
+      new WaitCommand(1)
+
+      //Surrement qu'il ne restera plus de temp
     );
   }
 }

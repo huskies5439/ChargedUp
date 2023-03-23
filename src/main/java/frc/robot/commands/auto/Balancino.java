@@ -5,7 +5,6 @@
 package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.BasePilotableConstantes;
 import frc.robot.commands.balancer.Balancer;
 import frc.robot.subsystems.BasePilotable;
 import frc.robot.subsystems.Coude;

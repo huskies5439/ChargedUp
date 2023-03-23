@@ -22,6 +22,7 @@ import frc.robot.commands.UpdatePosition;
 import frc.robot.commands.auto.AutoPlacer;
 import frc.robot.commands.auto.AvancerDistanceSimple;
 import frc.robot.commands.auto.Balancino;
+import frc.robot.commands.auto.PlacerChercher;
 import frc.robot.commands.balancer.AncrerBalance;
 import frc.robot.commands.balancer.Balancer;
 import frc.robot.subsystems.BasePilotable;
@@ -44,15 +45,21 @@ public class RobotContainer {
   //Autonomes de base
   private final Command sortirZoneSimple = new AvancerDistanceSimple(5, 3, basePilotable);
   private final Command balancer = new Balancer(basePilotable);
-  private final Command placerCone = new AutoPlacer(true,echelle, coude, pince, basePilotable);
-  private final Command placerCube = new AutoPlacer(false,echelle, coude, pince, basePilotable);
+  private final Command placerCone = new AutoPlacer(true, echelle, coude, pince, basePilotable);
+  private final Command placerCube = new AutoPlacer(false, echelle, coude, pince, basePilotable);
 
 
   //Trajets
-  //Trajet au centre, de base avec Cone
-  private final Command balancino = new Balancino(true, basePilotable, echelle, coude, pince);
+
+  //Balancino
+  private final Command balancinoCone = new Balancino(true, basePilotable, echelle, coude, pince);
   private final Command balancinoCube = new Balancino(false, basePilotable, echelle, coude, pince);
 
+  //
+  private final Command placerConeChercherCone = new PlacerChercher(true, true, echelle, coude, pince, basePilotable);
+  private final Command placerConeChercherCube = new PlacerChercher(true, false, echelle, coude, pince, basePilotable);
+  private final Command placerCubeChercherCone = new PlacerChercher(false, true, echelle, coude, pince, basePilotable);
+  private final Command placerCubeChercherCube = new PlacerChercher(false, false, echelle, coude, pince, basePilotable);
 
   Trigger aimantechelle = new Trigger(echelle::getDetecteurMagnetique);
   Trigger limitSwitchCoude = new Trigger(coude::getLimitSwitch);
@@ -67,8 +74,13 @@ public class RobotContainer {
     chooser.addOption("Placer Cube", placerCube);
     
     //Trajet du centre
-    chooser.addOption("Balancino", balancino);
+    chooser.addOption("Balancino Cone", balancinoCone);
     chooser.addOption("Balancino Cube", balancinoCube);
+
+    chooser.addOption("Placer Cone Chercher Cone", placerConeChercherCone);
+    chooser.addOption("Placer Cone Chercher Cube", placerConeChercherCube);
+    chooser.addOption("Placer Cube Chercher Cone", placerCubeChercherCone);
+    chooser.addOption("Placer Cube Chercher Cube", placerCubeChercherCube);
     
     
 
