@@ -37,7 +37,7 @@ public class TournerPID extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    voltage = pid.calculate(basePilotable.getAngle() - angleDepart) + BasePilotableConstantes.feedforwardtourner.calculate(pid.getSetpoint().velocity);
+    voltage = pid.calculate(basePilotable.getAngle()) + BasePilotableConstantes.feedforwardtourner.calculate(pid.getSetpoint().velocity);
       basePilotable.autoConduire(-voltage, voltage);
   }
 

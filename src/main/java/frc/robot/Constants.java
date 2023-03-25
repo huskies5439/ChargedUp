@@ -16,8 +16,8 @@ public final class Constants {
     
     public static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.635);//a déterminer dans sis id
 
-    public static final double maxVitesse = 3.0;//ir dev = 3
-    public static final double maxAcceleration = 3.0;//ir dev = 3
+    public static final double maxVitesse =2.0;//ir dev = 3
+    public static final double maxAcceleration = 1.5;//ir dev = 3
 
     public static final double kS = 0.17836;
     public static final double kV = 2.1008;
@@ -70,10 +70,10 @@ public final class Constants {
 
   public static final class Cible {
     //angle [degrés] du coude en premier, puis hauteur [m] de l'échelle
-    public static final double[] kBas = {-10, 0};
+    public static final double[] kRentrer = {-10, 0};
     public static final double[] kMilieu = {105, 0}; 
     public static final double[] kHaut = {105, 0.45};
-    public static final double[] ksol = {35, 0};
+    public static final double[] kSol = {35, 0};
 
   }
 }

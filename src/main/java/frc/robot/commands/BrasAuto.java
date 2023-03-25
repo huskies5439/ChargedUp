@@ -11,7 +11,7 @@ import frc.robot.subsystems.Echelle;
 
 public class BrasAuto extends ParallelCommandGroup {
 
-  public BrasAuto(double[] cible, Coude coude, Echelle echelle) {
+  public BrasAuto(double[] cible, Echelle echelle, Coude coude) {
     addCommands(
       new InstantCommand(()->coude.setCible(cible[0])),
       new InstantCommand(()->echelle.setCible(cible[1]))

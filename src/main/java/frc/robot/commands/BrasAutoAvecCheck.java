@@ -14,7 +14,7 @@ public class BrasAutoAvecCheck extends SequentialCommandGroup {
    
 
     addCommands(
-      new BrasAuto(cible, coude, echelle),
+      new BrasAuto(cible, echelle, coude),
       new BrasEnPosition(echelle, coude)
 
     );

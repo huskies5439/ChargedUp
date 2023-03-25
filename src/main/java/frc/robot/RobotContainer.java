@@ -20,9 +20,10 @@ import frc.robot.commands.HomingBras;
 import frc.robot.commands.PincerAuto;
 import frc.robot.commands.UpdatePosition;
 import frc.robot.commands.auto.AutoPlacer;
+import frc.robot.commands.auto.AutoPlacerSol;
 import frc.robot.commands.auto.AvancerDistanceSimple;
 import frc.robot.commands.auto.Balancino;
-import frc.robot.commands.auto.PlacerChercher;
+import frc.robot.commands.auto.JamesBande;
 import frc.robot.commands.balancer.AncrerBalance;
 import frc.robot.commands.balancer.Balancer;
 import frc.robot.subsystems.BasePilotable;
@@ -47,19 +48,19 @@ public class RobotContainer {
   private final Command balancer = new Balancer(basePilotable);
   private final Command placerCone = new AutoPlacer(true, echelle, coude, pince, basePilotable);
   private final Command placerCube = new AutoPlacer(false, echelle, coude, pince, basePilotable);
-
+  //placer sol
+  private final Command placerSol = new AutoPlacerSol(echelle, coude, pince);
+  //placer sol puis reculer
+  private final Command placerSolReculer = new AutoPlacerSol(echelle, coude, pince).andThen(new  AvancerDistanceSimple(-5,2.5,basePilotable)); 
 
   //Trajets
+  private final Command jamesBande = new JamesBande(echelle, coude, pince, basePilotable);
 
   //Balancino
   private final Command balancinoCone = new Balancino(true, basePilotable, echelle, coude, pince);
   private final Command balancinoCube = new Balancino(false, basePilotable, echelle, coude, pince);
 
   //
-  private final Command placerConeChercherCone = new PlacerChercher(true, true, echelle, coude, pince, basePilotable);
-  private final Command placerConeChercherCube = new PlacerChercher(true, false, echelle, coude, pince, basePilotable);
-  private final Command placerCubeChercherCone = new PlacerChercher(false, true, echelle, coude, pince, basePilotable);
-  private final Command placerCubeChercherCube = new PlacerChercher(false, false, echelle, coude, pince, basePilotable);
 
   Trigger aimantechelle = new Trigger(echelle::getDetecteurMagnetique);
   Trigger limitSwitchCoude = new Trigger(coude::getLimitSwitch);
@@ -72,16 +73,14 @@ public class RobotContainer {
     chooser.addOption("Balancer", balancer);
     chooser.addOption("Placer Cone", placerCone);
     chooser.addOption("Placer Cube", placerCube);
-    
+    chooser.addOption("Placer Sol" , placerSol);
     //Trajet du centre
     chooser.addOption("Balancino Cone", balancinoCone);
     chooser.addOption("Balancino Cube", balancinoCube);
 
-    chooser.addOption("Placer Cone Chercher Cone", placerConeChercherCone);
-    chooser.addOption("Placer Cone Chercher Cube", placerConeChercherCube);
-    chooser.addOption("Placer Cube Chercher Cone", placerCubeChercherCone);
-    chooser.addOption("Placer Cube Chercher Cube", placerCubeChercherCube);
-    
+    chooser.addOption("James Bande", jamesBande);
+
+
     
 
     configureBindings();
@@ -96,10 +95,10 @@ public class RobotContainer {
   private void configureBindings() {
 
     //Bouton pour que le bras soit à la bonne hauteur
-    manette.a().onTrue(new BrasAuto(Cible.kBas, coude, echelle));
-    manette.b().onTrue(new BrasAuto(Cible.kMilieu, coude, echelle));
-    manette.y().onTrue(new BrasAuto(Cible.kHaut, coude, echelle));
-    manette.x().onTrue(new BrasAuto(Cible.ksol, coude, echelle));
+    manette.a().onTrue(new BrasAuto(Cible.kRentrer, echelle, coude));
+    manette.b().onTrue(new BrasAuto(Cible.kMilieu, echelle, coude));
+    manette.y().onTrue(new BrasAuto(Cible.kHaut, echelle, coude));
+    manette.x().onTrue(new BrasAuto(Cible.kSol, echelle, coude));
 
     manette.leftBumper().whileTrue(new DescendrePrecision(coude));
 

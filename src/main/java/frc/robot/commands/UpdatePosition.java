@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.BasePilotable;
 import frc.robot.subsystems.Limelight;
@@ -24,9 +25,10 @@ public class UpdatePosition extends CommandBase {
 
   @Override
   public void execute() {
-    if(limelight.getTv() && limelight.getTa() > 1){
+    if(limelight.getTv() && limelight.getTa() > 0.2){
       basePilotable.addVisionMeasurement(limelight.getVisionPosition().toPose2d(), limelight.getTotalLatency()/1000.0);
     }
+    SmartDashboard.putNumber("Look for ApritTag", limelight.getTa());
   }
 
   @Override

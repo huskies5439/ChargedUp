@@ -4,6 +4,7 @@
 
 package frc.robot.commands.auto;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.BasePilotable;
 
@@ -16,7 +17,7 @@ public class AvancerDistanceSimple extends CommandBase {
   public AvancerDistanceSimple(double distance, double voltage, BasePilotable basePilotable) {
     this.distance = distance;
     this.basePilotable = basePilotable;
-    this.voltage = voltage;
+    //this.voltage = voltage;
     addRequirements(basePilotable);
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -27,7 +28,7 @@ public class AvancerDistanceSimple extends CommandBase {
   public void initialize() {
     positionDepart = basePilotable.getPosition();
     basePilotable.setBrakeEtRampTeleop(false);
-    voltage = voltage*Math.signum(distance);
+    voltage = 2.5*Math.signum(distance);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,6 +41,7 @@ public class AvancerDistanceSimple extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     basePilotable.stop();
+    voltage = 0;
   }
 
   // Returns true when the command should end.

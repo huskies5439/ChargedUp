@@ -106,12 +106,10 @@ public class BasePilotable extends SubsystemBase {
     SmartDashboard.putNumber("Angle", getAngle());
     SmartDashboard.putNumber("Pitch", getPitch());
     SmartDashboard.putNumber("Position Base", getPosition());
-    SmartDashboard.putNumber("Vitesse Base", getVitesse());
 
     SmartDashboard.putNumber("Pose Estimator X", poseEstimator.getEstimatedPosition().getX());
     SmartDashboard.putNumber("Pose Estimator Y", poseEstimator.getEstimatedPosition().getY());
 
-    SmartDashboard.putNumber("Pitch", getPitch());
     
     SmartDashboard.putData(field);
   }

@@ -97,7 +97,7 @@ public class Coude extends SubsystemBase {
 
   public void pidCoude() {
     if (pidCoudeActif) {
-      if (pid.getGoal().position == Cible.kBas[0] && getPosition() < -5 && getPosition() >= CoudeConstantes.kMin) {
+      if (pid.getGoal().position == Cible.kRentrer[0] && getPosition() < -5 && getPosition() >= CoudeConstantes.kMin) {
        //Lorsque le coude est presque rendu aux limit switches, on met un voltage constant au lieu de la fin du PID.
         if(getLimitSwitch()){
           //Quand le coude est rentré, on force mais en limitant le courant pour maintenir le coude en place
