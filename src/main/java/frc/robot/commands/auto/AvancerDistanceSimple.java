@@ -41,7 +41,6 @@ public class AvancerDistanceSimple extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     basePilotable.stop();
-    voltage = 0;
   }
 
   // Returns true when the command should end.

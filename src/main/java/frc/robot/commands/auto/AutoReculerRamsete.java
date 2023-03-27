@@ -14,6 +14,7 @@ public class AutoReculerRamsete extends SequentialCommandGroup {
   
   public AutoReculerRamsete(BasePilotable basePilotable) {
 
+    //fait reculer le robot avec un ramsete
     PathPlannerTrajectory reculer = basePilotable.creerTrajectoire("Reculer", true);
 
     addCommands(

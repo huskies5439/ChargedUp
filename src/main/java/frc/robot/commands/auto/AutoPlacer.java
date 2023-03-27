@@ -19,6 +19,7 @@ public class AutoPlacer extends SequentialCommandGroup {
   
   public AutoPlacer(boolean cone, Echelle echelle, Coude coude, Pince pince, BasePilotable basePilotable) {
 
+    //change la distance dépendament du trajet selectionner
     double distanceDepart;
     if(cone) {
       distanceDepart = 0.35;
