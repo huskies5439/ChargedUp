@@ -24,6 +24,7 @@ import frc.robot.commands.auto.AutoPlacerSol;
 import frc.robot.commands.auto.AvancerDistanceSimple;
 import frc.robot.commands.auto.Balancino;
 import frc.robot.commands.auto.JamesBande;
+import frc.robot.commands.auto.LaCachette;
 import frc.robot.commands.balancer.AncrerBalance;
 import frc.robot.commands.balancer.Balancer;
 import frc.robot.subsystems.BasePilotable;
@@ -44,14 +45,14 @@ public class RobotContainer {
   private final SendableChooser<Command> chooser = new SendableChooser<>();
   
   //Autonomes de base
-  private final Command sortirZoneSimple = new AvancerDistanceSimple(5, 3, basePilotable);
+  private final Command sortirZoneDevant = new AvancerDistanceSimple(5, basePilotable);
   private final Command balancer = new Balancer(basePilotable);
   private final Command placerCone = new AutoPlacer(true, echelle, coude, pince, basePilotable);
   private final Command placerCube = new AutoPlacer(false, echelle, coude, pince, basePilotable);
   //placer sol
   private final Command placerSol = new AutoPlacerSol(echelle, coude, pince);
   //placer sol puis reculer
-  private final Command placerSolReculer = new AutoPlacerSol(echelle, coude, pince).andThen(new  AvancerDistanceSimple(-5,2.5,basePilotable)); 
+  private final Command placerSolReculer = new AutoPlacerSol(echelle, coude, pince).andThen(new  AvancerDistanceSimple(-5, basePilotable)); 
 
   //Trajets
   private final Command jamesBande = new JamesBande(echelle, coude, pince, basePilotable);
@@ -60,7 +61,7 @@ public class RobotContainer {
   private final Command balancinoCone = new Balancino(true, basePilotable, echelle, coude, pince);
   private final Command balancinoCube = new Balancino(false, basePilotable, echelle, coude, pince);
 
-  //
+  private final Command laCachette = new LaCachette(basePilotable, echelle, coude, pince);
 
   Trigger aimantechelle = new Trigger(echelle::getDetecteurMagnetique);
   Trigger limitSwitchCoude = new Trigger(coude::getLimitSwitch);
@@ -69,19 +70,20 @@ public class RobotContainer {
 
     SmartDashboard.putData(chooser);
     //Autonomes simples
-    chooser.addOption("Sortir zone SIMPLE", sortirZoneSimple);
+    chooser.addOption("Sortir zone DEVANT", sortirZoneDevant);
     chooser.addOption("Balancer", balancer);
     chooser.addOption("Placer Cone", placerCone);
     chooser.addOption("Placer Cube", placerCube);
     chooser.addOption("Placer Sol" , placerSol);
+
     //Trajet du centre
     chooser.addOption("Balancino Cone", balancinoCone);
     chooser.addOption("Balancino Cube", balancinoCube);
 
+    //Trajet Bande
     chooser.addOption("James Bande", jamesBande);
 
-
-    
+    chooser.addOption("La Cachette", laCachette);
 
     configureBindings();
     
@@ -100,12 +102,9 @@ public class RobotContainer {
     manette.y().onTrue(new BrasAuto(Cible.kHaut, echelle, coude));
     manette.x().onTrue(new BrasAuto(Cible.kSol, echelle, coude));
 
-    manette.leftBumper().whileTrue(new DescendrePrecision(coude));
+    manette.leftTrigger().whileTrue(new DescendrePrecision(coude));
 
-
-    
-    
-    manette.leftTrigger().whileTrue(new AncrerBalance(manette::getLeftY, manette::getRightX, basePilotable));
+    manette.leftBumper().whileTrue(new AncrerBalance(manette::getLeftY, manette::getRightX, basePilotable));
 
     //Pratique pour débugger le balancement
     //manette.rightTrigger().whileTrue(new Balancer(basePilotable));
@@ -121,7 +120,7 @@ public class RobotContainer {
     limitSwitchCoude.onTrue(new InstantCommand(coude::resetEncodeur));
 
     //pince 
-    manette.rightBumper().onTrue(new InstantCommand(pince::togglePincePiston, pince)); //Pas un toggle car cela désactiverais le PincerAuto qui doit fonctionner en permanence
+    manette.rightTrigger().onTrue(new InstantCommand(pince::togglePincePiston, pince)); //Pas un toggle car cela désactiverais le PincerAuto qui doit fonctionner en permanence
 
     //Homing
     manette.start().onTrue(new HomingBras(echelle, coude));

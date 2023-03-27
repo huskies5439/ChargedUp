@@ -6,7 +6,6 @@ package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.Cible;
 import frc.robot.commands.BrasAuto;
 import frc.robot.commands.BrasAutoAvecCheck;
@@ -37,7 +36,7 @@ public class AutoPlacer extends SequentialCommandGroup {
       new BrasAutoAvecCheck(Cible.kMilieu, echelle, coude),
 
       //Avancer en levant le bras à sa position finale
-      new AvancerDistanceSimple(distanceDepart, 2.5, basePilotable).alongWith(new BrasAutoAvecCheck(Cible.kHaut, echelle, coude)),
+      new AvancerDistanceSimple(distanceDepart, basePilotable).alongWith(new BrasAutoAvecCheck(Cible.kHaut, echelle, coude)),
 
       //new WaitCommand(1),
 
@@ -45,7 +44,7 @@ public class AutoPlacer extends SequentialCommandGroup {
       new InstantCommand(pince::ouvrir),
 
       //Reculer
-      new AvancerDistanceSimple(-distanceDepart, 2.5, basePilotable),
+      new AvancerDistanceSimple(-distanceDepart, basePilotable),
 
       //Descendre le bras
       new BrasAuto(Cible.kRentrer, echelle, coude)

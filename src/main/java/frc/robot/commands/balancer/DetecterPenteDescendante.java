@@ -9,8 +9,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.BasePilotable;
 
-
-
 //////POTENTIEL DÉSUET ??????/////////
 public class DetecterPenteDescendante extends CommandBase {
   
@@ -58,10 +56,10 @@ public class DetecterPenteDescendante extends CommandBase {
     if (angleActuel > 13 && deltaAngle < -0.03) {
         compteur = compteur + 1;
     }
+
     else {
       compteur = 0;
     }
-
 
     basePilotable.autoConduire(voltage, voltage);
 
@@ -76,7 +74,6 @@ public class DetecterPenteDescendante extends CommandBase {
 
     detecterPenteActif = false;
     SmartDashboard.putBoolean("detecterpenteactif", detecterPenteActif);
-
   }
 
   @Override

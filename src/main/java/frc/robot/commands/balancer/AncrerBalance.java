@@ -22,17 +22,15 @@ DoubleSupplier vz;
     addRequirements(basePilotable);
     // Use addRequirements() here to declare subsystem dependencies.
   }
-
-  // Called when the command is initially scheduled.
+  
   @Override
   public void initialize() {
     basePilotable.setBrakeEtRampTeleop(false);
   }
-
-  // Called every time the scheduler runs while the command is scheduled.
+  
   @Override
   public void execute() {
-    basePilotable.conduire(0.5*vx.getAsDouble(), vz.getAsDouble());
+    basePilotable.conduire(0.5*vx.getAsDouble(), 0.8*vz.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.

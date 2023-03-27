@@ -8,22 +8,21 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Coude;
 
 public class DescendrePrecision extends CommandBase {
-  /** Creates a new DescendrePrecision. */
   double ciblePrecision;
   double cibleInitiale;
   Coude coude;
+
   public DescendrePrecision(Coude coude) {
     this.coude = coude;
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     cibleInitiale = coude.getCible();
-    ciblePrecision = cibleInitiale-15;
-    coude.setCible(ciblePrecision);
-
+    if (cibleInitiale > 90) { //Pour ne pas le faire si on est pas dans les airs
+      ciblePrecision = cibleInitiale - 15;
+      coude.setCible(ciblePrecision);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.

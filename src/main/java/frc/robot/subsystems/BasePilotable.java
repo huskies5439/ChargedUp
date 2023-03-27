@@ -92,8 +92,6 @@ public class BasePilotable extends SubsystemBase {
 
     // transmission
     lowGear();
-
-   
   }
 
   @Override

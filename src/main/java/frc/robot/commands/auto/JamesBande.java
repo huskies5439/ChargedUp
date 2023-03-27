@@ -9,7 +9,6 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.Cible;
@@ -25,8 +24,6 @@ public class JamesBande extends SequentialCommandGroup {
     
     PathPlannerTrajectory chercherConeBande = basePilotable.creerTrajectoire("ChercherConeBande", true);
     PathPlannerTrajectory retourConeBande = basePilotable.creerTrajectoire("RetourAvecConeBande", false);
-
-
     
     addCommands(
       new InstantCommand(() -> basePilotable.placerRobotPositionInitial(chercherConeBande)),
@@ -34,7 +31,6 @@ public class JamesBande extends SequentialCommandGroup {
 
     //Placer un cone
     new AutoPlacer(false, echelle, coude, pince, basePilotable),
-
     
     basePilotable.ramsete(chercherConeBande),
     
@@ -42,12 +38,10 @@ public class JamesBande extends SequentialCommandGroup {
                           new TournerPID(0,basePilotable), 
                           pince::getArmer),
 
-
-    new ParallelCommandGroup(basePilotable.ramsete(retourConeBande), new BrasAutoAvecCheck(Cible.kMilieu, echelle, coude)),
+    new ParallelCommandGroup(basePilotable.ramsete(retourConeBande), 
+    new BrasAutoAvecCheck(Cible.kMilieu, echelle, coude)),
     new BrasAutoAvecCheck(Cible.kHaut, echelle, coude),
     new InstantCommand(pince::ouvrir)
-
-
     );
   }
 }

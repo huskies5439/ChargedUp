@@ -4,22 +4,16 @@
 
 package frc.robot.commands.balancer;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.BasePilotable;
 
 public class DetecterSurRampe extends CommandBase {
-  /** Creates a new DetecterSurRampe. */
+  
   BasePilotable basePilotable;
   double voltage;
  
-
-  boolean detecterSurRampe;
-
-  public DetecterSurRampe(double voltage, BasePilotable basePilotable) {
+  public DetecterSurRampe(BasePilotable basePilotable) {
     this.basePilotable = basePilotable;
-    this.voltage = voltage;
-    
     
     addRequirements(basePilotable);
 
@@ -30,23 +24,17 @@ public class DetecterSurRampe extends CommandBase {
   @Override
   public void initialize() {
     basePilotable.setBrakeEtRampTeleop(false);
-    detecterSurRampe = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     basePilotable.autoConduire(voltage, voltage);
-    SmartDashboard.putBoolean("DetecterSurRampe", detecterSurRampe);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    detecterSurRampe = false;
-    SmartDashboard.putBoolean("DetecterSurRampe", detecterSurRampe);
-
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

@@ -12,13 +12,12 @@ public class Balancer extends SequentialCommandGroup {
   
 
   public Balancer(BasePilotable basePilotable) {
-    double voltage = 3;
     addCommands(
       //Avancer jusqu'à ce qu'on monte sur la balance
-      new DetecterSurRampe(voltage, basePilotable),
+      new DetecterSurRampe( basePilotable),
 
-     //Monter 1.25 m sur la balance (point de chute)
-      new AvancerDistanceSimple(1.25, voltage, basePilotable),
+      //Monter 1.25 m sur la balance (point de chute)
+      new AvancerDistanceSimple(1.25, basePilotable),
       
       //Stabilise le robot
       new Stabiliser(basePilotable)

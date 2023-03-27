@@ -13,6 +13,7 @@ public final class Constants {
 
     public static final double rampTeleop = 0.2;
 
+    public static final double voltageAvancerLentement = 2.5;
     
     public static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.635);//a déterminer dans sis id
 
