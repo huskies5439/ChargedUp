@@ -51,9 +51,7 @@ public class RobotContainer {
   private final Command placerCube = new AutoPlacer(false, echelle, coude, pince, basePilotable);
   //placer sol
   private final Command placerSol = new AutoPlacerSol(echelle, coude, pince);
-  //placer sol puis reculer
-  private final Command placerSolReculer = new AutoPlacerSol(echelle, coude, pince).andThen(new  AvancerDistanceSimple(-5, basePilotable)); 
-
+  
   //Trajets
   private final Command jamesBande = new JamesBande(echelle, coude, pince, basePilotable);
 
