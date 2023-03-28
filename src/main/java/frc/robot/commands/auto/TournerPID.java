@@ -23,9 +23,10 @@ public class TournerPID extends CommandBase {
     addRequirements(basePilotable);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+
+    //Créer le PID pour tourner
     pid = new ProfiledPIDController(BasePilotableConstantes.kPTourner, 0, 0,
         new TrapezoidProfile.Constraints(BasePilotableConstantes.maxVitesseTourner, BasePilotableConstantes.kMaxAccelerationTourner));
     basePilotable.setBrakeEtRampTeleop(false);
@@ -34,14 +35,13 @@ public class TournerPID extends CommandBase {
     angleDepart = basePilotable.getAngle();
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    //Tourner
     voltage = pid.calculate(basePilotable.getAngle()) + BasePilotableConstantes.feedforwardtourner.calculate(pid.getSetpoint().velocity);
       basePilotable.autoConduire(-voltage, voltage);
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     
@@ -50,9 +50,9 @@ public class TournerPID extends CommandBase {
     basePilotable.stop();
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    //S'arrêter après avoir atteint la cible
     return pid.atGoal();
   }
 }

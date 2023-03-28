@@ -20,24 +20,23 @@ DoubleSupplier vz;
     this.vx = vx;
     this.vz = vz;
     addRequirements(basePilotable);
-    // Use addRequirements() here to declare subsystem dependencies.
   }
   
   @Override
   public void initialize() {
+    //Se mettre en brake pour ne pas gisser de la balance
     basePilotable.setBrakeEtRampTeleop(false);
   }
   
   @Override
   public void execute() {
+    //Baisser la vitesse selon la valeur donner pour se stabiliser en autonome
     basePilotable.conduire(0.5*vx.getAsDouble(), 0.8*vz.getAsDouble());
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;

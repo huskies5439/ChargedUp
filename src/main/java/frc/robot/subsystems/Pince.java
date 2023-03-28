@@ -20,44 +20,36 @@ public class Pince extends SubsystemBase {
 
   public Pince() {
     ouvrir();
-
   }
 
   @Override
-  public void periodic() {
-   // SmartDashboard.putBoolean("armer", getArmer());
-    //SmartDashboard.putBoolean("infrarouge", getFaisceau());
+  public void periodic() {} 
 
-  }
-
+  //Ouvrir-fermer pince
   public void ouvrir() {
     pinceGauche.set(Value.kForward);
     pinceDroite.set(Value.kForward);
     ouverturePiston = true;
-
   }
 
   public void fermer() {
     pinceGauche.set(Value.kReverse);
     pinceDroite.set(Value.kReverse);
     ouverturePiston = false;
-
   }
 
+  //State du piston
   public boolean getOuverturePiston() {
     return ouverturePiston;
-
   }
 
   public void togglePincePiston() {
     if (ouverturePiston) {
       fermer();
-
     }
 
     else {
       ouvrir();
-      
     }
   }
 

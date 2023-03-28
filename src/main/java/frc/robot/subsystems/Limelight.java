@@ -36,12 +36,9 @@ public class Limelight extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
-    //SmartDashboard.putNumber("Rz Camera", Math.toDegrees(getVisionPosition().getRotation().getZ()));
-    //SmartDashboard.putNumber("Latence", getTotalLatency());
-    //SmartDashboard.putBoolean("April Tag", getTv());
-  }
+  public void periodic() {}
 
+  //Donne la position du robot selon la limelight
   public Pose3d getVisionPosition() {
     result = botpose.getDoubleArray(temp);
 
@@ -54,31 +51,31 @@ public class Limelight extends SubsystemBase {
 
   }
 
+  //Temps d'attente avant la reception de l'image
   public double getTotalLatency() {
     return tl.getDouble(0) + cl.getDouble(0);
-
   }
 
+  //Voit un April Tag
   public boolean getTv() {
     return tv.getDouble(0) == 1;
-
   }
 
+  //Pourcentage que rempli le April Tag sur la vision
   public double getTa() {
     return ta.getDouble(0);
-
   }
 
+  //Change l'alliance
   public void setAlliance() {
     if (DriverStation.getAlliance() == Alliance.Red) {
       alliance = "red";
-
     }
 
     else {
       alliance = "blue";
     }
-    
+
     botpose = limelight.getEntry("botpose_wpi" + alliance);
     
   }

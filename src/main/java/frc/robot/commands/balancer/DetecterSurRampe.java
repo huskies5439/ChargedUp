@@ -16,29 +16,25 @@ public class DetecterSurRampe extends CommandBase {
     this.basePilotable = basePilotable;
     
     addRequirements(basePilotable);
-
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     basePilotable.setBrakeEtRampTeleop(false);
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    //Avance
     basePilotable.autoConduire(voltage, voltage);
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    //Arrête quand le robot commence à monter sur la pente de la balance 
     return Math.abs(basePilotable.getPitch()) > 12;
   }
 }

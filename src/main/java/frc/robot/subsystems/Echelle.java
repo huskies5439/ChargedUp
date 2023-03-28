@@ -48,13 +48,25 @@ public class Echelle extends SubsystemBase {
     limiteCourant(false); 
  }
 
-
   @Override
   public void periodic() {
-  SmartDashboard.putNumber("Position Mat", getPosition());
-
+    SmartDashboard.putNumber("Position Mat", getPosition());
   }
 
+  //Encodeur Mât
+  public double getPosition() {
+    return moteur.getSelectedSensorPosition()*conversionEncodeur;
+  }
+
+  public double getVitesse() {
+    return moteur.getSelectedSensorVelocity()*conversionEncodeur*10; //x10 car les encodeur des falcon donne des click par 100 ms.
+  }
+  
+  public void resetEncodeur() {
+    moteur.setSelectedSensorPosition(0);
+  }
+
+  //Mouvement de l'échelle sans PID
   public void setVoltage(double voltage) {
     moteur.setVoltage(voltage);
   }
@@ -88,37 +100,24 @@ public class Echelle extends SubsystemBase {
     pidEchelleActif = false;
   }
 
-  //Encodeur Mât
-  public double getPosition() {
-    return moteur.getSelectedSensorPosition()*conversionEncodeur;
-  }
-
-  public double getVitesse() {
-    return moteur.getSelectedSensorVelocity()*conversionEncodeur*10; //x10 car les encodeur des falcon donne des click par 100 ms.
-  }
-  
-  public void resetEncodeur() {
-    moteur.setSelectedSensorPosition(0);
-  }
-
-  public boolean getDetecteurMagnetique() {
-    return !detecteurMagnetique.get();
-  }
-
+  //Mouvement de l'échelle PID
   public void pidEchelle() {
     if (pidEchelleActif) {
-      if (pid.getGoal().position==Cible.kHaut[1] && getPosition() > 0.9*Cible.kHaut[1]){
+      if (pid.getGoal().position==Cible.kHaut[1] && getPosition() > 0.9*Cible.kHaut[1]) {
         limiteCourant(true);
       }
-      else{
+
+      else {
         limiteCourant(false);
       }
+
       double voltage = pid.calculate(getPosition());
       setVoltage(voltage);
 
     }
   }
 
+  //Changer la cible
   public void setCible(double cible) {
     cible = MathUtil.clamp(cible, 0, EchelleConstantes.kMaxEchelle);
     pid.setGoal(cible);
@@ -129,11 +128,17 @@ public class Echelle extends SubsystemBase {
     return pid.atGoal();
   }
 
-  public void limiteCourant(boolean active){
-    if(active){
+  public boolean getDetecteurMagnetique() {
+    return !detecteurMagnetique.get();
+  }
+
+  //Pour ne pas briser l'échelle quand on applique une force au bras pour le tenir en place au sol
+  public void limiteCourant(boolean active) {
+    if(active) {
       moteur.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 15, 20, 1));
     }
-    else{//Les valeurs ne changent rien car la limite n'est pas enable
+
+    else {//Les valeurs ne changent rien car la limite n'est pas enable
       moteur.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(false, 30, 30, 1));
     }
   }

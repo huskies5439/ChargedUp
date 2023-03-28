@@ -22,7 +22,6 @@ public class AutoReculerRamsete extends SequentialCommandGroup {
       new InstantCommand(() -> basePilotable.setBrakeEtRampTeleop(false)),
 
       basePilotable.ramsete(reculer)
-
     );
   }
 }

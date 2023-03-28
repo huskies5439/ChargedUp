@@ -20,7 +20,6 @@ public class AvancerDistanceSimple extends CommandBase {
     addRequirements(basePilotable);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     positionDepart = basePilotable.getPosition();
@@ -28,21 +27,19 @@ public class AvancerDistanceSimple extends CommandBase {
     voltage = BasePilotableConstantes.voltageAvancerLentement*Math.signum(distance);
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     basePilotable.autoConduire(voltage, voltage);
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     basePilotable.stop();
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    //Arrêter quand les roues ont tourner la distance demander
     return Math.abs(basePilotable.getPosition() - positionDepart) > Math.abs(distance);
   }
 }

@@ -97,10 +97,12 @@ public class BasePilotable extends SubsystemBase {
   @Override
   public void periodic() {
 
+    // Position du robot sur le terrain
     poseEstimator.update(Rotation2d.fromDegrees(getAngle()), getPositionG(), getPositionD());
 
     field.setRobotPose(poseEstimator.getEstimatedPosition());
 
+    // Dashboard
     SmartDashboard.putNumber("Angle", getAngle());
     SmartDashboard.putNumber("Pitch", getPitch());
     SmartDashboard.putNumber("Position Base", getPosition());
@@ -119,12 +121,14 @@ public class BasePilotable extends SubsystemBase {
     drive.arcadeDrive(-0.75 * vx, -0.65 * vz);
   }
 
+  // Conduire en autonome
   public void autoConduire(double voltGauche, double voltDroit) {
     moteursG.setVoltage(voltGauche);
     moteursD.setVoltage(voltDroit);
     drive.feed();
   }
 
+  //Arrêter les moteurs
   public void stop() {
     drive.arcadeDrive(0, 0);
   }
@@ -252,16 +256,12 @@ public class BasePilotable extends SubsystemBase {
     poseEstimator.resetPosition(Rotation2d.fromDegrees(getAngle()), getPositionG(), getPositionD(), pose);
   }
 
-  public void placerRobotPositionInitial(PathPlannerTrajectory trajectory)
-  {
+  //Path Planner
+  public void placerRobotPositionInitial(PathPlannerTrajectory trajectory) {
     trajectory = PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory, DriverStation.getAlliance());
     resetOdometry(trajectory.getInitialPose());
   }
 
-
-  
-
-  // déplacement trajectoire
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(getVitesseG(), getVitesseD());
   }
@@ -276,7 +276,8 @@ public class BasePilotable extends SubsystemBase {
         new PathConstraints(BasePilotableConstantes.maxVitesse, BasePilotableConstantes.maxAcceleration),
         new PathPoint(getPose().getTranslation(), getPose().getRotation()),
         //new PathPoint(new Translation2d(x - 0.5, y), new Rotation2d(Math.toRadians(angle))),//necessaire ??
-        new PathPoint(new Translation2d(x, y), new Rotation2d(Math.toRadians(angle))));
+        new PathPoint(new Translation2d(x, y), new Rotation2d(Math.toRadians(angle)))
+      );
     return trajectoire;
   }
 

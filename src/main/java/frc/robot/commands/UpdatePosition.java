@@ -25,10 +25,10 @@ public class UpdatePosition extends CommandBase {
 
   @Override
   public void execute() {
+    //Ajuster notre position avec la limelight si on voit un April tag qui prend plus de 0.2% de la vision
     if(limelight.getTv() && limelight.getTa() > 0.2){
       basePilotable.addVisionMeasurement(limelight.getVisionPosition().toPose2d(), limelight.getTotalLatency()/1000.0);
     }
-    SmartDashboard.putNumber("Look for ApritTag", limelight.getTa());
   }
 
   @Override

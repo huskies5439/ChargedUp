@@ -31,8 +31,12 @@ public class Stabiliser extends CommandBase {
 
   @Override
   public void execute() {
+
+    //Rouller pour se restabiliser si la balance bouge
     voltage = pidBalancer.calculate(basePilotable.getPitch(), 0);
 
+
+    //Si on est droit, ne pas bouger
     if (pidBalancer.atSetpoint()) {
       voltage = 0;
     }

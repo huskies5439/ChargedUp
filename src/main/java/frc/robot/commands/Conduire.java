@@ -32,7 +32,7 @@ public class Conduire extends CommandBase {
   public void execute() {
     basePilotable.conduire(avancer.getAsDouble(), tourner.getAsDouble());
 
-    
+    //Changer les vitesses
     if(! basePilotable.getIsHighGear() && Math.abs(basePilotable.getVitesse())>1.65) {
       basePilotable.highGear();
 

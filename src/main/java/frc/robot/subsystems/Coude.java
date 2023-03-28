@@ -51,9 +51,9 @@ public class Coude extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Angle Coude", getPosition());
-
   }
 
+  //Encodeur coude
   public double getPosition() {
     return (encodeur.getDistance() + CoudeConstantes.kOffset);
   }
@@ -66,20 +66,28 @@ public class Coude extends SubsystemBase {
     encodeur.reset();
   }
 
+  //Mouvement du coude sans PID
   public void setVoltage(double voltage) {
     moteur.setVoltage(voltage);
   }
 
-     public void descendre() {
-      if (getPosition() > CoudeConstantes.kMin){
-        setVoltage(-3);
-      }
-      
-      else{
-        stop();
+  //Le coude touche au bas du robot
+  public boolean getLimitSwitch() {
+    return !limitSwitch.get();
+  }
+
+  public void descendre() {
+    if (getPosition() > CoudeConstantes.kMin){
+      setVoltage(-3);
     }
+    
+    else {
+      stop();
+    }
+
     pidCoudeActif = false;
   }
+
     public void monter() {
       if (getPosition() < CoudeConstantes.kMax) {
         setVoltage(3);
@@ -94,7 +102,7 @@ public class Coude extends SubsystemBase {
   public void stop() {
     setVoltage(0);
   }
-
+  //Mouvement du coude en PID
   public void pidCoude() {
     if (pidCoudeActif) {
       if (pid.getGoal().position == Cible.kRentrer[0] && getPosition() < -5 && getPosition() >= CoudeConstantes.kMin) {
@@ -112,32 +120,29 @@ public class Coude extends SubsystemBase {
       }
     }
   }
-
+  //Changer la cible du coude
   public void setCible(double cible) {
     cible = MathUtil.clamp(cible, CoudeConstantes.kMin, CoudeConstantes.kMax);
     pid.setGoal(cible);
     pidCoudeActif = true;
+  }
   
-   
-   
-
-  }
- public double getCible() {
-  return pid.getGoal().position;
- }
-  public boolean getLimitSwitch() {
-    return !limitSwitch.get();
+  public double getCible() {
+    return pid.getGoal().position;
   }
 
+  //Le coude est à sa cible
   public boolean getRenduCible() {
     return pid.atGoal();
   }
 
-  public void limiteCourant(boolean active){
-    if(active){
+  //Pour ne pas briser le coude quand on applique une force au bras pour le tenir en place au sol
+  public void limiteCourant(boolean active) {
+    if(active) {
       moteur.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 10, 15, 1));
     }
-    else{//Les valeurs ne changent rien car la limite n'est pas enable
+
+    else {//Les valeurs ne changent rien car la limite n'est pas enable
       moteur.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(false, 30, 30, 1));
     }
   }

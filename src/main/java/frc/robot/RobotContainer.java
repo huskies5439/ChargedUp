@@ -55,7 +55,6 @@ public class RobotContainer {
   //Trajets
   private final Command jamesBande = new JamesBande(echelle, coude, pince, basePilotable);
 
-  //Balancino
   private final Command balancinoCone = new Balancino(true, basePilotable, echelle, coude, pince);
   private final Command balancinoCube = new Balancino(false, basePilotable, echelle, coude, pince);
 
@@ -86,6 +85,7 @@ public class RobotContainer {
 
     configureBindings();
     
+    // Commande automatique pendant le jeu
     basePilotable.setDefaultCommand(new Conduire(manette::getLeftY,manette::getRightX, basePilotable));
     pince.setDefaultCommand(new PincerAuto(pince)); 
     echelle.setDefaultCommand(new RunCommand(echelle::pidEchelle, echelle));
@@ -127,6 +127,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
+    // Command fait en autonome
     return chooser.getSelected();
   }
 }

@@ -38,8 +38,6 @@ public class AutoPlacer extends SequentialCommandGroup {
       //Avancer en levant le bras à sa position finale
       new AvancerDistanceSimple(distanceDepart, basePilotable).alongWith(new BrasAutoAvecCheck(Cible.kHaut, echelle, coude)),
 
-      //new WaitCommand(1),
-
       //Ouvrir la pince
       new InstantCommand(pince::ouvrir),
 

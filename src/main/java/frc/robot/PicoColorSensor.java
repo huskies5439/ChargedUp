@@ -17,9 +17,8 @@ public class PicoColorSensor implements AutoCloseable {
       blue = b;
       ir = _ir;
     }
-
     public RawColor() {
-    }
+  }
 
     public int red;
     public int green;
@@ -44,7 +43,6 @@ public class PicoColorSensor implements AutoCloseable {
     public CharSequence subSequence(int start, int end) {
       return new String(data, start, end, StandardCharsets.UTF_8);
     }
-
   }
 
   private static class IntRef {
@@ -58,7 +56,9 @@ public class PicoColorSensor implements AutoCloseable {
       int value = Integer.parseInt(charSeq, lastComma.value + 1, nextComma, 10);
       lastComma.value = nextComma;
       return value;
-    } catch (Exception ex) {
+    }
+    
+    catch (Exception ex) {
       return 0;
     }
   }
@@ -68,6 +68,7 @@ public class PicoColorSensor implements AutoCloseable {
       if (readLen <= lastComma + 1 ) {
         return readLen;
       }
+
       lastComma++;
       if (data[lastComma] == ',') {
         break;
@@ -116,11 +117,14 @@ public class PicoColorSensor implements AutoCloseable {
           threadLock.lock();
           this.hasColor0 = false;
           this.hasColor1 = false;
-        } finally {
+        }
+
+        finally {
           threadLock.unlock();
         }
         continue;
       }
+
       if (!threadRunning.get()) {
         break;
       }
@@ -160,6 +164,7 @@ public class PicoColorSensor implements AutoCloseable {
         this.lastReadTime = ts;
         this.hasColor0 = hasColor0;
         this.hasColor1 = hasColor1;
+
         if (hasColor0) {
           this.color0.red = color0.red;
           this.color0.green = color0.green;
@@ -167,6 +172,7 @@ public class PicoColorSensor implements AutoCloseable {
           this.color0.ir = color0.ir;
           this.prox0 = prox0;
         }
+
         if (hasColor1) {
           this.color1.red = color1.red;
           this.color1.green = color1.green;
@@ -174,7 +180,9 @@ public class PicoColorSensor implements AutoCloseable {
           this.color1.ir = color1.ir;
           this.prox1 = prox1;
         }
-      } finally {
+      }
+      
+      finally {
         threadLock.unlock();
       }
     }
@@ -192,7 +200,9 @@ public class PicoColorSensor implements AutoCloseable {
     try {
       threadLock.lock();
       return hasColor0;
-    } finally {
+    }
+    
+    finally {
       threadLock.unlock();
     }
   }
@@ -201,7 +211,9 @@ public class PicoColorSensor implements AutoCloseable {
     try {
       threadLock.lock();
       return hasColor1;
-    } finally {
+    }
+    
+    finally {
       threadLock.unlock();
     }
   }
@@ -210,7 +222,9 @@ public class PicoColorSensor implements AutoCloseable {
     try {
       threadLock.lock();
       return new RawColor(color0.red, color0.green, color0.blue, color0.ir);
-    } finally {
+    }
+    
+    finally {
       threadLock.unlock();
     }
   }
@@ -222,7 +236,9 @@ public class PicoColorSensor implements AutoCloseable {
       rawColor.green = color0.green;
       rawColor.blue = color0.blue;
       rawColor.ir = color0.ir;
-    } finally {
+    }
+    
+    finally {
       threadLock.unlock();
     }
   }
@@ -231,7 +247,9 @@ public class PicoColorSensor implements AutoCloseable {
     try {
       threadLock.lock();
       return prox0;
-    } finally {
+    }
+    
+    finally {
       threadLock.unlock();
     }
   }
@@ -240,7 +258,9 @@ public class PicoColorSensor implements AutoCloseable {
     try {
       threadLock.lock();
       return new RawColor(color1.red, color1.green, color1.blue, color1.ir);
-    } finally {
+    }
+    
+    finally {
       threadLock.unlock();
     }
   }
@@ -252,7 +272,9 @@ public class PicoColorSensor implements AutoCloseable {
       rawColor.green = color1.green;
       rawColor.blue = color1.blue;
       rawColor.ir = color1.ir;
-    } finally {
+    }
+    
+    finally {
       threadLock.unlock();
     }
   }
@@ -261,7 +283,9 @@ public class PicoColorSensor implements AutoCloseable {
     try {
       threadLock.lock();
       return prox1;
-    } finally {
+    }
+    
+    finally {
       threadLock.unlock();
     }
   }
@@ -270,7 +294,9 @@ public class PicoColorSensor implements AutoCloseable {
     try {
       threadLock.lock();
       return lastReadTime;
-    } finally {
+    }
+    
+    finally {
       threadLock.unlock();
     }
   }

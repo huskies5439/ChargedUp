@@ -24,9 +24,10 @@ public class AvancerDistancePID extends CommandBase {
     addRequirements(basePilotable);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+
+    //Créer le PID
     pid = new ProfiledPIDController(12, 0, 0,
         new TrapezoidProfile.Constraints(BasePilotableConstantes.maxVitesse, BasePilotableConstantes.maxAcceleration) );
     basePilotable.setBrakeEtRampTeleop(false);
@@ -37,6 +38,7 @@ public class AvancerDistancePID extends CommandBase {
 
   @Override
   public void execute() {
+    //Bouger avec PID
       voltage = pid.calculate(basePilotable.getPosition()-positionDepart) + BasePilotableConstantes.feedforward.calculate(pid.getSetpoint().velocity);
       basePilotable.autoConduire(voltage, voltage);
   }
@@ -44,12 +46,12 @@ public class AvancerDistancePID extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     voltage = 0;
-  
     basePilotable.stop();
   }
   
   @Override
   public boolean isFinished() {
+    //Le robot à atteint sa cible
     return pid.atGoal();
   }
 }
