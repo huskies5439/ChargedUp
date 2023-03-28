@@ -83,6 +83,7 @@ public class RobotContainer {
     //Trajet Bande
     chooser.addOption("James Bande", jamesBande);
 
+    //Trajet Haut
     chooser.addOption("La Cachette", laCachette);
 
     configureBindings();
