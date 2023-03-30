@@ -16,6 +16,10 @@ public class Balancer extends SequentialCommandGroup {
     if(!forward){
       distance=-distance;
     }
+
+
+
+      
  
     addCommands(
       //Avancer jusqu'à ce qu'on monte sur la balance
