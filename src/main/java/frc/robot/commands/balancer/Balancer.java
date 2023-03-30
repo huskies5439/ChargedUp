@@ -12,7 +12,7 @@ public class Balancer extends SequentialCommandGroup {
   
 
   public Balancer(boolean forward, BasePilotable basePilotable) {
-    double distance = 1.25;
+    double distance = 1.4;
     if(!forward){
       distance=-distance;
     }

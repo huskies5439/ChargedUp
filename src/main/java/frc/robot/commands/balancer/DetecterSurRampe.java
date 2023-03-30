@@ -4,6 +4,7 @@
 
 package frc.robot.commands.balancer;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.BasePilotableConstantes;
 import frc.robot.subsystems.BasePilotable;
@@ -13,7 +14,7 @@ public class DetecterSurRampe extends CommandBase {
   BasePilotable basePilotable;
   boolean forward;
   double voltage;
-  int angle;
+  
 
   public DetecterSurRampe(boolean forward, BasePilotable basePilotable) {
     this.basePilotable = basePilotable;
@@ -28,6 +29,7 @@ public class DetecterSurRampe extends CommandBase {
     if(!forward){
       voltage = -voltage;
     }
+    
 
   }
 
@@ -35,14 +37,18 @@ public class DetecterSurRampe extends CommandBase {
   public void execute() {
     //Avance
     basePilotable.autoConduire(voltage, voltage);
+    SmartDashboard.putBoolean("surPente", false);
   }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    SmartDashboard.putBoolean("surPente", true);
+
+  }
 
   @Override
   public boolean isFinished() {
     //Arrête quand le robot commence à monter sur la pente de la balance 
-    return Math.abs(basePilotable.getPitch()) > angle;
+    return Math.abs(basePilotable.getPitch()) > 12;
   }
 }

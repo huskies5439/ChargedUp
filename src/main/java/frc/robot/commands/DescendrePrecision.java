@@ -22,7 +22,7 @@ public class DescendrePrecision extends CommandBase { //Descendre un peu la cibl
   public void initialize() {
     cibleInitiale = coude.getCible();
     if (cibleInitiale > 90) { //Pour ne pas le faire si on est pas dans les airs
-      ciblePrecision = cibleInitiale - 20;
+      ciblePrecision = cibleInitiale - 15;
       coude.setCible(ciblePrecision);
     }
   }

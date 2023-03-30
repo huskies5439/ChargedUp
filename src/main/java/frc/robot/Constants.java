@@ -72,9 +72,8 @@ public final class Constants {
   public static final class Cible {
     //angle [degrés] du coude en premier, puis hauteur [m] de l'échelle
     public static final double[] kRentrer = {-10, 0};
-    public static final double[] kMilieu = {110, 0}; 
-    public static final double[] kHaut = {110, 0.45};
+    public static final double[] kMilieu = {105, 0}; 
+    public static final double[] kHaut = {105, 0.45};
     public static final double[] kSol = {35, 0};
-
   }
 }
