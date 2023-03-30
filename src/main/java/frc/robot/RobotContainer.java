@@ -46,7 +46,7 @@ public class RobotContainer {
   
   //Autonomes de base
   private final Command sortirZoneDevant = new AvancerDistanceSimple(5, basePilotable);
-  private final Command balancer = new Balancer(basePilotable);
+  private final Command balancerAvant = new Balancer(true, basePilotable);
   private final Command placerCone = new AutoPlacer(true, echelle, coude, pince, basePilotable);
   private final Command placerCube = new AutoPlacer(false, echelle, coude, pince, basePilotable);
   //placer sol
@@ -68,7 +68,7 @@ public class RobotContainer {
     SmartDashboard.putData(chooser);
     //Autonomes simples
     chooser.addOption("Sortir zone DEVANT", sortirZoneDevant);
-    chooser.addOption("Balancer", balancer);
+    chooser.addOption("Balancer avant", balancerAvant);
     chooser.addOption("Placer Cone", placerCone);
     chooser.addOption("Placer Cube", placerCube);
     chooser.addOption("Placer Sol" , placerSol);
@@ -106,7 +106,7 @@ public class RobotContainer {
     manette.leftBumper().whileTrue(new AncrerBalance(manette::getLeftY, manette::getRightX, basePilotable));
 
     //Pratique pour débugger le balancement
-    //manette.rightTrigger().whileTrue(new Balancer(basePilotable));
+    manette.rightBumper().whileTrue(new Balancer(true, basePilotable));
 
     //Bouger le bras manuellement
     manette.povUp().whileTrue(new StartEndCommand(echelle::allonger,echelle::stop , echelle));

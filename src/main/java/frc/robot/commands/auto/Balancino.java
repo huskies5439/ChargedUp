@@ -20,7 +20,7 @@ public class Balancino extends SequentialCommandGroup {
     addCommands(
       new AutoPlacer(cone, echelle, coude, pince, basePilotable),
       new TournerPID(180, basePilotable),
-      new Balancer(basePilotable)
+      new Balancer(true, basePilotable)
     );
   }
 }

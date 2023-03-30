@@ -11,13 +11,20 @@ import frc.robot.subsystems.BasePilotable;
 public class Balancer extends SequentialCommandGroup {
   
 
-  public Balancer(BasePilotable basePilotable) {
+  public Balancer(boolean forward, BasePilotable basePilotable) {
+    double distance = 1.25;
+    if(!forward){
+      distance=-distance;
+    }
+ 
     addCommands(
       //Avancer jusqu'à ce qu'on monte sur la balance
-      new DetecterSurRampe( basePilotable),
+      new DetecterSurRampe(forward, basePilotable),
 
       //Monter 1.25 m sur la balance (point de chute)
-      new AvancerDistanceSimple(1.25, basePilotable),
+      
+      
+      new AvancerDistanceSimple(distance, basePilotable),
       
       //Stabilise le robot
       new Stabiliser(basePilotable)
