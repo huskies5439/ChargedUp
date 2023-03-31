@@ -123,7 +123,6 @@ public class RobotContainer {
 
     //Homing
     manette.start().onTrue(new HomingBras(echelle, coude));
-   
   }
 
   public Command getAutonomousCommand() {

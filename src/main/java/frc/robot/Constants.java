@@ -17,7 +17,7 @@ public final class Constants {
     
     public static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.635);//a déterminer dans sis id
 
-    public static final double maxVitesse =2.0;//ir dev = 3
+    public static final double maxVitesse =2.5;//ir dev = 3
     public static final double maxAcceleration = 1.5;//ir dev = 3
 
     public static final double kS = 0.17836;

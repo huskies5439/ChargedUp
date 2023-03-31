@@ -32,7 +32,7 @@ public class AutoPlacer extends SequentialCommandGroup {
     addCommands(
       //Attraper le cone
       new InstantCommand(pince::fermer),
-      new WaitCommand(0.2),
+      new WaitCommand(0.1),
 
       //Lever le coude
       new BrasAutoAvecCheck(Cible.kMilieu, echelle, coude),
