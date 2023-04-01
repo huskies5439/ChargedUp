@@ -8,17 +8,22 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.BasePilotable;
+import frc.robot.subsystems.Coude;
 
 public class Conduire extends CommandBase {
 
   BasePilotable basePilotable;
+  Coude coude;
   DoubleSupplier avancer;
   DoubleSupplier tourner;
+  double vx;
+  double vz;
 
-  public Conduire(DoubleSupplier avancer, DoubleSupplier tourner, BasePilotable basePilotable) {
+  public Conduire(DoubleSupplier avancer, DoubleSupplier tourner, BasePilotable basePilotable, Coude coude) {
     this.avancer = avancer;
     this.tourner = tourner;
     this.basePilotable = basePilotable;
+    this.coude = coude;
 
     addRequirements(basePilotable);
   }
@@ -30,14 +35,25 @@ public class Conduire extends CommandBase {
   
   @Override
   public void execute() {
-    basePilotable.conduire(avancer.getAsDouble(), tourner.getAsDouble());
+    vx = avancer.getAsDouble();
+    vz = tourner.getAsDouble();
+
+    /*
+    if (coude.getPosition() > 90) {
+      vx *= 0.5;
+      vz *= 0.3;
+    }
+    */
+    
+
+    basePilotable.conduire(vx, vz);
 
     //Changer les vitesses
-    if(! basePilotable.getIsHighGear() && Math.abs(basePilotable.getVitesse())>1.65) {
+    if(! basePilotable.getIsHighGear() && Math.abs(basePilotable.getVitesse()) > 1.65) {
       basePilotable.highGear();
 
     }
-    else if(basePilotable.getIsHighGear() && Math.abs(basePilotable.getVitesse()) <1.25) {
+    else if(basePilotable.getIsHighGear() && Math.abs(basePilotable.getVitesse()) < 1.25) {
 
       basePilotable.lowGear();
     } 
