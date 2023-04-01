@@ -5,6 +5,7 @@
 package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.balancer.Balancer;
 import frc.robot.commands.balancer.TraverserBalance;
 import frc.robot.subsystems.BasePilotable;
@@ -16,9 +17,10 @@ public class Traversino extends SequentialCommandGroup {
   
   public Traversino(boolean cone, BasePilotable basePilotable, Echelle echelle, Coude coude, Pince pince) {
     addCommands(
-      new AutoPlacer(cone, echelle, coude, pince, basePilotable),
+      /*new AutoPlacer(cone, echelle, coude, pince, basePilotable), */
       new TournerPID(180, basePilotable),
-      new TraverserBalance(cone, basePilotable),
+      new TraverserBalance(true, basePilotable),
+      new WaitCommand(0.5),
       new TournerPID(0, basePilotable),
       new Balancer(true, basePilotable)
     );

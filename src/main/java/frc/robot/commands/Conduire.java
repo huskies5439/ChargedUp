@@ -38,12 +38,11 @@ public class Conduire extends CommandBase {
     vx = avancer.getAsDouble();
     vz = tourner.getAsDouble();
 
-    /*
-    if (coude.getPosition() > 90) {
+   /*if (coude.getPosition() > 90) {
       vx *= 0.5;
-      vz *= 0.3;
-    }
-    */
+      vz *= 0.65;
+    }*/
+    
     
 
     basePilotable.conduire(vx, vz);

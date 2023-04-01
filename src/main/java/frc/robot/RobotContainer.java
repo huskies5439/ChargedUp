@@ -25,7 +25,6 @@ import frc.robot.commands.auto.AvancerDistanceSimple;
 import frc.robot.commands.auto.Balancino;
 import frc.robot.commands.auto.JamesBande;
 import frc.robot.commands.auto.LaCachette;
-import frc.robot.commands.auto.Traversino;
 import frc.robot.commands.balancer.AncrerBalance;
 import frc.robot.commands.balancer.Balancer;
 import frc.robot.subsystems.BasePilotable;
@@ -58,8 +57,8 @@ public class RobotContainer {
 
   private final Command balancinoCone = new Balancino(true, basePilotable, echelle, coude, pince);
   private final Command balancinoCube = new Balancino(false, basePilotable, echelle, coude, pince);
-  private final Command traversinoCone = new Traversino(true, basePilotable, echelle, coude, pince);
-  private final Command traversinoCube = new Traversino(false, basePilotable, echelle, coude, pince);
+  //private final Command traversinoCone = new Traversino(true, basePilotable, echelle, coude, pince);
+  //private final Command traversinoCube = new Traversino(false, basePilotable, echelle, coude, pince);
 
   private final Command laCachette = new LaCachette(basePilotable, echelle, coude, pince);
 
@@ -79,8 +78,8 @@ public class RobotContainer {
     //Trajet du centre
     chooser.addOption("Balancino Cone", balancinoCone);
     chooser.addOption("Balancino Cube", balancinoCube);
-    chooser.addOption("Traversino Cone", traversinoCone);
-    chooser.addOption("Traversino Cube", traversinoCube);
+    //chooser.addOption("Traversino Cone", traversinoCone);
+    //chooser.addOption("Traversino Cube", traversinoCube);
 
     //Trajet Bande
     chooser.addOption("James Bande", jamesBande);
@@ -111,7 +110,7 @@ public class RobotContainer {
     manette.leftBumper().whileTrue(new AncrerBalance(manette::getLeftY, manette::getRightX, basePilotable));
 
     //Pratique pour débugger le balancement
-    //manette.rightBumper().whileTrue(new Balancer(true, basePilotable));
+    // manette.rightBumper().whileTrue(new Balancer(true, basePilotable));
 
     //Bouger le bras manuellement
     manette.povUp().whileTrue(new StartEndCommand(echelle::allonger,echelle::stop , echelle));

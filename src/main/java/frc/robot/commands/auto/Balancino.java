@@ -15,7 +15,6 @@ import frc.robot.subsystems.Pince;
 
 public class Balancino extends SequentialCommandGroup {
 //Trajet du centre. Place un objet, tourne, balance
-
   public Balancino(boolean cone, BasePilotable basePilotable, Echelle echelle, Coude coude, Pince pince) {
     addCommands(
       new AutoPlacer(cone, echelle, coude, pince, basePilotable),

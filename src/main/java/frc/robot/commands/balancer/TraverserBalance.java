@@ -12,7 +12,7 @@ public class TraverserBalance extends SequentialCommandGroup {
   
 
   public TraverserBalance(boolean forward, BasePilotable basePilotable) {
-    double distance = 4;
+    double distance = 2.5;
     if(!forward) {
       distance=-distance;
     }
