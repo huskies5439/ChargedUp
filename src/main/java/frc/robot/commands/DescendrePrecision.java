@@ -7,9 +7,8 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Coude;
 
-
-
-public class DescendrePrecision extends CommandBase { //Descendre un peu la cible pour s'ajuster avec la grille puis remonter la cible à sa position initial une fois fini
+//Descendre un peu la cible pour s'ajuster avec la grille puis remonter la cible à sa position initial une fois fini
+public class DescendrePrecision extends CommandBase { 
   double ciblePrecision;
   double cibleInitiale;
   Coude coude;
@@ -33,7 +32,6 @@ public class DescendrePrecision extends CommandBase { //Descendre un peu la cibl
   @Override
   public void end(boolean interrupted) {
     coude.setCible(cibleInitiale);
-
   }
 
   @Override

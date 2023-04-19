@@ -77,7 +77,7 @@ public class Echelle extends SubsystemBase {
 
   public void allonger() {
    
-    if (getPosition()< EchelleConstantes.kMaxEchelle){
+    if (getPosition()< EchelleConstantes.kMaxEchelle) {
       setVoltage(3);
     }
 

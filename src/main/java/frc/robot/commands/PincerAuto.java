@@ -22,7 +22,6 @@ public class PincerAuto extends CommandBase {
   public void initialize() {
     etatPasse = true;
     etatActuel = true;
-  
   }
   
   @Override
@@ -31,13 +30,13 @@ public class PincerAuto extends CommandBase {
   etatActuel = pince.getFaisceau();
   
   // Si on permet au robot de pincer et qu'il y a rien dans la pince, ferme le piston et ne permet pas au robot de pincer.
-  if (pince.getArmer() && !etatActuel){
+  if (pince.getArmer() && !etatActuel) {
     pince.setArmer(false);
     pince.fermer();
   }
 
   // Si le capteur infrarouge était pas activer dans le passé et est activer maintenant, ouvre le piston et permet au robot de pincer.
-  if (!etatPasse && etatActuel){
+  if (!etatPasse && etatActuel) {
     pince.setArmer(true);
     // pince.ouvrir();
   }

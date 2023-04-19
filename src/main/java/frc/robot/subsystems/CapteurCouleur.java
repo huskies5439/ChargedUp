@@ -15,10 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PicoColorSensor;
 import frc.robot.PicoColorSensor.RawColor;
 
-
-
 ///////////////////////Inutiliser pour l'instant///////////////////////
-
 
 public class CapteurCouleur extends SubsystemBase {
   

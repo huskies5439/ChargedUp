@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.BasePilotable;
 
 public class AncrerBalance extends CommandBase {
-  /** Creates a new AncrerBalance. */
 BasePilotable basePilotable;
 DoubleSupplier vx;
 DoubleSupplier vz;

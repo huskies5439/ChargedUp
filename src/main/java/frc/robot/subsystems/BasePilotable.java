@@ -231,7 +231,8 @@ public class BasePilotable extends SubsystemBase {
   }
 
   // Odométrie
-  public double[] getOdometry() {// seulement utile pour le dash bord
+  public double[] getOdometry() {
+    // seulement utile pour le dash bord
     double[] position = new double[3];
     double x = getPose().getTranslation().getX();
     double y = getPose().getTranslation().getY();

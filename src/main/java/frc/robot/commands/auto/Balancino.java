@@ -12,7 +12,6 @@ import frc.robot.subsystems.Coude;
 import frc.robot.subsystems.Echelle;
 import frc.robot.subsystems.Pince;
 
-
 public class Balancino extends SequentialCommandGroup {
 //Trajet du centre. Place un objet, tourne, balance
 

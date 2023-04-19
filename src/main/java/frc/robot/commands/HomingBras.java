@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Coude;
 import frc.robot.subsystems.Echelle;
 
-
 public class HomingBras extends SequentialCommandGroup {
   //Sert à mettre le bras à 0 entre les matchs.
   //Présentement ne fait que le Mat. Si le coude reste dépendant du bras, ne rien changer

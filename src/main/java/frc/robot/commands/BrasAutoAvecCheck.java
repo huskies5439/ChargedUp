@@ -12,7 +12,7 @@ import frc.robot.subsystems.Echelle;
 public class BrasAutoAvecCheck extends SequentialCommandGroup {
 
   //Set la cible et attendre qu'elle soit atteint
-  public BrasAutoAvecCheck(double[] cible, Echelle echelle, Coude coude) {   
+  public BrasAutoAvecCheck(double[] cible, Echelle echelle, Coude coude) {
     addCommands(
       new BrasAuto(cible, echelle, coude),
       new BrasEnPosition(echelle, coude)
