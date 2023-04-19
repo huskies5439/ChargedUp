@@ -6,6 +6,7 @@ package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.Cible;
 import frc.robot.commands.BrasAuto;
 import frc.robot.commands.BrasAutoAvecCheck;
@@ -31,6 +32,7 @@ public class AutoPlacer extends SequentialCommandGroup {
     addCommands(
       //Attraper le cone
       new InstantCommand(pince::fermer),
+      new WaitCommand(0.1),
 
       //Lever le coude
       new BrasAutoAvecCheck(Cible.kMilieu, echelle, coude),

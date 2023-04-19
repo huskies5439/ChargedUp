@@ -30,7 +30,7 @@ DoubleSupplier vz;
   @Override
   public void execute() {
     //Baisser la vitesse selon la valeur donner pour se stabiliser en autonome
-    basePilotable.conduire(0.5*vx.getAsDouble(), 0.8*vz.getAsDouble());
+    basePilotable.conduire(0.5*vx.getAsDouble(), 0.65*vz.getAsDouble());
   }
 
   @Override

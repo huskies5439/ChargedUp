@@ -4,33 +4,47 @@
 
 package frc.robot.commands.balancer;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.BasePilotableConstantes;
 import frc.robot.subsystems.BasePilotable;
 
 public class DetecterSurRampe extends CommandBase {
   
   BasePilotable basePilotable;
+  boolean forward;
   double voltage;
- 
-  public DetecterSurRampe(BasePilotable basePilotable) {
+  
+
+  public DetecterSurRampe(boolean forward, BasePilotable basePilotable) {
     this.basePilotable = basePilotable;
-    
+    this.forward = forward;
     addRequirements(basePilotable);
   }
 
   @Override
   public void initialize() {
     basePilotable.setBrakeEtRampTeleop(false);
+    voltage = BasePilotableConstantes.voltageAvancerLentement;
+    if(!forward){
+      voltage = -voltage;
+    }
+    
+
   }
 
   @Override
   public void execute() {
     //Avance
     basePilotable.autoConduire(voltage, voltage);
+    SmartDashboard.putBoolean("surPente", false);
   }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    SmartDashboard.putBoolean("surPente", true);
+
+  }
 
   @Override
   public boolean isFinished() {

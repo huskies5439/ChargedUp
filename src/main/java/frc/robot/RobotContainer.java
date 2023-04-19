@@ -46,7 +46,7 @@ public class RobotContainer {
   
   //Autonomes de base
   private final Command sortirZoneDevant = new AvancerDistanceSimple(5, basePilotable);
-  private final Command balancer = new Balancer(basePilotable);
+  private final Command balancerAvant = new Balancer(true, basePilotable);
   private final Command placerCone = new AutoPlacer(true, echelle, coude, pince, basePilotable);
   private final Command placerCube = new AutoPlacer(false, echelle, coude, pince, basePilotable);
   //placer sol
@@ -57,6 +57,8 @@ public class RobotContainer {
 
   private final Command balancinoCone = new Balancino(true, basePilotable, echelle, coude, pince);
   private final Command balancinoCube = new Balancino(false, basePilotable, echelle, coude, pince);
+  //private final Command traversinoCone = new Traversino(true, basePilotable, echelle, coude, pince);
+  //private final Command traversinoCube = new Traversino(false, basePilotable, echelle, coude, pince);
 
   private final Command laCachette = new LaCachette(basePilotable, echelle, coude, pince);
 
@@ -68,7 +70,7 @@ public class RobotContainer {
     SmartDashboard.putData(chooser);
     //Autonomes simples
     chooser.addOption("Sortir zone DEVANT", sortirZoneDevant);
-    chooser.addOption("Balancer", balancer);
+    chooser.addOption("Balancer avant", balancerAvant);
     chooser.addOption("Placer Cone", placerCone);
     chooser.addOption("Placer Cube", placerCube);
     chooser.addOption("Placer Sol" , placerSol);
@@ -76,6 +78,8 @@ public class RobotContainer {
     //Trajet du centre
     chooser.addOption("Balancino Cone", balancinoCone);
     chooser.addOption("Balancino Cube", balancinoCube);
+    //chooser.addOption("Traversino Cone", traversinoCone);
+    //chooser.addOption("Traversino Cube", traversinoCube);
 
     //Trajet Bande
     chooser.addOption("James Bande", jamesBande);
@@ -86,7 +90,7 @@ public class RobotContainer {
     configureBindings();
     
     // Commande automatique pendant le jeu
-    basePilotable.setDefaultCommand(new Conduire(manette::getLeftY,manette::getRightX, basePilotable));
+    basePilotable.setDefaultCommand(new Conduire(manette::getLeftY,manette::getRightX, basePilotable, coude));
     pince.setDefaultCommand(new PincerAuto(pince)); 
     echelle.setDefaultCommand(new RunCommand(echelle::pidEchelle, echelle));
     coude.setDefaultCommand(new RunCommand(coude::pidCoude, coude));
@@ -106,7 +110,7 @@ public class RobotContainer {
     manette.leftBumper().whileTrue(new AncrerBalance(manette::getLeftY, manette::getRightX, basePilotable));
 
     //Pratique pour débugger le balancement
-    //manette.rightTrigger().whileTrue(new Balancer(basePilotable));
+    // manette.rightBumper().whileTrue(new Balancer(true, basePilotable));
 
     //Bouger le bras manuellement
     manette.povUp().whileTrue(new StartEndCommand(echelle::allonger,echelle::stop , echelle));
@@ -123,7 +127,6 @@ public class RobotContainer {
 
     //Homing
     manette.start().onTrue(new HomingBras(echelle, coude));
-   
   }
 
   public Command getAutonomousCommand() {

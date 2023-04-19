@@ -8,30 +8,21 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.auto.AvancerDistanceSimple;
 import frc.robot.subsystems.BasePilotable;
 
-public class Balancer extends SequentialCommandGroup {
+public class TraverserBalance extends SequentialCommandGroup {
   
 
-  public Balancer(boolean forward, BasePilotable basePilotable) {
-    double distance = 1.4;
+  public TraverserBalance(boolean forward, BasePilotable basePilotable) {
+    double distance = 2.5;
     if(!forward) {
       distance=-distance;
     }
 
-
-
-      
- 
     addCommands(
       //Avancer jusqu'à ce qu'on monte sur la balance
       new DetecterSurRampe(forward, basePilotable),
 
-      //Monter 1.25 m sur la balance (point de chute)
-      
-      
-      new AvancerDistanceSimple(distance, basePilotable),
-      
-      //Stabilise le robot
-      new Stabiliser(basePilotable)
+      //Avancer d'une certaine distance par dessu la balance.
+      new AvancerDistanceSimple(distance, basePilotable)
     );
   }
 }
